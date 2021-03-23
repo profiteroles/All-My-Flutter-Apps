@@ -17,7 +17,7 @@ I love when some thinks out side the box,gets through the system and makes a sto
 
 <div class="row">
   <div class="column">
-    <img src="shot/1.png" alt="Screenshot" style="width:100%">
+    <img src="shot/1.png" alt="Screenshot" style="width:50%">
   </div>
   <div class="column">
     <img src="shot/2.png" alt="Screenshot" style="width:100%">
