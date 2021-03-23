@@ -3,26 +3,8 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  
   img {
   border-radius: 50%;
-}
-  
-  .column {
-  float: left;
-  width: 33.33%;
-  padding: 5px;
-}
-  .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-  
-@media screen and (max-width: 500px) {
-  .column {
-    width: 50%;
-  }
 }
 </style>
 </head>
