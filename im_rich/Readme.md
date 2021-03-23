@@ -13,25 +13,25 @@ I love when some thinks out side the box,gets through the system and makes a sto
 </div>
 <div class="row">
 <!--   <div class="column"> -->
-    <img src="shot/1.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/1.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/2.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/2.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/3.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/3.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/4.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/4.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/5.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/5.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/6.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/6.png" alt="Screenshot" width="300" height="600">
 <!--   </div>
   <div class="column"> -->
-    <img src="shot/7.png" alt="Screenshot" width="300" height="500">
+    <img src="shot/7.png" alt="Screenshot" width="300" height="600">
 <!--   </div> -->
 </div>
 </body>
