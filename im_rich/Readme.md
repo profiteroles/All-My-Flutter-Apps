@@ -17,10 +17,7 @@ I love when some thinks out side the box,gets through the system and makes a sto
 
 <div class="row">
   <div class="column">
-    <img src="shot/1.png" alt="Screenshot" style="object-fit:contain;
-            width:100px;
-            height:200px;
-            border: solid 1px #CCC"/>
+    <img src="shot/1.png" width="100" height="200">
   </div>
   <div class="column">
     <img src="shot/2.png" alt="Screenshot" style="width:100%">
