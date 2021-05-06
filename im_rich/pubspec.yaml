@@ -67,18 +67,7 @@ flutter:
     - family: Merienda
       fonts:
       - asset: fonts/MeriendaOne-Regular.ttf
-          
-    - family: SourceSans
-      fonts:
-      - asset: fonts/SourceSansPro-Regular.ttf
-
-    - family: Metropolis
-      fonts:
-      - asset: fonts/metropolis.medium.otf
-        weight: 500
-        
-      - asset: fonts/metropolis.regular.otf
-        weight: 400
+    
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
