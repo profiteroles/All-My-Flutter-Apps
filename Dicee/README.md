@@ -2,11 +2,11 @@
 <html>
 <body>
 
-<h2>BMI Calculator App</h2>
+<h2>Dice App</h2>
 
 <div>
-This app simply calculates your BMI for the given input<br>
-It's got some fancy UI & Calculation function<br>
+This one of my first app that I made<br>
+on the new version I add some annimation in it Please check that on Profiterol App<br>
 <br>
 </div>
 <div class="row">
