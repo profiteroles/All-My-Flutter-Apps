@@ -1,0 +1,6 @@
+name: sli_wizard
+version: 0.0.2
+description: Sli Wizard to publish 
+homepage: https://www.uniqapp.store
+environment:
+  sdk: '>=2.10.0 <3.0.0'

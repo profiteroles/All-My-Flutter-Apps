@@ -1,0 +1,14 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "sli_wizard",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    }
+  ],
+  "generated": "2021-12-04T10:40:23.341084Z",
+  "generator": "pub",
+  "generatorVersion": "2.14.4"
+}
