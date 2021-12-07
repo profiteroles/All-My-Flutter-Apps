@@ -1,0 +1,8 @@
+name: converter
+description: Tool for image conversion
+version: 0.0.1
+dependencies:
+  sli_wizard: ^0.0.2
+  image: ^3.1.0
+environment:
+  sdk: '>=2.10.0 <3.0.0'
