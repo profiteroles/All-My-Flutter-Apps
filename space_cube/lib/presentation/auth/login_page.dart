@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/route_manager.dart';
 import 'package:space_cube/application/state/juke_api.dart';
 import 'package:space_cube/router/route_constants.dart';
+import 'package:space_cube/widgets/snackbar_error.dart';
 import '../../widgets/sign_boiler_plate.dart';
 import '../../widgets/material_button.dart';
 import '../../widgets/input_field.dart';
@@ -35,13 +36,7 @@ class _LogInPageState extends State<LogInPage> {
         }
       } on DioError catch (e) {
         print(e.response);
-        Get.snackbar(
-          'Error',
-          e.response!.data['message'],
-          snackPosition: SnackPosition.BOTTOM,
-          icon: Icon(Icons.error),
-          backgroundColor: Get.theme.errorColor,
-        );
+        snackbarError(e.response!.data['message']);
       }
     }
   }
@@ -60,12 +55,7 @@ class _LogInPageState extends State<LogInPage> {
           SizedBox(height: height * 0.02),
           JukeInputField(title: 'Password', hint: 'Password', icon: Icons.lock, obscure: true, passValid: true),
           SizedBox(height: height * 0.03),
-          JukeMaterialBtn(
-            height: height * 0.06,
-            fbKey: _fbKey,
-            title: 'Sign In',
-            onPressed: _submitLogin,
-          ),
+          JukeMaterialBtn(height: height * 0.06, fbKey: _fbKey, title: 'Sign In', onPressed: _submitLogin),
         ],
       ),
     );

@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/route_manager.dart';
-import 'package:space_cube/application/state/juke_api.dart';
-import 'package:space_cube/router/route_constants.dart';
+import '../../application/state/juke_api.dart';
+import '../../router/route_constants.dart';
+import '../../widgets/snackbar_error.dart';
 import '../../widgets/input_field.dart';
 import '../../widgets/material_button.dart';
 import '../../widgets/appbar.dart';
@@ -20,6 +19,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _fbKey = GlobalKey<FormBuilderState>();
+  final _controller = TextEditingController();
 
   Future<void> _submitSignUp() async {
     _fbKey.currentState?.save();
@@ -27,22 +27,22 @@ class _SignUpPageState extends State<SignUpPage> {
       var data = _fbKey.currentState!.value;
       print(data);
       try {
-        var response = await JukeAPI.dio.post('register', data: data);
+        var response = await JukeAPI.dio.post('register', queryParameters: data);
         print(response);
         if (response.statusCode == 201) {
           Get.offNamed(homeRoute);
         }
       } on DioError catch (e) {
         print(e.response);
-        Get.snackbar(
-          'Error',
-          e.response!.data['message'],
-          snackPosition: SnackPosition.BOTTOM,
-          icon: Icon(Icons.error),
-          backgroundColor: Get.theme.errorColor,
-        );
+        snackbarError(e.response!.data['message']);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -55,37 +55,29 @@ class _SignUpPageState extends State<SignUpPage> {
         height: height,
         isSignUpPage: true,
         children: [
-          JukeInputField(title: 'Full Name', hint: 'Your Name', icon: Icons.person),
+          JukeInputField(title: 'Full Name', hint: 'Your Name', icon: Icons.person, nameValid: true),
           SizedBox(height: height * 0.02),
           JukeInputField(title: 'Email', hint: 'youremail@example.com', icon: Icons.email, emailValid: true, inputType: TextInputType.emailAddress),
           SizedBox(height: height * 0.02),
-          JukeInputField(title: 'Password', hint: 'Password', icon: Icons.lock, obscure: true, passValid: true),
-          SizedBox(height: height * 0.02),
-          JukeInputField(title: 'Password Confirmation', hint: 'Confirm Password', icon: Icons.lock, obscure: true, passValid: true),
-          SizedBox(height: height * 0.03),
-          JukeMaterialBtn(
-            height: height * 0.06,
-            fbKey: _fbKey,
-            title: 'Sign Up',
-            onPressed: () async {
-              _fbKey.currentState?.save();
-              if (_fbKey.currentState!.validate()) {
-                var data = _fbKey.currentState!.value;
-                print(data);
-                Response response = await Dio().post('http://localhost/api/register', data: data);
-                print(response);
-                if (response.statusCode == 201) {
-                  Get.offAndToNamed(homeRoute);
-                }
-                // Navigator.pushReplacementNamed(context, homeRoute);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Get it together!!!'),
-                  backgroundColor: Colors.pink,
-                ));
-              }
-            },
+          JukeInputField(
+            controller: _controller,
+            title: 'Password',
+            hint: 'Password',
+            icon: Icons.lock,
+            obscure: true,
+            passValid: true,
           ),
+          SizedBox(height: height * 0.02),
+          JukeInputField(
+            title: 'Password Confirmation',
+            hint: 'Confirm Password',
+            icon: Icons.lock,
+            obscure: true,
+            passValid: true,
+            passConfirm: _controller.text,
+          ),
+          SizedBox(height: height * 0.03),
+          JukeMaterialBtn(height: height * 0.06, fbKey: _fbKey, title: 'Sign Up', onPressed: _submitSignUp),
         ],
       ),
     );
