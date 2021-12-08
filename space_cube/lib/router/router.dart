@@ -5,7 +5,7 @@ import 'package:space_cube/presentation/Playlists/playlists_page.dart';
 import 'package:space_cube/presentation/Tracks/tracks_page.dart';
 import 'package:space_cube/presentation/Unfound/unfound.dart';
 import 'package:space_cube/presentation/auth/account_page.dart';
-import 'package:space_cube/presentation/auth/signin_page.dart';
+import 'package:space_cube/presentation/auth/login_page.dart';
 import 'package:space_cube/presentation/auth/signup_page.dart';
 import 'package:space_cube/presentation/favorities/favorities_page.dart';
 import 'package:space_cube/router/route_constants.dart';
@@ -18,7 +18,7 @@ class Router {
       case signupRoute:
         return MaterialPageRoute(builder: (_) => const SignUpPage());
       case signinRoute:
-        return MaterialPageRoute(builder: (_) => const SignInPage());
+        return MaterialPageRoute(builder: (_) => const LogInPage());
       case accountRoute:
         return MaterialPageRoute(builder: (_) => const AccountPage());
       case favoriteRoute:
