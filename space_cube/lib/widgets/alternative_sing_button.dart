@@ -1,9 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:space_cube/presentation/auth/login_page.dart';
-import 'package:space_cube/presentation/auth/signup_page.dart';
-import 'package:space_cube/router/route_constants.dart';
+import 'package:space_cube/routes/routes.dart';
 
 class AlternativeSingBtn extends StatelessWidget {
   const AlternativeSingBtn({required this.isSignUp, Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class AlternativeSingBtn extends StatelessWidget {
               TextSpan(
                 text: 'Sign ' + (isSignUp ? 'Up' : 'In'),
                 style: TextStyle(color: Colors.blueGrey, fontSize: 16, decoration: TextDecoration.underline),
-                recognizer: TapGestureRecognizer()..onTap = () => isSignUp ? Get.to(SignUpPage()) : Get.back(),
+                recognizer: TapGestureRecognizer()..onTap = () => isSignUp ? Get.toNamed(JukeRoutes.signup) : Get.back(),
               ),
             ],
           ),

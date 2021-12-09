@@ -7,12 +7,11 @@ class JukeMaterialBtn extends StatelessWidget {
     required this.height,
     required this.title,
     required this.onPressed,
-    required GlobalKey<FormBuilderState> fbKey,
-  })  : _fbKey = fbKey,
-        super(key: key);
+    // required GlobalKey<FormBuilderState> fbKey,
+  }) : super(key: key);
 
   final double height;
-  final GlobalKey<FormBuilderState> _fbKey;
+  // final GlobalKey<FormBuilderState>? _fbKey;
   final VoidCallback onPressed;
   final String title;
 

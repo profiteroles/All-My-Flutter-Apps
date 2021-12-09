@@ -1,7 +1,16 @@
-import 'package:get_storage/get_storage.dart';
+import '/application/models/user.dart';
 
-class LocalStorage {
-  static final _getStorage = () => GetStorage('space_juke');
+abstract class LocalStorageInterface {
+  // static final _getStorage = () => GetStorage('space_juke');
 
-  static LocalStorage _storage = LocalStorage();
+  // static LocalStorage _storage = LocalStorage();
+
+  Future<String> getToken();
+  Future<String> saveToken(String token);
+  Future<void> clearAllData();
+
+  Future<User> saveUser(User user);
+  Future<User> getUser();
+  Future<void> saveDarkMode(bool darkMode);
+  Future<bool> isDarkMode();
 }

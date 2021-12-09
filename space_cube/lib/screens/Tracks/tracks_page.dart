@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:space_cube/application/storage/local_storage_impl.dart';
 import 'package:space_cube/values/theme/theme_service.dart';
 import 'package:space_cube/widgets/toggle_button.dart';
 
@@ -32,7 +33,7 @@ class _TracksPageState extends State<TracksPage> with AutomaticKeepAliveClientMi
         actions: [
           DarkThemeToggle(value: isDarkMode, onToggle: toggleOn),
           SizedBox(width: 20),
-          IconButton(onPressed: () => Get.back(), icon: Icon(Icons.logout), iconSize: 32),
+          IconButton(onPressed: () => LocalStorageImpl().clearAllData(), icon: Icon(Icons.logout), iconSize: 32),
           SizedBox(width: 10),
         ],
       ),

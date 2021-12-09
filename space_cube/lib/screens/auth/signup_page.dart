@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/route_manager.dart';
+import '../../routes/routes.dart';
 import '../../application/state/juke_api.dart';
-import '../../router/route_constants.dart';
 import '../../widgets/snackbar_error.dart';
 import '../../widgets/input_field.dart';
 import '../../widgets/material_button.dart';
@@ -29,10 +29,15 @@ class _SignUpPageState extends State<SignUpPage> {
       try {
         var response = await JukeAPI.dio.post('register', queryParameters: data);
         print(response);
+
         if (response.statusCode == 201) {
-          Get.offNamed(homeRoute);
+          Get.offNamed(JukeRoutes.home);
         }
       } on DioError catch (e) {
+        if (e.response == null) {
+          print('more shit');
+          snackbarError('Check Your Internet Connection');
+        }
         print(e.response);
         snackbarError(e.response!.data['message']);
       }
@@ -64,7 +69,6 @@ class _SignUpPageState extends State<SignUpPage> {
             title: 'Password',
             hint: 'Password',
             icon: Icons.lock,
-            obscure: true,
             passValid: true,
           ),
           SizedBox(height: height * 0.02),
@@ -72,12 +76,11 @@ class _SignUpPageState extends State<SignUpPage> {
             title: 'Password Confirmation',
             hint: 'Confirm Password',
             icon: Icons.lock,
-            obscure: true,
             passValid: true,
             passConfirm: _controller.text,
           ),
           SizedBox(height: height * 0.03),
-          JukeMaterialBtn(height: height * 0.06, fbKey: _fbKey, title: 'Sign Up', onPressed: _submitSignUp),
+          JukeMaterialBtn(height: height * 0.06, title: 'Sign Up', onPressed: _submitSignUp),
         ],
       ),
     );
