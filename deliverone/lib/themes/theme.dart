@@ -35,11 +35,24 @@ final _borderDark = OutlineInputBorder(
 );
 
 final lightTheme = ThemeData.light().copyWith(
+    appBarTheme: AppBarTheme(
+      color: AppColors.white,
+      titleTextStyle: GoogleFonts.poppins().copyWith(
+        color: AppColors.purple,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1,
+      ),
+    ),
+    bottomAppBarColor: AppColors.veryLightGrey,
+    primaryColorDark: AppColors.white,
+    scaffoldBackgroundColor: AppColors.white,
     canvasColor: AppColors.white,
     textTheme: GoogleFonts.poppinsTextTheme().apply(
       bodyColor: AppColors.purple,
       displayColor: AppColors.purple,
     ),
+    cardTheme: CardTheme(color: AppColors.white),
     inputDecorationTheme: InputDecorationTheme(
       border: _borderLight,
       enabledBorder: _borderLight,
@@ -54,15 +67,44 @@ final lightTheme = ThemeData.light().copyWith(
     colorScheme: ThemeData().colorScheme.copyWith(
           primary: AppColors.purple,
           secondary: AppColors.green,
+          onSecondary: AppColors.purple,
         ));
 
 final darkTheme = ThemeData.dark().copyWith(
+    appBarTheme: AppBarTheme(
+      color: AppColors.purple,
+      titleTextStyle: GoogleFonts.poppins().copyWith(
+        color: AppColors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1,
+      ),
+    ),
     canvasColor: AppColors.grey,
     scaffoldBackgroundColor: AppColors.dark,
+    bottomAppBarColor: Colors.transparent,
     textTheme: GoogleFonts.poppinsTextTheme().apply(
       bodyColor: AppColors.green,
       displayColor: AppColors.green,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          AppColors.purple,
+        ),
+      ),
+    ),
+    // textButtonTheme: TextButtonThemeData(
+    //   style: ButtonStyle(
+    //     backgroundColor: MaterialStateProperty.all<Color>(
+    //       AppColors.purple,
+    //     ),
+    //     textStyle: MaterialStateProperty.all<TextStyle>(
+    //       TextStyle(color: AppColors.white),
+    //     ),
+    //   ),
+    // ),
+    cardTheme: CardTheme(color: AppColors.grey),
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppColors.grey,
       filled: true,
@@ -81,4 +123,5 @@ final darkTheme = ThemeData.dark().copyWith(
     colorScheme: ThemeData().colorScheme.copyWith(
           primary: AppColors.green,
           secondary: AppColors.purple,
+          onSecondary: AppColors.white,
         ));
