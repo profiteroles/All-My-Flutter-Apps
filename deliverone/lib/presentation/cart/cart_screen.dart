@@ -1,10 +1,14 @@
+import 'package:deliverone/presentation/cart/cart_controller.dart';
+import 'package:deliverone/presentation/widgets/cart/empty_cart.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+
 import '../../data/products.dart';
-import '../widgets/cart/cart_product_item.dart';
+import '../widgets/cart/cart_product_item_card.dart';
 import '../widgets/cart/cart_summary_card.dart';
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key, required this.onShopping}) : super(key: key);
+class CartScreen extends GetWidget<CartController> {
+  CartScreen({Key? key, required this.onShopping}) : super(key: key);
 
   final VoidCallback onShopping;
 
@@ -12,13 +16,14 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cart')),
-      body: CardWidget(),
-      // EmptyCart(onTap: onShopping),
+      body: Obx(
+        () => controller.totalItems.value == 0 ? EmptyCart(onTap: onShopping) : CardWidget(),
+      ),
     );
   }
 }
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends GetWidget<CartController> {
   const CardWidget({Key? key}) : super(key: key);
 
   @override
@@ -28,27 +33,30 @@ class CardWidget extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: ListView.builder(
-            itemExtent: 280,
-            itemCount: products.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                child: CartProduct(product: product),
-              );
-            },
+          child: Obx(
+            () => ListView.builder(
+              itemExtent: 280,
+              itemCount: controller.cartList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final productCard = controller.cartList[index];
+                return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                    child: CartProductItemCard(
+                      productCart: productCard,
+                      onIncrement: () => controller.onAdd(productCard),
+                      onDecrement: () => controller.onDecrementItem(productCard),
+                      onDelete: () => controller.onDeleteItem(productCard),
+                    ));
+              },
+            ),
           ),
         ),
         Expanded(
           flex: 2,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: CartSummaryCard(
-              deliveryFee: 0,
-              subtotal: 24.4,
-            ),
+            child: CartSummaryCard(),
           ),
         ),
       ],

@@ -1,9 +1,8 @@
-import 'package:deliverone/domain/routes/routes.dart';
-import 'package:deliverone/presentation/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../domain/routes/routes.dart';
+import '../home/home_controller.dart';
 import '../../themes/theme.dart';
-import '../../domain/repository/local_storage_impl.dart';
 import '../widgets/app_elevated_button.dart';
 import '../widgets/user_details_card.dart';
 
@@ -44,8 +43,10 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage(user.image),
-                      // backgroundColor: Colors.blue,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(user.image),
+                      ),
                     ),
                   ),
                 ),

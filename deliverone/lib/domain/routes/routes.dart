@@ -32,7 +32,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.login,
       page: () => LoginScreen(),
-      // bindings: [MainBindings(), LoginBinging()],
       binding: LoginBinging(),
     ),
     // GetPage(

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import '../../../../domain/models/product.dart';
 import '../../../../themes/theme.dart';
 import '../../../../path.dart';
-import '../appbutton.dart';
 
 class CardItemDetails extends StatelessWidget {
   const CardItemDetails({
     Key? key,
     required this.product,
-    this.forHome = true,
+    this.forHome = false,
+    required this.bottomChild,
   }) : super(key: key);
 
   final Product product;
   final bool forHome;
+  final Widget bottomChild;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,11 @@ class CardItemDetails extends StatelessWidget {
         Expanded(
           flex: forHome ? 4 : 2,
           child: CircleAvatar(
-            backgroundColor: AppColors.dark,
-            child: ClipOval(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  IMAGE_PATH + product.image,
-                  fit: BoxFit.cover,
-                ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Image.asset(
+                IMAGE_PATH + product.image,
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -57,48 +55,7 @@ class CardItemDetails extends StatelessWidget {
             ],
           ),
         ),
-        forHome
-            ? Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: AppButton(
-                    title: 'Add',
-                    onTap: () {},
-                    padding: EdgeInsets.symmetric(vertical: 3),
-                  ),
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(Icons.remove, color: AppColors.purple),
-                    ),
-                  ),
-                  Text('1'),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.purple,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: InkWell(
-                      child: Icon(Icons.add, color: AppColors.white),
-                      onTap: () {},
-                    ),
-                  ),
-                  Text(
-                    '\$${product.price}',
-                    style: TextStyle(color: AppColors.green),
-                  ),
-                ],
-              ),
+        bottomChild,
         Spacer(),
       ],
     );

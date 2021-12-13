@@ -1,10 +1,13 @@
+import 'package:deliverone/presentation/cart/cart_controller.dart';
 import 'package:deliverone/themes/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class JukeBottomNavBar extends StatelessWidget {
   const JukeBottomNavBar({
     required this.onIndexSelected,
     required this.index,
+    // required this.amountItems,
     this.image = '',
     Key? key,
   }) : super(key: key);
@@ -15,6 +18,7 @@ class JukeBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.find<CartController>();
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: DecoratedBox(
@@ -46,15 +50,31 @@ class JukeBottomNavBar extends StatelessWidget {
                 ),
               ),
               Material(
-                child: CircleAvatar(
-                  backgroundColor: AppColors.purple,
-                  radius: 28,
-                  child: IconButton(
-                    onPressed: () => onIndexSelected(2),
-                    iconSize: 32,
-                    icon: Icon(Icons.shopping_basket),
-                    color: index == 2 ? AppColors.green : AppColors.white,
-                  ),
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: AppColors.purple,
+                      radius: 28,
+                      child: IconButton(
+                        onPressed: () => onIndexSelected(2),
+                        iconSize: 32,
+                        icon: Icon(Icons.shopping_basket),
+                        color: index == 2 ? AppColors.green : AppColors.white,
+                      ),
+                    ),
+                    Obx(
+                      () => cartController.cartList.length.isEqual(0)
+                          ? SizedBox.shrink()
+                          : Positioned(
+                              right: 0,
+                              child: CircleAvatar(
+                                radius: 10,
+                                backgroundColor: AppColors.green,
+                                child: Text(cartController.cartList.length.toString()),
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
               ),
               Material(

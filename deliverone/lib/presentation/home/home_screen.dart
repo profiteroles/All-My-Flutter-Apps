@@ -12,32 +12,29 @@ class HomeScreen extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Obx(
-            () => Expanded(
+      body: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
               child: IndexedStack(
                 index: controller.index(),
                 children: [
                   ProductsScreen(),
                   Placeholder(),
-                  // Center(child: Text(' current index is  ${controller.index()}', style: TextStyle(color: Colors.white))),
                   CartScreen(onShopping: () => controller.index(0)),
                   Placeholder(),
                   ProfileScreen(),
                 ],
               ),
             ),
-          ),
-          Obx(
-            () => JukeBottomNavBar(
+            JukeBottomNavBar(
               image: controller.user().image,
               index: controller.index(),
               onIndexSelected: (i) => controller.index(i),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

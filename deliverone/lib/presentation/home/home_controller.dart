@@ -6,7 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 
 class HomeController extends GetxController {
-  HomeController({required this.localInterface, required this.apiInterface});
+  HomeController(this.localInterface, this.apiInterface);
   final LocalStorageInterface localInterface;
   final APIRepositoryInterface apiInterface;
 
@@ -15,19 +15,6 @@ class HomeController extends GetxController {
   RxBool isDarkMode = false.obs;
 
   final PageController pageController = PageController();
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadCurrentTheme();
-  }
-
-  @override
-  void onReady() {
-    print('onReady is Called');
-    super.onReady();
-    loadUser();
-  }
 
   void loadUser() async => localInterface.getUser().then((value) => user(value));
 

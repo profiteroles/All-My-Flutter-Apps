@@ -14,6 +14,7 @@ class LoginScreen extends GetWidget<LoginController> {
   const LoginScreen({Key? key}) : super(key: key);
 
   void login() async {
+    print('LoginScreen - login is Called');
     final bool result = await controller.login();
     result ? Get.offNamed(AppRoutes.home) : null;
   }
