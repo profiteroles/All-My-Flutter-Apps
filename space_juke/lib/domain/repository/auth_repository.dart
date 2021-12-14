@@ -15,4 +15,11 @@ class AuthRepository {
     Map<String, dynamic> json = await apiClient.register(data);
     return Auth.fromJson(json);
   }
+
+  Future<Map<String, dynamic>> logout() async {
+    print('AuthRepository - logout is Called');
+
+    Map<String, dynamic> json = await apiClient.logout();
+    return json;
+  }
 }

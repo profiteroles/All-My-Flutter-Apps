@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_connect.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:space_juke/domain/models/auth.dart';
 import 'package:space_juke/presentation/widgets/snackbar_error.dart';
 import '../../values/constants.dart';
 
 class AuthApiClient extends GetConnect {
+  final storage = GetStorage(STORAGE_KEY);
   Future<Map<String, dynamic>> login(Map<String, dynamic> data) async {
     debugPrint('AuthApiClient - login is Called');
     final response = await post(BASE_URL + "login", data);
@@ -34,5 +37,17 @@ class AuthApiClient extends GetConnect {
       print('Success');
       return response.body;
     }
+  }
+
+  Future<Map<String, dynamic>> logout() async {
+    debugPrint('AuthApiClient - logout is Called');
+    final token = storage.read(SESSION_KEY)['token'];
+    var response = await post(
+      BASE_URL + 'logout',
+      '',
+      headers: {"Authorization": 'Bearer ' + token},
+    );
+
+    return response.body;
   }
 }

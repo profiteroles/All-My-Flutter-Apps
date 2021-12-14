@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:space_juke/domain/models/auth.dart';
+import 'package:space_juke/domain/models/user.dart';
 import 'package:space_juke/domain/repository/auth_repository.dart';
 import 'package:space_juke/values/constants.dart';
 import 'package:space_juke/values/routes/routes.dart';
@@ -28,9 +31,9 @@ class LoginController extends GetxController {
       var data = fbKey.currentState!.value;
       loginState(LoginState.loading);
 
-      await repository.login(data: data).then((value) {
-        storage.write(SESSION_KEY, value);
-        Get.offNamed(AppRoutes.home, arguments: data);
+      await repository.login(data: data).then((auth) {
+        storage.write(SESSION_KEY, auth.toJson(auth));
+        Get.offNamed(AppRoutes.home, arguments: auth.user);
         loginState(LoginState.initial);
       }).catchError((err) {
         debugPrint('LoginController - login - Caught an Error:');

@@ -35,14 +35,14 @@ class JukeBottomNavBar extends StatelessWidget {
               Material(
                 child: IconButton(
                   onPressed: () => onIndexSelected(0),
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.playlist_play, size: 34),
                   color: index == 0 ? AppColors.green : AppColors.lightGrey,
                 ),
               ),
               Material(
                 child: IconButton(
                   onPressed: () => onIndexSelected(1),
-                  icon: Icon(Icons.store),
+                  icon: Icon(Icons.play_lesson, size: 28),
                   color: index == 1 ? AppColors.green : AppColors.lightGrey,
                 ),
               ),
@@ -52,8 +52,8 @@ class JukeBottomNavBar extends StatelessWidget {
                   radius: 28,
                   child: IconButton(
                     onPressed: () => onIndexSelected(2),
-                    iconSize: 32,
-                    icon: Icon(Icons.shopping_basket),
+                    iconSize: 36,
+                    icon: Icon(Icons.play_arrow),
                     color: index == 2 ? AppColors.green : AppColors.white,
                   ),
                 ),
@@ -61,7 +61,7 @@ class JukeBottomNavBar extends StatelessWidget {
               Material(
                 child: IconButton(
                   onPressed: () => onIndexSelected(3),
-                  icon: Icon(index == 3 ? Icons.favorite : Icons.favorite_border),
+                  icon: Icon(index == 3 ? Icons.favorite : Icons.favorite_border, size: 32),
                   color: index == 3 ? Colors.red[600] : AppColors.lightGrey,
                 ),
               ),
@@ -74,8 +74,8 @@ class JukeBottomNavBar extends StatelessWidget {
                     color: index == 4 ? Theme.of(context).colorScheme.onSecondary : Colors.transparent,
                   ),
                   child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.blue,
+                    radius: 20,
+                    backgroundColor: Colors.transparent,
                     backgroundImage: AssetImage(image),
                   ),
                 ),

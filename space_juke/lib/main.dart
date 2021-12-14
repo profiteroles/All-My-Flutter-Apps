@@ -1,9 +1,9 @@
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:space_juke/presentation/initial/main_binding.dart';
 import 'package:space_juke/values/constants.dart';
 
 import 'values/routes/routes.dart';
-import 'presentation/main/main_bindings.dart';
 import 'values/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,13 +23,10 @@ class JukeApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       getPages: AppPages.pages,
+      initialBinding: MainBindings(),
       initialRoute: AppRoutes.splash,
-      // initialBinding: MainBindings(),
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context),
-        child: child!,
-      ),
       localizationsDelegates: const [FormBuilderLocalizations.delegate],
+      builder: (context, child) => MediaQuery(data: MediaQuery.of(context), child: child!),
     );
   }
 }

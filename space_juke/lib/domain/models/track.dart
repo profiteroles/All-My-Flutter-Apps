@@ -1,5 +1,9 @@
 import 'genre.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'track.g.dart';
+
+@JsonSerializable()
 class Track {
   Track({
     required this.id,
@@ -12,4 +16,8 @@ class Track {
   final int id, year;
   final String artist, album, name;
   final Genre genre;
+
+  factory Track.fromJson(Map<String, dynamic> json) => _$TrackFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TrackToJson(this);
 }

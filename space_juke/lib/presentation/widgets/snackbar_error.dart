@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:space_juke/values/themes/theme.dart';
 
-SnackbarController snackbarError(String content) => Get.snackbar(
-      'Error',
+SnackbarController snackbarError(String content, {bool isInfo = false}) => Get.snackbar(
+      isInfo ? 'Info' : 'Error',
       content,
-      snackPosition: SnackPosition.BOTTOM,
-      icon: Icon(Icons.error, color: Colors.white),
-      backgroundColor: Get.theme.errorColor,
-      colorText: Colors.white,
+      snackPosition: isInfo ? SnackPosition.TOP : SnackPosition.BOTTOM,
+      icon: Icon(isInfo ? Icons.info : Icons.error, color: AppColors.white),
+      backgroundColor: isInfo ? Get.theme.colorScheme.onSecondary : Get.theme.errorColor,
+      colorText: AppColors.white,
     );

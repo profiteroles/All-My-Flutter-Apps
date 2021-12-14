@@ -1,7 +1,6 @@
 import 'package:get/instance_manager.dart';
 import 'package:space_juke/domain/provider/auth_provider.dart';
 import 'package:space_juke/domain/repository/auth_repository.dart';
-import 'package:space_juke/domain/repository/local_storage_impl.dart';
 import 'login_controller.dart';
 
 class LoginBinging extends Bindings {

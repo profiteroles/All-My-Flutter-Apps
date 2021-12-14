@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:space_juke/domain/models/user.dart';
 import 'package:space_juke/values/themes/theme.dart';
 import '../../values/constants.dart';
 import '../../values/routes/routes.dart';
@@ -17,14 +18,16 @@ class InitialController extends GetxController {
     });
   }
 
-  void checkSession() {
+  void checkSession() async {
     print('InitialController - checkSession is Called');
-    final authSession = storage.read(SESSION_KEY) ?? '';
+    final authSession = await storage.read(SESSION_KEY) ?? '';
+
     print('Session: $authSession');
     if (authSession.toString() == '') {
       Get.offNamed(AppRoutes.login);
     } else {
-      Get.offNamed(AppRoutes.home);
+      final user = User.fromJson(authSession['user']);
+      Get.offNamed(AppRoutes.home, arguments: user);
     }
   }
 

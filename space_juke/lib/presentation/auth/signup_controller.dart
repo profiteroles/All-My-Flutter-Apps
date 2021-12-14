@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:space_juke/domain/models/user.dart';
 import 'package:space_juke/domain/repository/auth_repository.dart';
 import 'package:space_juke/presentation/widgets/snackbar_error.dart';
 import 'package:space_juke/values/constants.dart';
@@ -24,19 +25,16 @@ class SignUpController extends GetxController {
       var data = fbKey.currentState!.value;
       singUpState(SingUpState.loading);
 
-      await repository.register(data: data).then((value) {
-        print(value);
-        print('________END________');
-        storage.read(SESSION_KEY);
-        storage.write(SESSION_KEY, value);
-        Get.offNamed(AppRoutes.home);
+      await repository.register(data: data).then((auth) {
+        storage.remove(SESSION_KEY);
+        storage.write(SESSION_KEY, auth.toJson(auth));
+        Get.offNamed(AppRoutes.home, arguments: auth.user);
         singUpState(SingUpState.initial);
       }).onError((error, stackTrace) {
         singUpState(SingUpState.initial);
         debugPrint('SignUpController - register - onError');
         print(stackTrace);
         print('________END__STACKTRACE______');
-
         singUpState(SingUpState.initial);
         debugPrint(error.toString());
         print('________END__ERROR______');
