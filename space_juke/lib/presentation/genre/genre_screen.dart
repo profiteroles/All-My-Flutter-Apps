@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:space_juke/domain/models/genre.dart';
 import 'package:space_juke/presentation/genre/genre_controller.dart';
+import 'package:space_juke/presentation/widgets/appbar.dart';
 
 class GenreScreen extends GetView<GenreController> {
   const GenreScreen({Key? key}) : super(key: key);
@@ -9,7 +10,8 @@ class GenreScreen extends GetView<GenreController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Genres')),
+      extendBodyBehindAppBar: true,
+      appBar: JukeAppBar('Genres'),
       body: controller.obx(
         (list) => ListView.builder(
           itemCount: list.length,

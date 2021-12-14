@@ -1,3 +1,5 @@
+import 'package:space_juke/presentation/widgets/appbar.dart';
+
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,21 +7,13 @@ import '../../../../values/themes/theme.dart';
 import '../widgets/app_elevated_button.dart';
 import '../widgets/user_details_card.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final controller = Get.find<HomeController>();
-
-  ProfileScreen({Key? key}) : super(key: key);
-
-  // void onUpdateTheme(bool isDark) {
-  //   print('ProfileScreen - onUpdateTheme is Called');
-  //   controller.updateTheme(isDark);
-  //   Get.changeTheme(isDark ? darkTheme : lightTheme);
-  // }
+class ProfileScreen extends GetWidget<HomeController> {
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
+      appBar: JukeAppBar('Profile'),
       body: Obx(
         () => Column(
           children: [

@@ -13,6 +13,9 @@ class PlaylistRepository {
     // print(response);
     // print('PlaylistAPIClient__________Response END__________');
     for (var tracks in response) {
+      print(tracks);
+      print('PlaylistAPIClient__________ tracks END__________');
+
       playlist.add(Playlist.fromJson(tracks));
     }
 

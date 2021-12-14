@@ -7,8 +7,8 @@ part of 'genre.dart';
 // **************************************************************************
 
 Genre _$GenreFromJson(Map<String, dynamic> json) => Genre(
-      // id: json['id'] as int,
-      // parent: json['parent'] as int?,
+      id: json['id'] as int,
+      parent: json['parent'] as int?,
       name: json['name'] as String,
       icon: json['icon'] as String,
       extra: json['extra'] as String?,
@@ -17,8 +17,8 @@ Genre _$GenreFromJson(Map<String, dynamic> json) => Genre(
     );
 
 Map<String, dynamic> _$GenreToJson(Genre instance) => <String, dynamic>{
-      // 'id': instance.id,
-      // 'parent': instance.parent,
+      'id': instance.id,
+      'parent': instance.parent,
       'name': instance.name,
       'icon': instance.icon,
       'extra': instance.extra,

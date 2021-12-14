@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:space_juke/presentation/widgets/appbar.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({Key? key}) : super(key: key);
@@ -6,7 +7,8 @@ class FavouritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Favourites')),
+      extendBodyBehindAppBar: true,
+      appBar: JukeAppBar('Favourites'),
       body: Center(child: Text('Favs Screen')),
     );
   }

@@ -33,11 +33,12 @@ class InitialController extends GetxController {
 
   void validateTheme() {
     print('InitialController - validateTheme is Called');
-    final isDark = storage.read(THEME_KEY);
+    final isDark = storage.read(THEME_KEY) ?? false;
     print('Theme Mode is: ${isDark ? 'DarkMode' : 'LightMode'}');
     if (isDark) {
       Get.changeTheme(isDark ? darkTheme : lightTheme);
     } else {
+      storage.writeIfNull(THEME_KEY, false);
       Get.changeTheme(Get.isDarkMode ? darkTheme : lightTheme);
     }
   }

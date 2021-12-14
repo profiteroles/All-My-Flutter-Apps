@@ -3,6 +3,8 @@ import 'package:space_juke/presentation/genre/genre_binding.dart';
 import 'package:space_juke/presentation/genre/genre_screen.dart';
 import 'package:space_juke/presentation/playlist/playlist_binding.dart';
 import 'package:space_juke/presentation/playlist/playlist_screen.dart';
+import 'package:space_juke/presentation/tracks/create_track.dart';
+import 'package:space_juke/presentation/tracks/show_track.dart';
 import 'package:space_juke/presentation/tracks/tracks_binding.dart';
 import 'package:space_juke/presentation/tracks/tracks_screen.dart';
 
@@ -28,6 +30,8 @@ class AppRoutes {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String tracks = '/tracks';
+  static const String addTrack = '/tracks/create';
+  static const String showTrack = '/tracks/show';
   static const String genres = '/genres';
   static const String playlist = '/playlist';
   static const String favorite = '/favorite';
@@ -41,6 +45,8 @@ class AppPages {
     GetPage(name: AppRoutes.signup, page: () => SignUpScreen(), binding: SignUpBinging()),
     GetPage(name: AppRoutes.home, page: () => HomeScreen()),
     GetPage(name: AppRoutes.tracks, page: () => TracksScreen()),
+    GetPage(name: AppRoutes.addTrack, page: () => CreateTrackScreen()),
+    GetPage(name: AppRoutes.showTrack, page: () => ShowTrackScreen()),
     GetPage(name: AppRoutes.genres, page: () => GenreScreen()), // Bindings are in the MainBindings
     GetPage(name: AppRoutes.playlist, page: () => PlaylistScreen()),
     GetPage(name: AppRoutes.favorite, page: () => FavouritesScreen()),

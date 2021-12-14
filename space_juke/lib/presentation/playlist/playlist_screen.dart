@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:space_juke/domain/models/playlist.dart';
 import 'package:space_juke/presentation/home/home_controller.dart';
+import 'package:space_juke/presentation/widgets/appbar.dart';
 import 'package:space_juke/presentation/widgets/empty_playlist.dart';
 
 class PlaylistScreen extends GetWidget<HomeController> {
@@ -10,7 +11,8 @@ class PlaylistScreen extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Cart')),
+      extendBodyBehindAppBar: true,
+      appBar: JukeAppBar('Playlist'),
       // body: EmptyPlaylist(onTap: () => controller.index(0)),
       body: controller.obx(
         (list) => ListView.builder(
