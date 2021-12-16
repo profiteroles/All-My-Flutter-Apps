@@ -1,16 +1,24 @@
-# space_juke
+# SPACE JUKE
 
-A new Flutter project.
+#### A new Custom Complex mobile application inspired from Laravel 8 <a href="https://github.com/profiteroles/PHP-Laravel-Projects/tree/main/space_juke">SPACE CUBE</a> Web Application.
 
-## Getting Started
+- ### Clean Architechture
+- ### GetX State Management
+- ### Local Container within Docker
+- ### Theme Implementation
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+# Screenshots
+<img src="shots/0.png" alt="Screenshot" width="200" height="400">
+<img src="shots/1.png" alt="Screenshot" width="200" height="400">
+<img src="shots/2.png" alt="Screenshot" width="200" height="400">
+<img src="shots/3.png" alt="Screenshot" width="200" height="400">
+<img src="shots/4.png" alt="Screenshot" width="200" height="400">
+<img src="shots/5.png" alt="Screenshot" width="200" height="400">
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
+
