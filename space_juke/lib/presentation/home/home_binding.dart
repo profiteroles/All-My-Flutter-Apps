@@ -9,11 +9,9 @@ class HomeBinding extends Bindings {
   @override
   void dependencies() {
     print('HomeBinding');
-    Get.lazyPut(() => HomeController());
+    Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<AuthRepository>(() => AuthRepository());
     Get.lazyPut<PlaylistRepository>(() => PlaylistRepository());
     Get.lazyPut<PlaylistAPIClient>(() => PlaylistAPIClient());
-
-    // Get.lazyPut(() => CartController());
   }
 }

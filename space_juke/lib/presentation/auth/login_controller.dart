@@ -38,8 +38,8 @@ class LoginController extends GetxController {
       }).catchError((err) {
         debugPrint('LoginController - login - Caught an Error:');
         loginState(LoginState.initial);
-        debugPrint(err);
-        snackbarError('Check Your Interner Connection');
+        err.noSuchMethod;
+        snackbarError('Check Your Interner Connection ');
       });
     }
   }

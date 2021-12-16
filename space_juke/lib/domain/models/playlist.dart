@@ -11,13 +11,13 @@ class Playlist {
     required this.public,
     required this.name,
     required this.user,
-    required this.tracks,
+    // required this.tracks,
   });
   final int id;
   final bool public;
   final String name;
   final User user;
-  final List<Track> tracks;
+  // final List<Track> tracks;
 
   factory Playlist.fromJson(Map<String, dynamic> json) => _$PlaylistFromJson(json);
 

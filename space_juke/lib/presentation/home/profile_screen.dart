@@ -53,7 +53,7 @@ class ProfileScreen extends GetWidget<HomeController> {
                       isThemeDark: controller.isDarkMode(),
                     ),
                   ),
-                  Center(child: AppElevatedBtn(onTap: controller.logout, title: 'Log Out'))
+                  Center(child: AppElevatedBtn(onTap: controller.logout, title: 'Log Out')),
                 ],
               ),
             ),

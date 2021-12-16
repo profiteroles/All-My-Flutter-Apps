@@ -43,12 +43,12 @@ class AppPages {
     GetPage(name: AppRoutes.splash, page: () => InitialView(), binding: InitialBinding()),
     GetPage(name: AppRoutes.login, page: () => LoginScreen(), binding: LoginBinging()),
     GetPage(name: AppRoutes.signup, page: () => SignUpScreen(), binding: SignUpBinging()),
-    GetPage(name: AppRoutes.home, page: () => HomeScreen()),
-    GetPage(name: AppRoutes.tracks, page: () => TracksScreen()),
+    GetPage(name: AppRoutes.home, page: () => HomeScreen(), binding: HomeBinding()),
+    GetPage(name: AppRoutes.tracks, page: () => TracksScreen(), binding: TracksBinding()),
     GetPage(name: AppRoutes.addTrack, page: () => CreateTrackScreen()),
     GetPage(name: AppRoutes.showTrack, page: () => ShowTrackScreen()),
-    GetPage(name: AppRoutes.genres, page: () => GenreScreen()), // Bindings are in the MainBindings
-    GetPage(name: AppRoutes.playlist, page: () => PlaylistScreen()),
+    GetPage(name: AppRoutes.genres, page: () => GenreScreen(), binding: GenreBinding()), // Bindings are in the MainBindings
+    GetPage(name: AppRoutes.playlist, page: () => PlaylistScreen(), binding: PlaylistBinding()),
     GetPage(name: AppRoutes.favorite, page: () => FavouritesScreen()),
     GetPage(name: AppRoutes.account, page: () => ProfileScreen()),
   ];

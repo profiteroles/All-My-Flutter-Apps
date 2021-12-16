@@ -8,12 +8,10 @@ part of 'playlist.dart';
 
 Playlist _$PlaylistFromJson(Map<String, dynamic> json) => Playlist(
       id: json['id'] as int,
-      public: json['public'] as bool,
+      public: json['public'] == 1 ? true : false,
       name: json['name'] as String,
       user: User.fromJson(json['user'] as Map<String, dynamic>),
-      tracks: (json['tracks'] as List<dynamic>)
-          .map((e) => Track.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      // tracks: (json['tracks'] as List<dynamic>).map((e) => Track.fromJson(e as Map<String, dynamic>)).toList(),
     );
 
 Map<String, dynamic> _$PlaylistToJson(Playlist instance) => <String, dynamic>{
@@ -21,5 +19,5 @@ Map<String, dynamic> _$PlaylistToJson(Playlist instance) => <String, dynamic>{
       'public': instance.public,
       'name': instance.name,
       'user': instance.user,
-      'tracks': instance.tracks,
+      // 'tracks': instance.tracks,
     };

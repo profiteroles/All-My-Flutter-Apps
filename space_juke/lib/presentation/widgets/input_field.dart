@@ -6,7 +6,7 @@ class JukeInputField extends StatefulWidget {
   const JukeInputField({
     required this.title,
     required this.hint,
-    required this.icon,
+    this.icon,
     this.radius = 30,
     this.required = true,
     this.emailValid = false,
@@ -15,14 +15,15 @@ class JukeInputField extends StatefulWidget {
     this.passConfirm = '',
     this.inputType = TextInputType.text,
     this.controller,
+    this.hasIcon = true,
     Key? key,
   }) : super(key: key);
 
-  final IconData icon;
+  final IconData? icon;
   final String title, hint, passConfirm;
   final TextInputType inputType;
   final double radius;
-  final bool required, emailValid, passValid, nameValid;
+  final bool required, emailValid, passValid, nameValid, hasIcon;
   final TextEditingController? controller;
   @override
   State<JukeInputField> createState() => _JukeInputFieldState();
@@ -40,7 +41,9 @@ class _JukeInputFieldState extends State<JukeInputField> {
       keyboardType: widget.inputType,
       decoration: InputDecoration(
         labelText: widget.title,
-        prefixIcon: Icon(widget.icon),
+        labelStyle: Theme.of(context).textTheme.headline6,
+        contentPadding: EdgeInsets.all(widget.hasIcon ? 0 : 15),
+        prefixIcon: widget.hasIcon ? Icon(widget.icon) : null,
         suffixIcon: widget.passValid
             ? IconButton(
                 onPressed: () => setState(() => obscure = !obscure),

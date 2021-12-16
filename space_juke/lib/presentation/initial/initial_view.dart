@@ -28,7 +28,7 @@ class InitialView extends GetWidget<InitialController> {
             ),
             const SizedBox(height: 10),
             Text(
-              'DeliverONE',
+              'SPACE JUKE',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline3!.copyWith(
                     fontWeight: FontWeight.bold,

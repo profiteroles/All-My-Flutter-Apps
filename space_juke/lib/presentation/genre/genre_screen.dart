@@ -34,7 +34,7 @@ class GenreScreen extends GetView<GenreController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(genre.name, style: Theme.of(context).textTheme.headline6),
-                          // Text(genre.icon, style: Theme.of(context).textTheme.bodyText1),
+                          Text(genre.created_at.toString(), style: Theme.of(context).textTheme.bodyText1),
                           // Text(genre.parent.toString(), style: Theme.of(context).textTheme.caption),
                         ],
                       ),

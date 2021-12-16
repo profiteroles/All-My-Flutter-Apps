@@ -8,7 +8,6 @@ class LoginBinging extends Bindings {
   void dependencies() {
     print('LoginBinding - dependencies is Called');
     Get.lazyPut<LoginController>(() => LoginController());
-    // Get.lazyPut<LocalStorageImpl>(() => LocalStorageImpl());
     Get.lazyPut<AuthRepository>(() => AuthRepository());
     Get.lazyPut<AuthApiClient>(() => AuthApiClient());
   }
