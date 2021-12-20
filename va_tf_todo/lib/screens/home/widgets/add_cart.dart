@@ -94,11 +94,7 @@ class AddCard extends StatelessWidget {
         child: DottedBorder(
           color: Colors.grey[400]!,
           child: Center(
-            child: Icon(
-              Icons.add,
-              size: 10.0.wp,
-              color: Colors.grey,
-            ),
+            child: Icon(Icons.add, size: 10.0.wp, color: Colors.grey),
           ),
         ),
       ),

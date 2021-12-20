@@ -1,22 +1,33 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:va_tf_todo/data/models/task.dart';
-import 'package:va_tf_todo/data/services/service.dart';
+import 'package:va_tf_todo/data/services/storage_service.dart';
 import 'package:va_tf_todo/values/utils/key.dart';
 
 class TaskProvider {
-  final StorageService _storage = Get.find<StorageService>();
+  final _storage = Get.find<StorageService>();
 
   List<Task> readTasks() {
+    debugPrint('TaskProvider - readTasks is Called');
     var tasks = <Task>[];
-    //TODO : fix this shit
-    // jsonDecode(_storage.read(taskKey).toString()).forEach((e) => tasks.add(Task.fromJson(e)));
+    var json = _storage.read(taskKey);
+    // Task task = Task.fromJson(json);
+    print(json);
+    // jsonDecode(json).forEach((e) {
+    //   debugPrint('_______ TaskProvider - readTasks Start______');
+    //   print(e);
+    debugPrint('_______ TaskProvider - readTasks End______');
+    // tasks.add(Task.fromJson(e));
+    // });
 
     return tasks;
   }
 
   void writeTasks(List<Task> tasks) {
-    _storage.write(taskKey, jsonEncode(tasks));
+    debugPrint('TaskProvider - writeTasks is Called');
+    // print(tasks);
+    _storage.write(taskKey, tasks);
   }
 }
