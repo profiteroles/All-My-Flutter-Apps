@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
+import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/widgets/icons.dart';
 
 class HomeController extends GetxController {
   HomeController({required this.taskRepository});
@@ -25,7 +28,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     debugPrint('HomeController - initialised');
-
     tasks.assignAll(taskRepository.readTasks());
     ever(tasks, (_) => taskRepository.writeTasks(tasks));
   }
@@ -33,12 +35,12 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     debugPrint('HomeController - Closed');
-
     super.onClose();
     editCtrl.dispose();
   }
 
   void doneTodo(String title) {
+    debugPrint('HomeController - doneTodo is Called title is: $title');
     var doingTodo = {'title': title, 'isDone': false};
     int index = doingTodos.indexWhere((e) => mapEquals<String, dynamic>(doingTodo, e));
     doingTodos.removeAt(index);
@@ -49,6 +51,7 @@ class HomeController extends GetxController {
   }
 
   void changeTodos(List<dynamic> select) {
+    debugPrint('HomeController - changeTodos is Called');
     doingTodos.clear();
     doneTodos.clear();
     for (var i = 0; i < select.length; i++) {
@@ -86,35 +89,34 @@ class HomeController extends GetxController {
   }
 
   bool containerTodo(List todos, String title) {
-    print('HomeController - updateTask is called receive todo - title is: $title \n$todos');
+    debugPrint('HomeController - containerTodo is called receive todo - title is: $title \n$todos');
     return todos.any((todo) => todo['title'] == title);
   }
 
   void changeTask(Task? selected) {
-    print('HomeController - changeTask is called receive value is:\n'
+    debugPrint('HomeController - changeTask is called receive value is:\n'
         '${selected?.title} ${selected?.icon} ${selected?.color}');
     task.value = selected;
   }
 
   void changeChipIndex(int i) {
-    print('HomeController - changeChipIndex is called receive value is: $i');
-
+    debugPrint('HomeController - changeChipIndex is called receive value is: $i');
     chipIndex.value = i;
   }
 
   void changeDeleting(bool value) {
-    print('HomeController - changeChipIndex is called receive value is: $value');
+    debugPrint('HomeController - changeDeleting is called receive value is: $value');
     deleting.value = value;
   }
 
   void deleteTask(Task task) {
-    print('HomeController - addTask is called receive task is: \n'
+    debugPrint('HomeController - addTask is called receive task is: \n'
         '${task.title} ${task.icon} ${task.color}');
     tasks.remove(task);
   }
 
   bool addTask(Task task) {
-    print('HomeController - addTask is called receive task is: \n'
+    debugPrint('HomeController - addTask is called receive task is: \n'
         '${task.title} ${task.icon} ${task.color}');
 
     if (tasks.contains(task)) {
@@ -126,13 +128,13 @@ class HomeController extends GetxController {
   }
 
   bool addTodo(String title) {
-    print('HomeController - addTodo is called receive task is: $title');
+    debugPrint('HomeController - addTodo is called receive task is: $title');
 
     var todo = {'title': title, 'isDone': false};
     if (doingTodos.any((task) => mapEquals<String, dynamic>(todo, task))) {
       return false;
     }
-    var doneTodo = {'title': title, 'isDone': false};
+    var doneTodo = {'title': title, 'isDone': true};
     if (doneTodos.any((task) => mapEquals<String, dynamic>(doneTodo, task))) {
       return false;
     }
@@ -142,7 +144,7 @@ class HomeController extends GetxController {
   }
 
   void updateTodos() {
-    print('HomeController - updateTodos is called');
+    debugPrint('HomeController - updateTodos is called');
 
     var newTodos = <Map<String, dynamic>>[];
     newTodos.addAll([...doingTodos, ...doneTodos]);
@@ -153,26 +155,76 @@ class HomeController extends GetxController {
   }
 
   void deleteDoneTodo(dynamic task) {
-    print('HomeController - deleteDoneTodo is called');
-
-    // var doneTodo = {'title': title, 'isDone': true};
-    // int index = doneTodos().indexWhere((item) => mapEquals(task, item));
-    //  doneTodos.removeAt(index);
+    debugPrint('HomeController - deleteDoneTodo is called');
     doneTodos.remove(task);
   }
 
   bool isTodoEmpty(Task task) {
-    print('HomeController - isTodoEmpty is called');
-
+    debugPrint('HomeController - isTodoEmpty is called');
     return task.todos == null || task.todos!.isEmpty;
   }
 
   int getDoneTodo(Task task) {
-    print('HomeController - getDoneTodo is called');
+    debugPrint('HomeController - getDoneTodo is called');
     var res = 0;
     for (var i = 0; i < task.todos!.length; i++) {
-      res += 1;
+      if (task.todos![i]['isDone'] == true) {
+        res += 1;
+      }
     }
     return res;
+  }
+
+  void addNewList() {
+    debugPrint('HomeController - addNewList is called');
+    final icons = getIcons();
+    if (formKey.currentState!.validate()) {
+      int icon = icons[chipIndex.value].icon!.codePoint;
+      String color = icons[chipIndex.value].color!.toHex();
+      var task = Task(title: editCtrl.text, icon: icon, color: color);
+
+      Get.back();
+      addTask(task) ? EasyLoading.showSuccess('Create Success') : EasyLoading.showError('You already have that task!');
+    }
+  }
+
+  void addMission() {
+    debugPrint('HomeController - addMission is called');
+    if (formKey.currentState!.validate()) {
+      if (task.value == null) {
+        EasyLoading.showError('Please Choose the list');
+      } else {
+        final bool success = updateTask(
+          task.value!,
+          editCtrl.text,
+        );
+        if (success) {
+          EasyLoading.showSuccess('Task added to your ${task.value!.title}');
+          closeDialog();
+        } else {
+          EasyLoading.showError('Task is already in the list');
+        }
+        editCtrl.clear();
+      }
+    }
+  }
+
+  void addForTaskScren() {
+    if (formKey.currentState!.validate()) {
+      var success = addTodo(editCtrl.text);
+      if (success) {
+        EasyLoading.showSuccess('New Task added to your List');
+      } else {
+        EasyLoading.showError('Task is already on the list');
+      }
+      editCtrl.clear();
+    }
+  }
+
+  void toHomeScreen() {
+    Get.back();
+    updateTodos();
+    editCtrl.clear();
+    changeTask(null);
   }
 }

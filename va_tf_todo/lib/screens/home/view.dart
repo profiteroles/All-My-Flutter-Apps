@@ -14,6 +14,7 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: DragTarget<Task>(
         onAccept: (task) {
           controller.deleteTask(task);
@@ -21,16 +22,9 @@ class HomeScreen extends GetView<HomeController> {
         },
         builder: (_, __, ___) => Obx(
           () => FloatingActionButton(
-            backgroundColor: controller.deleting.value ? Colors.red : Colors.blue,
-            onPressed: () {
-              if (controller.tasks.isNotEmpty) {
-                Get.to(() => AddDialog(), transition: Transition.downToUp);
-              } else {
-                EasyLoading.showInfo('First of all, Create a task');
-              }
-            },
-            child: Icon(controller.deleting.value ? Icons.delete : Icons.add),
-          ),
+              backgroundColor: controller.deleting.value ? Colors.red : Colors.blue,
+              child: Icon(controller.deleting.value ? Icons.delete : Icons.add),
+              onPressed: () => controller.tasks.isNotEmpty ? Get.to(() => const AddDialog(), transition: Transition.downToUp) : EasyLoading.showInfo('First of all, Create a task')),
         ),
       ),
       body: SafeArea(
@@ -47,20 +41,21 @@ class HomeScreen extends GetView<HomeController> {
                 physics: const ClampingScrollPhysics(),
                 children: [
                   ...controller.tasks
-                      .map((task) => LongPressDraggable(
-                            data: task,
-                            onDragStarted: () => controller.changeDeleting(true),
-                            onDraggableCanceled: (_, __) => controller.changeDeleting(false),
-                            onDragEnd: (_) => controller.changeDeleting(false),
-                            feedback: Opacity(
-                              opacity: .8,
-                              child: TaskCard(task: task),
-                            ),
+                      .map(
+                        (task) => LongPressDraggable(
+                          child: TaskCard(task: task),
+                          data: task,
+                          onDragStarted: () => controller.changeDeleting(true),
+                          onDraggableCanceled: (_, __) => controller.changeDeleting(false),
+                          onDragEnd: (_) => controller.changeDeleting(false),
+                          feedback: Opacity(
+                            opacity: .8,
                             child: TaskCard(task: task),
-                          ))
+                          ),
+                        ),
+                      )
                       .toList(),
-                  // TaskCard(task : Task(title: 'title', icon: 0xe59c, color: 'FF2B60E6')),
-                  AddCard(),
+                  const AddCard(),
                 ],
               ),
             ),

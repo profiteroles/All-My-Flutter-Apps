@@ -1,16 +1,13 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/values/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
-class AddCard extends StatelessWidget {
-  final homeCtrl = Get.find<HomeController>();
-  AddCard({Key? key}) : super(key: key);
+class AddCard extends GetView<HomeController> {
+  const AddCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +24,18 @@ class AddCard extends StatelessWidget {
             radius: 5,
             title: 'Task Type',
             content: Form(
-              key: homeCtrl.formKey,
+              key: controller.formKey,
               child: Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 3.0.wp),
                     child: TextFormField(
-                      controller: homeCtrl.editCtrl,
+                      validator: (value) => value!.trim().isEmpty ? 'Task is required' : null,
+                      controller: controller.editCtrl,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Title',
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Task is required';
-                        }
-                      },
                     ),
                   ),
                   Padding(
@@ -54,42 +47,31 @@ class AddCard extends StatelessWidget {
                                 final index = icons.indexOf(e);
                                 return ChoiceChip(
                                   label: e,
-                                  elevation: homeCtrl.chipIndex.value == index ? 3 : 0,
+                                  elevation: controller.chipIndex.value == index ? 3 : 0,
                                   selectedColor: Colors.white,
                                   backgroundColor: Colors.white,
-                                  selected: homeCtrl.chipIndex.value == index,
-                                  onSelected: (selected) {
-                                    homeCtrl.chipIndex.value = selected ? index : 0;
-                                  },
+                                  selected: controller.chipIndex.value == index,
+                                  onSelected: (selected) => controller.chipIndex.value = selected ? index : 0,
                                 );
                               }))
                           .toList(),
                     ),
                   ),
                   ElevatedButton(
+                    onPressed: controller.addNewList,
+                    child: const Text('Confirm'),
                     style: ElevatedButton.styleFrom(
                       primary: blue,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       minimumSize: const Size(150, 40),
                     ),
-                    onPressed: () {
-                      if (homeCtrl.formKey.currentState!.validate()) {
-                        int icon = icons[homeCtrl.chipIndex.value].icon!.codePoint;
-                        String color = icons[homeCtrl.chipIndex.value].color!.toHex();
-                        var task = Task(title: homeCtrl.editCtrl.text, icon: icon, color: color);
-
-                        Get.back();
-                        homeCtrl.addTask(task) ? EasyLoading.showSuccess('Create Success') : EasyLoading.showError('You already have that task!');
-                      }
-                    },
-                    child: const Text('Confirm'),
                   ),
                 ],
               ),
             ),
           );
-          homeCtrl.editCtrl.clear();
-          homeCtrl.changeChipIndex(0);
+          controller.editCtrl.clear();
+          controller.changeChipIndex(0);
         },
         child: DottedBorder(
           color: Colors.grey[400]!,

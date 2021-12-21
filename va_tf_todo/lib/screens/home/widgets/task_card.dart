@@ -6,10 +6,9 @@ import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/show/task_screen.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
-class TaskCard extends StatelessWidget {
-  TaskCard({Key? key, required this.task}) : super(key: key);
+class TaskCard extends GetView<HomeController> {
+  const TaskCard({Key? key, required this.task}) : super(key: key);
   final Task task;
-  final homeCtrl = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +16,9 @@ class TaskCard extends StatelessWidget {
     final squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
-        homeCtrl.changeTask(task);
-        homeCtrl.changeTodos(task.todos ?? []);
-        Get.to(() => TaskDetailScreen());
+        controller.changeTask(task);
+        controller.changeTodos(task.todos ?? []);
+        Get.to(() => const TaskDetailScreen());
       },
       child: Container(
         width: squareWidth / 2,
@@ -39,8 +38,8 @@ class TaskCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepProgressIndicator(
-              totalSteps: homeCtrl.isTodoEmpty(task) ? 1 : task.todos!.length,
-              currentStep: homeCtrl.isTodoEmpty(task) ? 0 : homeCtrl.getDoneTodo(task),
+              totalSteps: controller.isTodoEmpty(task) ? 1 : task.todos!.length,
+              currentStep: controller.isTodoEmpty(task) ? 0 : controller.getDoneTodo(task),
               size: 5,
               padding: 0,
               unselectedGradientColor: const LinearGradient(
@@ -51,18 +50,12 @@ class TaskCard extends StatelessWidget {
               selectedGradientColor: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  color.withOpacity(.5),
-                  color,
-                ],
+                colors: [color.withOpacity(.5), color],
               ),
             ),
             Padding(
               padding: EdgeInsets.all(6.0.wp),
-              child: Icon(
-                IconData(task.icon, fontFamily: 'MaterialIcons'),
-                color: color,
-              ),
+              child: Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
             ),
             Padding(
               padding: EdgeInsets.all(6.0.wp),
@@ -80,14 +73,11 @@ class TaskCard extends StatelessWidget {
                   SizedBox(height: 2.0.wp),
                   Text(
                     "${task.todos?.length ?? 0} Tasks",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

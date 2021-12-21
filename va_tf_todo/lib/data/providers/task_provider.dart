@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -12,22 +13,16 @@ class TaskProvider {
   List<Task> readTasks() {
     debugPrint('TaskProvider - readTasks is Called');
     var tasks = <Task>[];
-    var json = _storage.read(taskKey);
-    // Task task = Task.fromJson(json);
-    print(json);
-    // jsonDecode(json).forEach((e) {
-    //   debugPrint('_______ TaskProvider - readTasks Start______');
-    //   print(e);
-    debugPrint('_______ TaskProvider - readTasks End______');
-    // tasks.add(Task.fromJson(e));
-    // });
+
+    for (var task in _storage.read(taskKey) as List) {
+      tasks.add(Task.fromJson(task));
+    }
 
     return tasks;
   }
 
   void writeTasks(List<Task> tasks) {
     debugPrint('TaskProvider - writeTasks is Called');
-    // print(tasks);
     _storage.write(taskKey, tasks);
   }
 }

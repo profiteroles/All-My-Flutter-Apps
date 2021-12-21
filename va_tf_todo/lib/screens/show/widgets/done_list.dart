@@ -58,7 +58,7 @@ class DoneList extends GetView<HomeController> {
                 ],
               ),
             )
-          : Container(),
+          : const SizedBox.shrink(),
     );
   }
 }

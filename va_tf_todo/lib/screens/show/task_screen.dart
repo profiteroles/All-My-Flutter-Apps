@@ -7,33 +7,23 @@ import 'package:va_tf_todo/screens/show/widgets/doing_list.dart';
 import 'package:va_tf_todo/screens/show/widgets/done_list.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
-class TaskDetailScreen extends StatelessWidget {
-  TaskDetailScreen({Key? key}) : super(key: key);
-
-  final homeCtrl = Get.find<HomeController>();
+class TaskDetailScreen extends GetView<HomeController> {
+  const TaskDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var task = homeCtrl.task.value!;
+    var task = controller.task.value!;
     var color = HexColor.fromHex(task.color);
     return Scaffold(
       body: Form(
-        key: homeCtrl.formKey,
+        key: controller.formKey,
         child: ListView(
           children: [
             Padding(
               padding: EdgeInsets.all(3.0.wp),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Get.back();
-                      homeCtrl.updateTodos();
-                      homeCtrl.changeTask(null);
-                      homeCtrl.editCtrl.clear();
-                    },
-                  ),
+                  IconButton(icon: const Icon(Icons.arrow_back), onPressed: controller.toHomeScreen),
                 ],
               ),
             ),
@@ -52,7 +42,7 @@ class TaskDetailScreen extends StatelessWidget {
             ),
             Obx(
               () {
-                var totalTodos = homeCtrl.doingTodos.length + homeCtrl.doneTodos.length;
+                var totalTodos = controller.doingTodos.length + controller.doneTodos.length;
                 return Padding(
                   padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
                   child: Row(
@@ -65,7 +55,7 @@ class TaskDetailScreen extends StatelessWidget {
                       Expanded(
                         child: StepProgressIndicator(
                           totalSteps: totalTodos == 0 ? 1 : totalTodos,
-                          currentStep: homeCtrl.doneTodos.length,
+                          currentStep: controller.doneTodos.length,
                           size: 5,
                           padding: 0,
                           selectedGradientColor: LinearGradient(
@@ -88,31 +78,18 @@ class TaskDetailScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 5.0.wp),
               child: TextFormField(
-                controller: homeCtrl.editCtrl,
+                controller: controller.editCtrl,
                 autofocus: true,
                 validator: (value) => value!.trim().isEmpty ? 'Enter a task' : null,
                 decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[400]!)),
                   prefixIcon: Icon(Icons.check_box_outline_blank, color: Colors.grey[400]),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.done),
-                    onPressed: () {
-                      if (homeCtrl.formKey.currentState!.validate()) {
-                        var success = homeCtrl.addTodo(homeCtrl.editCtrl.text);
-                        if (success) {
-                          EasyLoading.showSuccess('New Task added to your List');
-                        } else {
-                          EasyLoading.showError('Task is already on the list');
-                        }
-                        homeCtrl.editCtrl.clear();
-                      }
-                    },
-                  ),
+                  suffixIcon: IconButton(icon: const Icon(Icons.done), onPressed: controller.addForTaskScren),
                 ),
               ),
             ),
-            DoingList(),
-            DoneList(),
+            const DoingList(),
+            const DoneList(),
           ],
         ),
       ),

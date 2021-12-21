@@ -43,7 +43,9 @@ dependencies:
   flutter_easyloading: ^3.0.3
   get: ^4.6.1
   get_storage: ^2.0.3
+  google_fonts: ^2.1.0
   step_progress_indicator: ^1.0.1
+  
 
 dev_dependencies:
   flutter_test:
