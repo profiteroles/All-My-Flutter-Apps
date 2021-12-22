@@ -15,29 +15,39 @@ class AnimatedCard extends GetView<SigningController> {
       () => AnimatedPositioned(
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInBack,
-        top: controller.isSignupScreen() ? 535 : 430,
+        top: controller.isSignupScreen() ? 68.0.hp : 56.0.hp,
         right: 0,
         left: 0,
         child: Center(
-          child: Container(
-            height: 90,
-            width: 90,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            transformAlignment: Alignment.topRight,
+            transform: (controller.isSignupScreen()
+                ? (Matrix4.identity()
+                  ..translate(0.025 * 100, 0.025 * 90)
+                  ..scale(0.95, 0.95))
+                : Matrix4.identity()),
+            curve: Curves.fastOutSlowIn,
+            height: controller.btnAnimationValue(),
+            width: controller.btnAnimationValue(),
             padding: EdgeInsets.all(3.0.wp),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50), boxShadow: [
-              if (hasShadow)
-                BoxShadow(
-                  color: Colors.black.withOpacity(.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                )
-            ]),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                if (hasShadow) BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 5),
+              ],
+            ),
             child: !hasShadow
-                ? Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [Colors.orange[200]!, Colors.red[400]!], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 2, offset: const Offset(0, 1))]),
-                    child: const Icon(Icons.arrow_forward, color: Colors.white),
+                ? InkWell(
+                    onTap: () => controller.isSignupScreen() ? controller.register() : controller.login(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [Colors.orange[200]!, Colors.red[400]!], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 2, offset: const Offset(0, 1))]),
+                      child: const Icon(Icons.arrow_forward, color: Colors.white),
+                    ),
                   )
                 : const Center(),
           ),

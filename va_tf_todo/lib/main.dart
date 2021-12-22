@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/services/storage_service.dart';
 import 'package:va_tf_todo/screens/singing/binding.dart';
 import 'package:va_tf_todo/screens/singing/view.dart';
+import 'package:va_tf_todo/values/theme.dart';
 
 void main() async {
   await GetStorage.init();
@@ -25,6 +27,9 @@ class VAToDo extends StatelessWidget {
       initialBinding: SigningBinding(),
       home: const SigningScreen(),
       builder: EasyLoading.init(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      localizationsDelegates: const [FormBuilderLocalizations.delegate],
     );
   }
 }
