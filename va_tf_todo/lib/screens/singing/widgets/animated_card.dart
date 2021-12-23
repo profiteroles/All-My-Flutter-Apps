@@ -32,7 +32,7 @@ class AnimatedCard extends GetView<SigningController> {
             width: controller.btnAnimationValue(),
             padding: EdgeInsets.all(3.0.wp),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).canvasColor,
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 if (hasShadow) BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 5),

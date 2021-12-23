@@ -23,7 +23,7 @@ class ToggleAnimationContainer extends GetView<SigningController> {
           width: 90.0.wp,
           margin: EdgeInsets.symmetric(horizontal: 4.0.wp),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).canvasColor,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 15, spreadRadius: 5)],
           ),

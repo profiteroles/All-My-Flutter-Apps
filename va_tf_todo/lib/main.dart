@@ -31,7 +31,7 @@ class VAToDo extends StatelessWidget {
       initialBinding: MainBinding(),
       builder: EasyLoading.init(),
       initialRoute: AppRoutes.home,
-      theme: lightTheme,
+      theme: darkTheme,
       darkTheme: darkTheme,
       getPages: AppPages.pages,
       localizationsDelegates: const [FormBuilderLocalizations.delegate],

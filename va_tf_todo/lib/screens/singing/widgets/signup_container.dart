@@ -41,7 +41,7 @@ class SignUpContainer extends GetView<SigningController> {
           ),
           XTextField(
             hint: 'Password',
-            passValid: true,
+            obscure: true,
             controller: passwordCtrl,
             validator: [
               V.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
@@ -50,7 +50,7 @@ class SignUpContainer extends GetView<SigningController> {
           ),
           XTextField(
             hint: 'Password Confirmation',
-            passValid: true,
+            obscure: true,
             validator: [
               V.FormBuilderValidators.required(context, errorText: 'Sure it matches but ... You know how this works'),
               V.FormBuilderValidators.minLength(context, 8, errorText: 'Actually "Eye" may guide you through this'),

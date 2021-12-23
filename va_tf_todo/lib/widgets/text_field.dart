@@ -10,11 +10,7 @@ class XTextField extends StatefulWidget {
     required this.hint,
     this.icon,
     this.radius = 8,
-    // this.required = true,
-    // this.emailValid = false,
-    this.passValid = false,
-    // this.nameValid = false,
-    // this.passConfirm = '',
+    this.obscure = false,
     this.type = TextInputType.text,
     this.controller,
     this.hasIcon = true,
@@ -23,11 +19,10 @@ class XTextField extends StatefulWidget {
   }) : super(key: key);
 
   final IconData? icon;
-  final String hint; //, passConfirm;
+  final String hint;
   final TextInputType type;
   final double radius;
-  // final bool required, emailValid, passValid, nameValid, hasIcon;
-  final bool hasIcon, passValid;
+  final bool hasIcon, obscure;
   final TextEditingController? controller;
   final List<String? Function(String?)> validator;
 
@@ -46,36 +41,23 @@ class _XTextFieldState extends State<XTextField> {
       child: FormBuilderTextField(
         controller: widget.controller,
         name: widget.hint.toLowerCase().replaceAll(' ', '_'),
-        obscureText: widget.passValid ? obscure : false,
+        obscureText: widget.obscure ? obscure : false,
         keyboardType: widget.type,
+        validator: FormBuilderValidators.compose(widget.validator),
         decoration: InputDecoration(
           labelText: widget.hint,
           labelStyle: Theme.of(context).inputDecorationTheme.hintStyle,
           contentPadding: EdgeInsets.all(widget.hasIcon ? 0 : 15),
           prefixIcon: Icon(widget.icon ?? Icons.lock_outline),
-          suffixIcon: widget.passValid
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(widget.radius)),
+          hintText: widget.hint,
+          suffixIcon: widget.obscure
               ? IconButton(
                   onPressed: () => setState(() => obscure = !obscure),
                   icon: Icon(obscure ? Icons.remove_red_eye_outlined : Icons.remove_red_eye),
                 )
               : null,
-          hintText: widget.hint,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(widget.radius)),
         ),
-        validator: FormBuilderValidators.compose(widget.validator
-            // [
-            //   FormBuilderValidators.required(context),
-            //   if (widget.emailValid) FormBuilderValidators.email(context),
-            //   if (widget.passValid) FormBuilderValidators.minLength(context, 8, errorText: 'Minimum 8 Characters'),
-            //   if (widget.passConfirm.length > 7) FormBuilderValidators.match(context, widget.passConfirm),
-            //   if (widget.nameValid)
-            //     (value) {
-            //       if (RegExp(r'[.,!@#$<>?":_`~;[\]\\|=+)(**&^%0-9-]').hasMatch(value!)) {
-            //         return 'Looks like your name is quite special';
-            //       }
-            //     }
-            // ],
-            ),
       ),
     );
   }

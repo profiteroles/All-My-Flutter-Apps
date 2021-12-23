@@ -1,10 +1,20 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:va_tf_todo/values/theme/dark_theme.dart';
+import 'package:va_tf_todo/values/theme/light_theme.dart';
 
 class SettingsController extends GetxController {
   RxBool isDarkMode = false.obs;
   RxBool nofityOn = true.obs;
 
-  void setThemeMode(bool value) => isDarkMode(value);
-  void setNotification(bool value) => nofityOn(value);
+  void setThemeMode(bool value) {
+    debugPrint('SettingsController - setThemeMode is Called');
+    isDarkMode(value);
+    Get.changeTheme(value ? darkTheme : lightTheme);
+  }
+
+  void setNotification(bool value) {
+    debugPrint('SettingsController - setThemeMode is Called');
+    nofityOn(value);
+  }
 }

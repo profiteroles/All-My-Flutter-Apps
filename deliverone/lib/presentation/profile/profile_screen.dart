@@ -7,6 +7,7 @@ import '../widgets/app_elevated_button.dart';
 import '../widgets/user_details_card.dart';
 
 class ProfileScreen extends StatelessWidget {
+  ProfileScreen({Key? key}) : super(key: key);
   final controller = Get.find<HomeController>();
 
   Future<void> logout() async {

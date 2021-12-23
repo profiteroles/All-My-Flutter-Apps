@@ -25,12 +25,13 @@ class TaskCard extends GetView<HomeController> {
         height: squareWidth / 2,
         margin: EdgeInsets.all(3.0.wp),
         decoration: BoxDecoration(
-          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey[300]!,
+              color: Theme.of(context).shadowColor.withOpacity(.3),
               blurRadius: 7,
-              offset: const Offset(0, 7),
+              offset: const Offset(0, 5),
             ),
           ],
         ),

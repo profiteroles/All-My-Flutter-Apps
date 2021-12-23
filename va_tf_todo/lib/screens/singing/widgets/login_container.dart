@@ -25,7 +25,7 @@ class LoginContainer extends GetView<SigningController> {
           ),
           XTextField(
             hint: 'Password',
-            passValid: true,
+            obscure: true,
             validator: [
               V.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
               V.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),

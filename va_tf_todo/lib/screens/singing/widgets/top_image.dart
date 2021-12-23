@@ -16,28 +16,20 @@ class TopImageSection extends GetView<SigningController> {
       child: Container(
         padding: EdgeInsets.only(top: 20.0.wp),
         height: 37.0.hp,
-        decoration: const BoxDecoration(color: purple),
+        decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
         child: Obx(
-          () => Column(
-            children: [
-              RichText(
-                text: TextSpan(
-                  text: "Welcome to",
-                  style: TextStyle(fontSize: 25, letterSpacing: 2, color: Colors.yellow[700]),
-                  children: [
-                    TextSpan(
-                      text: controller.isSignupScreen() ? " uniQ X," : " Back,",
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.yellow[700]),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                controller.isSignupScreen() ? "Signup to Continue" : "Signin to Continue",
-                style: const TextStyle(letterSpacing: 1, color: Colors.white),
-              ),
-            ],
+          () => RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: "Welcome to ",
+              style: TextStyle(fontSize: 25, letterSpacing: 2, color: Colors.yellow[700]),
+              children: [
+                TextSpan(
+                  text: controller.isSignupScreen() ? "uniQ X," : "Back,",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.yellow[700]),
+                )
+              ],
+            ),
           ),
         ),
       ),

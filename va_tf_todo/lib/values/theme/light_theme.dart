@@ -18,6 +18,9 @@ final borderDark = OutlineInputBorder(
 );
 
 final lightTheme = ThemeData.light().copyWith(
+  primaryColor: purple,
+  splashColor: Colors.transparent,
+  highlightColor: Colors.transparent,
   appBarTheme: AppBarTheme(
     color: white,
     titleTextStyle: GoogleFonts.raleway().copyWith(
@@ -27,6 +30,8 @@ final lightTheme = ThemeData.light().copyWith(
       letterSpacing: 1,
     ),
   ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: purple),
+  primaryColorLight: veryLightGrey,
   bottomAppBarColor: veryLightGrey,
   primaryColorDark: white,
   scaffoldBackgroundColor: white,
@@ -44,22 +49,19 @@ final lightTheme = ThemeData.light().copyWith(
       // bodyText2: const TextStyle(),
       ),
   cardTheme: const CardTheme(color: white),
-  // textButtonTheme: TextButtonThemeData(
-  //     style: ButtonStyle(
-  //   overlayColor: MaterialStateProperty.all(Colors.transparent),
-  // )),
-  // TODO: IMplemetn this to Dark theme
-  dialogTheme: const DialogTheme(
-    titleTextStyle: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: purple,
-      decoration: TextDecoration.underline,
-      decorationColor: black,
-      decorationThickness: 1.5,
-    ),
-    contentTextStyle: TextStyle(fontSize: 17, color: black),
-  ),
+
+  //Dialog Theme
+  // dialogTheme: const DialogTheme(
+  //   contentTextStyle: TextStyle(fontSize: 17, color: black),
+  //   titleTextStyle: TextStyle(
+  //     fontSize: 20,
+  //     fontWeight: FontWeight.bold,
+  //     color: purple,
+
+  //   ),
+  // ),
+
+  //Input Decoration Theme
   inputDecorationTheme: InputDecorationTheme(
     border: borderLight,
     enabledBorder: borderLight,
@@ -73,4 +75,7 @@ final lightTheme = ThemeData.light().copyWith(
         secondary: green,
         onSecondary: purple,
       ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    unselectedItemColor: lightGrey,
+  ),
 );

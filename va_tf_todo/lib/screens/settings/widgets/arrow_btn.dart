@@ -18,7 +18,7 @@ class ArrowBtn extends StatelessWidget {
       child: Icon(icon),
       style: TextButton.styleFrom(
         fixedSize: Size(14.0.wp, 14.0.wp),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Theme.of(context).primaryColorLight,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );

@@ -33,11 +33,7 @@ class SettingCard extends StatelessWidget {
           trailing: isSwitch ? Switch(value: value ?? false, onChanged: onChanged ?? (value) {}) : ArrowBtn(onPress: onPress ?? () {}),
           contentPadding: EdgeInsets.all(5.0.wp),
           iconColor: Colors.orange,
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.grey[200],
-            child: Icon(icon, color: Colors.grey),
-          ),
+          leading: Icon(icon),
         ),
       ),
     );

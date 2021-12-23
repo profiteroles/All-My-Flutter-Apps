@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
+import 'package:va_tf_todo/screens/home/widgets/task_input_field.dart';
 import 'package:va_tf_todo/screens/show/widgets/doing_list.dart';
 import 'package:va_tf_todo/screens/show/widgets/done_list.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
@@ -33,10 +34,7 @@ class TaskDetailScreen extends GetView<HomeController> {
                 children: [
                   Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
                   SizedBox(width: 3.0.sp),
-                  Text(
-                    task.title,
-                    style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
-                  )
+                  Text(task.title, style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -75,16 +73,17 @@ class TaskDetailScreen extends GetView<HomeController> {
                 );
               },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 5.0.wp),
-              child: TextFormField(
-                controller: controller.editCtrl,
-                autofocus: true,
-                validator: (value) => value!.trim().isEmpty ? 'Enter a task' : null,
-                decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[400]!)),
-                  prefixIcon: Icon(Icons.check_box_outline_blank, color: Colors.grey[400]),
-                  suffixIcon: IconButton(icon: const Icon(Icons.done), onPressed: controller.addForTaskScren),
+            TaskInputField(
+              title: 'Task',
+              controller: controller.editCtrl,
+              prefixIcon: Icon(Icons.check_box_outline_blank, color: Colors.grey[400]),
+              suffixIcon: OutlinedButton(
+                onPressed: controller.addForTaskScren,
+                child: const Icon(Icons.done),
+                style: OutlinedButton.styleFrom(
+                  elevation: 1,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  primary: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),
