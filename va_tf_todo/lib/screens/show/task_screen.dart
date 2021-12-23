@@ -3,9 +3,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
+import 'package:va_tf_todo/screens/home/widgets/choice_btn.dart';
 import 'package:va_tf_todo/screens/home/widgets/task_input_field.dart';
 import 'package:va_tf_todo/screens/show/widgets/doing_list.dart';
 import 'package:va_tf_todo/screens/show/widgets/done_list.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 class TaskDetailScreen extends GetView<HomeController> {
@@ -34,7 +36,7 @@ class TaskDetailScreen extends GetView<HomeController> {
                 children: [
                   Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
                   SizedBox(width: 3.0.sp),
-                  Text(task.title, style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold)),
+                  Text(task.title, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -45,10 +47,7 @@ class TaskDetailScreen extends GetView<HomeController> {
                   padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
                   child: Row(
                     children: [
-                      Text(
-                        '$totalTodos Tasks',
-                        style: TextStyle(fontSize: 12.0.sp, color: Colors.grey),
-                      ),
+                      Text('$totalTodos Tasks', style: Theme.of(context).textTheme.subtitle2),
                       SizedBox(width: 3.0.wp),
                       Expanded(
                         child: StepProgressIndicator(
@@ -76,15 +75,10 @@ class TaskDetailScreen extends GetView<HomeController> {
             TaskInputField(
               title: 'Task',
               controller: controller.editCtrl,
-              prefixIcon: Icon(Icons.check_box_outline_blank, color: Colors.grey[400]),
-              suffixIcon: OutlinedButton(
-                onPressed: controller.addForTaskScren,
-                child: const Icon(Icons.done),
-                style: OutlinedButton.styleFrom(
-                  elevation: 1,
-                  backgroundColor: Theme.of(context).primaryColor,
-                  primary: Theme.of(context).colorScheme.secondary,
-                ),
+              prefixIcon: const Icon(Icons.checklist_rounded),
+              suffixIcon: Padding(
+                padding: EdgeInsets.only(right: 2.0.wp),
+                child: ChoiceBtn(label: const Icon(Icons.done, color: green), elevation: 3, onSelected: controller.addForTaskScren),
               ),
             ),
             const DoingList(),

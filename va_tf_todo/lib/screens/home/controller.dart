@@ -23,6 +23,8 @@ class HomeController extends GetxController {
   final doingTodos = <dynamic>[].obs;
   final doneTodos = <dynamic>[].obs;
 
+  RxDouble taskBoxHeight = 6.0.hp.obs;
+
   RxInt pageIndex = 1.obs;
   RxDouble fabOpacity = 1.0.obs;
 
@@ -218,7 +220,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void addForTaskScren() {
+  void addForTaskScren(bool v) {
     if (formKey.currentState!.validate()) {
       var success = addTodo(editCtrl.text);
       if (success) {

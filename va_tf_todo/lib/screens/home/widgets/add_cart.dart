@@ -5,6 +5,7 @@ import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 import 'button.dart';
+import 'choice_btn.dart';
 import 'task_input_field.dart';
 
 class AddCard extends GetView<HomeController> {
@@ -30,11 +31,9 @@ class AddCard extends GetView<HomeController> {
                     child: Wrap(
                       spacing: 2.0.wp,
                       children: getIcons()
-                          .map((e) => Obx(() => ChoiceChip(
+                          .map((e) => Obx(() => ChoiceBtn(
                                 label: e,
                                 elevation: controller.chipIndex.value == getIcons().indexOf(e) ? 3 : 0,
-                                selectedColor: Theme.of(context).primaryColorDark,
-                                backgroundColor: Theme.of(context).canvasColor,
                                 selected: controller.chipIndex.value == getIcons().indexOf(e),
                                 onSelected: (selected) => controller.chipIndex.value = selected ? getIcons().indexOf(e) : 0,
                               )))

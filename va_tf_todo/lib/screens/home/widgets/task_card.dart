@@ -13,7 +13,7 @@ class TaskCard extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final color = HexColor.fromHex(task.color);
-    final squareWidth = Get.width - 12.0.wp;
+    // final squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
         controller.changeTask(task);
@@ -21,8 +21,8 @@ class TaskCard extends GetView<HomeController> {
         Get.to(() => const TaskDetailScreen());
       },
       child: Container(
-        width: squareWidth / 2,
-        height: squareWidth / 2,
+        // width: squareWidth / 2,
+        // height: squareWidth / 2,
         margin: EdgeInsets.all(3.0.wp),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
@@ -30,7 +30,7 @@ class TaskCard extends GetView<HomeController> {
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).shadowColor.withOpacity(.3),
-              blurRadius: 7,
+              blurRadius: 5,
               offset: const Offset(0, 5),
             ),
           ],

@@ -60,15 +60,9 @@ class AddDialog extends GetView<HomeController> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(
-                                        IconData(task.icon, fontFamily: 'MaterialIcons'),
-                                        color: HexColor.fromHex(task.color),
-                                      ),
+                                      Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: HexColor.fromHex(task.color)),
                                       SizedBox(width: 2.0.sp),
-                                      Text(
-                                        task.title,
-                                        style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
-                                      ),
+                                      Text(task.title, style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   if (controller.task.value == task) const Icon(Icons.check, color: Colors.blue),
