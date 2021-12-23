@@ -15,7 +15,7 @@ class AnimatedCard extends GetView<SigningController> {
       () => AnimatedPositioned(
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInBack,
-        top: controller.isSignupScreen() ? 68.0.hp : 56.0.hp,
+        top: controller.isSignupScreen() ? 68.0.hp : 60.0.hp,
         right: 0,
         left: 0,
         child: Center(

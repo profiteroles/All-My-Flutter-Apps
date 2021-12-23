@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:space_juke/domain/models/user.dart';
 import 'package:space_juke/domain/repository/auth_repository.dart';
 import 'package:space_juke/presentation/widgets/snackbar_error.dart';
 import 'package:space_juke/values/constants.dart';

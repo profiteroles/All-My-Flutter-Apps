@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/values/utils/extention.dart';
-
+import '../../../values/utils/extention.dart';
 import '../controller.dart';
 import 'login_container.dart';
 import 'signup_container.dart';
@@ -19,7 +18,7 @@ class ToggleAnimationContainer extends GetView<SigningController> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 700),
           curve: Curves.easeInBack,
-          height: controller.isSignupScreen() ? 49.0.hp : 33.0.hp,
+          height: controller.isSignupScreen() ? 49.0.hp : 37.0.hp,
           padding: EdgeInsets.all(5.0.wp),
           width: 90.0.wp,
           margin: EdgeInsets.symmetric(horizontal: 4.0.wp),
@@ -58,7 +57,7 @@ class ToggleAnimationContainer extends GetView<SigningController> {
                     ),
                   ],
                 ),
-                controller.isSignupScreen() ? const SignUpContainer() : const LoginContainer(),
+                controller.isSignupScreen() ? SignUpContainer() : const LoginContainer(),
               ],
             ),
           ),

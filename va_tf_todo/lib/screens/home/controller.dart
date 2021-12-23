@@ -19,10 +19,12 @@ class HomeController extends GetxController {
   final deleting = false.obs;
 
   final task = Rx<Task?>(null);
-
   final tasks = <Task>[].obs;
   final doingTodos = <dynamic>[].obs;
   final doneTodos = <dynamic>[].obs;
+
+  RxInt pageIndex = 1.obs;
+  RxDouble fabOpacity = 1.0.obs;
 
   @override
   void onInit() {
@@ -37,6 +39,18 @@ class HomeController extends GetxController {
     debugPrint('HomeController - Closed');
     super.onClose();
     editCtrl.dispose();
+  }
+
+  void closeDialog() {
+    Get.back();
+    editCtrl.clear();
+    changeTask(null);
+  }
+
+  void setPage(int index) {
+    debugPrint('HomeController - setPage is Called Index is: $index');
+    index == 1 ? fabOpacity(1) : fabOpacity(0);
+    pageIndex(index);
   }
 
   void doneTodo(String title) {
@@ -63,12 +77,6 @@ class HomeController extends GetxController {
         doingTodos.add(todo);
       }
     }
-  }
-
-  void closeDialog() {
-    Get.back();
-    editCtrl.clear();
-    changeTask(null);
   }
 
   bool updateTask(Task task, String title) {
@@ -113,6 +121,7 @@ class HomeController extends GetxController {
     debugPrint('HomeController - addTask is called receive task is: \n'
         '${task.title} ${task.icon} ${task.color}');
     tasks.remove(task);
+    EasyLoading.showSuccess('Task Removed');
   }
 
   bool addTask(Task task) {

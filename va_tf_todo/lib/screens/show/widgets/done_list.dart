@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
-import 'package:va_tf_todo/values/colors.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 class DoneList extends GetView<HomeController> {
@@ -38,11 +38,7 @@ class DoneList extends GetView<HomeController> {
                               padding: EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 2.0.wp),
                               child: Row(
                                 children: [
-                                  const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: Icon(Icons.done, color: blue),
-                                  ),
+                                  const SizedBox(width: 20, height: 20, child: Icon(Icons.done, color: blue)),
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
                                     child: Text(
