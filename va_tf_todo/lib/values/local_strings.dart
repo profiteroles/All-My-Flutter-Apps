@@ -1,6 +1,7 @@
 import "package:get/route_manager.dart";
 
-// https://www.science.co.il/international/Country-codes.php
+//Country Codes: https://www.science.co.il/international/Country-codes.php
+//Translator: https://file-translate.com/en/app/json-translate
 
 class LocalStrings extends Translations {
   @override
