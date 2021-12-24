@@ -37,7 +37,7 @@ class TodoListScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const FlatAppBar('My List', hasInfoIcon: true),
+        FlatAppBar('my_list'.tr, hasInfoIcon: true),
         Obx(
           () => GridView.count(
             crossAxisCount: 2,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class TaskButton extends StatelessWidget {
   const TaskButton({
@@ -14,7 +15,7 @@ class TaskButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(title ?? 'Confirm'),
+      child: Text(title ?? 'confirm'.tr),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         minimumSize: const Size(150, 40),

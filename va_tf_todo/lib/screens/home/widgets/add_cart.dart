@@ -20,7 +20,7 @@ class AddCard extends GetView<HomeController> {
           await Get.defaultDialog(
             titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
             radius: 5,
-            title: 'Task Type',
+            title: 'task_type'.tr,
             content: Form(
               key: controller.formKey,
               child: Column(

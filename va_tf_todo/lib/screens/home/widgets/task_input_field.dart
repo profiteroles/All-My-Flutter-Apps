@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 class TaskInputField extends StatelessWidget {
@@ -19,12 +20,12 @@ class TaskInputField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(3.0.wp),
       child: TextFormField(
-        validator: (value) => value!.trim().isEmpty ? 'Title is required' : null,
+        validator: (value) => value!.trim().isEmpty ? 'error_title_required'.tr : null,
         controller: controller,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           prefix: prefixIcon,
-          labelText: title ?? 'Title',
+          labelText: title ?? 'title'.tr,
         ),
       ),
     );

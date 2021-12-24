@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/widgets/text_field.dart';
-import 'package:form_builder_validators/form_builder_validators.dart' as V;
+import 'package:form_builder_validators/form_builder_validators.dart' as v;
 import '../controller.dart';
 
 class LoginContainer extends GetView<SigningController> {
@@ -19,16 +19,16 @@ class LoginContainer extends GetView<SigningController> {
             hint: 'Email',
             type: TextInputType.emailAddress,
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
-              V.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
+              v.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
+              v.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
             ],
           ),
           XTextField(
             hint: 'Password',
             obscure: true,
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
-              V.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
+              v.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
             ],
           ),
           Row(

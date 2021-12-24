@@ -21,7 +21,7 @@ class AddDialog extends GetView<HomeController> {
                   IconButton(onPressed: controller.closeDialog, icon: const Icon(Icons.close)),
                   TextButton(
                     onPressed: controller.addMission,
-                    child: Text('Done', style: TextStyle(fontSize: 14.0.sp)),
+                    child: Text('done'.tr, style: TextStyle(fontSize: 14.0.sp)),
                     style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
                   )
                 ],
@@ -29,7 +29,7 @@ class AddDialog extends GetView<HomeController> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
-              child: Text('New Task', style: TextStyle(fontSize: 20.0.sp, fontWeight: FontWeight.bold)),
+              child: Text('new_task'.tr, style: TextStyle(fontSize: 20.0.sp, fontWeight: FontWeight.bold)),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 7.0.wp),
@@ -44,7 +44,7 @@ class AddDialog extends GetView<HomeController> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 7.0.wp, vertical: 2.0.wp),
-              child: Text('Add to', style: TextStyle(fontSize: 14.0.sp, color: Colors.grey)),
+              child: Text('add_to'.tr, style: TextStyle(fontSize: 14.0.sp, color: Colors.grey)),
             ),
             ...controller.tasks
                 .map((task) => Obx(

@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart' as V;
+import 'package:form_builder_validators/form_builder_validators.dart' as v;
 import 'package:get/get.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/text_field.dart';
@@ -22,7 +22,7 @@ class SignUpContainer extends GetView<SigningController> {
             icon: Icons.account_box_outlined,
             hint: 'Full Name',
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Would be nice to get to know you'),
+              v.FormBuilderValidators.required(context, errorText: 'Would be nice to get to know you'),
               (value) {
                 if (RegExp(r'[.,!@#$<>?":_`~;[\]\\|=+)(**&^%0-9-]').hasMatch(value!)) {
                   return 'Looks like your name is quite special';
@@ -35,8 +35,8 @@ class SignUpContainer extends GetView<SigningController> {
             hint: 'Email',
             type: TextInputType.emailAddress,
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
-              V.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
+              v.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
+              v.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
             ],
           ),
           XTextField(
@@ -44,16 +44,16 @@ class SignUpContainer extends GetView<SigningController> {
             obscure: true,
             controller: passwordCtrl,
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
-              V.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
+              v.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
             ],
           ),
           XTextField(
             hint: 'Password Confirmation',
             obscure: true,
             validator: [
-              V.FormBuilderValidators.required(context, errorText: 'Sure it matches but ... You know how this works'),
-              V.FormBuilderValidators.minLength(context, 8, errorText: 'Actually "Eye" may guide you through this'),
+              v.FormBuilderValidators.required(context, errorText: 'Sure it matches but ... You know how this works'),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'Actually "Eye" may guide you through this'),
               (value) {
                 if (value != passwordCtrl.text) {
                   return 'Passwords kinda need match!';
