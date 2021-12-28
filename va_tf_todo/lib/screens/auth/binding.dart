@@ -3,10 +3,10 @@ import 'package:get/instance_manager.dart';
 
 import 'controller.dart';
 
-class SigningBinding extends Bindings {
+class AuthBinding extends Bindings {
   @override
   void dependencies() {
-    debugPrint('HomeBinding - dependencies is Called');
+    debugPrint('AuthBinding - dependencies is Called');
     Get.lazyPut(() => AuthController());
   }
 }

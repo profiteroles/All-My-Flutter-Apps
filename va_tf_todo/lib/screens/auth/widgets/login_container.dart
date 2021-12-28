@@ -11,7 +11,10 @@ class LoginContainer extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
+      // initialValue: {"email": '', "password": ''},
+      // autovalidateMode: AutovalidateMode.disabled,
       key: controller.fbKey,
+      // onWillPop: () async => false,
       child: Column(
         children: [
           XTextField(

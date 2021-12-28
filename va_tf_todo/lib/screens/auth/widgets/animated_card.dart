@@ -34,19 +34,21 @@ class AnimatedCard extends GetView<AuthController> {
             decoration: BoxDecoration(
               color: Theme.of(context).canvasColor,
               borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                if (hasShadow) BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 5),
-              ],
+              boxShadow: [if (hasShadow) BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 5)],
             ),
             child: !hasShadow
                 ? InkWell(
-                    onTap: () => controller.isSignupScreen() ? controller.register() : controller.login(),
+                    onTap: controller.authState() == AuthState.initial ? () => controller.isSignupScreen() ? controller.register() : controller.login() : () {},
                     child: Container(
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [Colors.orange[200]!, Colors.red[400]!], begin: Alignment.topLeft, end: Alignment.bottomRight),
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 2, offset: const Offset(0, 1))]),
-                      child: const Icon(Icons.arrow_forward, color: Colors.white),
+                      child: controller.authState() == AuthState.initial
+                          ? const Icon(Icons.arrow_forward, color: Colors.white)
+                          : const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                     ),
                   )
                 : const Center(),

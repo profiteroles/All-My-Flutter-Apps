@@ -21,7 +21,6 @@ final lightTheme = ThemeData.light().copyWith(
   primaryColor: purple,
   splashColor: Colors.transparent,
   highlightColor: Colors.transparent,
-
   appBarTheme: AppBarTheme(
       actionsIconTheme: const IconThemeData(color: lightGrey, size: 34),
       color: white,
@@ -31,7 +30,6 @@ final lightTheme = ThemeData.light().copyWith(
         fontWeight: FontWeight.bold,
         letterSpacing: 1.3,
       )),
-
   dialogTheme: const DialogTheme(
     titleTextStyle: TextStyle(color: black, fontSize: 24),
     contentTextStyle: TextStyle(color: grey, fontSize: 16),
@@ -83,5 +81,8 @@ final lightTheme = ThemeData.light().copyWith(
       ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     unselectedItemColor: lightGrey,
+  ),
+  snackBarTheme: const SnackBarThemeData(
+    backgroundColor: purple,
   ),
 );

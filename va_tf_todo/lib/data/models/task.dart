@@ -1,17 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Task extends Equatable {
-  final String title;
-  final int icon;
-  final String color;
-  final List<dynamic>? todos;
+  late String id;
+  late bool isDone;
+  late String title;
+  late int icon;
+  late String color;
+  late Timestamp createdAt;
+  late List<dynamic>? todos;
 
-  const Task({
+  Task({
     required this.title,
     required this.icon,
     required this.color,
+    this.isDone = false,
     this.todos,
   });
+
+  Task.fromDocumentSnapshot({required DocumentSnapshot doc}) {
+    id = doc.id;
+    title = doc['title'];
+    icon = doc['icon'];
+    color = doc['color'];
+    createdAt = doc['created_at'];
+    todos = doc['doc'];
+  }
 
   Task copyWith({String? title, int? icon, String? color, List<dynamic>? todos}) => Task(
         title: title ?? this.title,

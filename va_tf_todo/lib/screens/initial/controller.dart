@@ -1,33 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
-import 'package:va_tf_todo/screens/auth/view.dart';
-import 'package:va_tf_todo/screens/home/view.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:va_tf_todo/values/routes.dart';
 
-class InitialController extends GetxController {
-  static InitialController instance = Get.find();
+// class InitialController extends GetxController {
+//   FirebaseAuth auth = FirebaseAuth.instance;
 
-  late Rx<User?> _user;
+//   late Rx<User?> _user;
 
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-  @override
-  void onReady() {
-    super.onReady();
-    Future.delayed(const Duration(seconds: 2), () {
-      //
-    });
-    _user = Rx<User?>(auth.currentUser);
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
-  }
-
-  _initialScreen(User? user) {
-    if (user == null) {
-      debugPrint('Login Page');
-      Get.offAll(() => const SigningScreen());
-    } else {
-      Get.offAll(() => const HomeScreen());
-    }
-  }
-}
+//   @override
+//   void onReady() {
+//     print('initialController - onReady');
+//     super.onReady();
+//     _user = Rx<User?>(auth.currentUser);
+//     Future.delayed(const Duration(seconds: 1), () {
+//       print(_user()?.email);
+//       print('_______END________');
+//       if (_user.value == null) {
+//         Get.offNamed(AppRoutes.auth);
+//       } else {
+//         debugPrint(_user()!.displayName);
+//         // auth.signOut();
+//         Get.toNamed(AppRoutes.home);
+//       }
+//     });
+//   }
+// }
