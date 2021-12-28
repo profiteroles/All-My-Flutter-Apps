@@ -11,10 +11,7 @@ class LoginContainer extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
-      // initialValue: {"email": '', "password": ''},
-      // autovalidateMode: AutovalidateMode.disabled,
-      key: controller.fbKey,
-      // onWillPop: () async => false,
+      key: controller.loginKey,
       child: Column(
         children: [
           XTextField(
@@ -22,16 +19,16 @@ class LoginContainer extends GetView<AuthController> {
             hint: 'Email',
             type: TextInputType.emailAddress,
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
-              v.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
+              v.FormBuilderValidators.required(context, errorText: 'validator_required'.tr),
+              v.FormBuilderValidators.email(context, errorText: 'validator_email'.tr),
             ],
           ),
           XTextField(
             hint: 'Password',
             obscure: true,
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
-              v.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
+              v.FormBuilderValidators.required(context, errorText: 'validator_required'.tr),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
             ],
           ),
           Row(
@@ -45,12 +42,12 @@ class LoginContainer extends GetView<AuthController> {
                       onChanged: (value) => controller.isRememberMe(!controller.isRememberMe()),
                     ),
                   ),
-                  Text("Remember me", style: Theme.of(context).textTheme.bodyText1),
+                  Text('remember_me'.tr, style: Theme.of(context).textTheme.bodyText1),
                 ],
               ),
               TextButton(
                 onPressed: () {},
-                child: Text("Forgot Password?", style: Theme.of(context).textTheme.bodyText1),
+                child: Text('forgot_password'.tr, style: Theme.of(context).textTheme.bodyText1),
               ),
             ],
           )

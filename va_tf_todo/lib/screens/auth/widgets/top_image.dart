@@ -20,13 +20,14 @@ class TopImageSection extends GetView<AuthController> {
           () => RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              text: "Welcome to ",
-              style: TextStyle(fontSize: 25, letterSpacing: 2, color: Colors.yellow[700]),
+              text: 'welcome'.tr,
+              style: Theme.of(context).textTheme.headline5,
               children: [
+                TextSpan(text: controller.isSignupScreen() ? 'to'.tr : ''),
                 TextSpan(
-                  text: controller.isSignupScreen() ? "uniQ X," : "Back,",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.yellow[700]),
-                )
+                  text: controller.isSignupScreen() ? "uniQ X," : 'back'.tr,
+                  style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),

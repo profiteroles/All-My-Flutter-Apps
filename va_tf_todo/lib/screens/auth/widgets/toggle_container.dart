@@ -37,7 +37,7 @@ class ToggleAnimationContainer extends GetView<AuthController> {
                       onPressed: () => controller.toggleContainers(false),
                       style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                       child: Text(
-                        "LOGIN",
+                        'login'.tr,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               color: !controller.isSignupScreen() ? Theme.of(context).textTheme.headline6!.color : Theme.of(context).inputDecorationTheme.hintStyle!.color,
                               fontWeight: !controller.isSignupScreen() ? FontWeight.bold : FontWeight.normal,
@@ -48,7 +48,7 @@ class ToggleAnimationContainer extends GetView<AuthController> {
                       onPressed: () => controller.toggleContainers(true),
                       style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                       child: Text(
-                        "SIGNUP",
+                        'signup'.tr,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               fontWeight: controller.isSignupScreen() ? FontWeight.bold : FontWeight.normal,
                               color: controller.isSignupScreen() ? Theme.of(context).textTheme.headline6!.color : Theme.of(context).inputDecorationTheme.hintStyle!.color,

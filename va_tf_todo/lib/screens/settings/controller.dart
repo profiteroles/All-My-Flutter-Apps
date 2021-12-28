@@ -4,6 +4,8 @@ import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 
 class SettingsController extends GetxController {
+  static SettingsController instance = Get.find();
+
   RxBool isDarkMode = false.obs;
   RxBool nofityOn = true.obs;
   RxString appLanguage = 'English'.obs;

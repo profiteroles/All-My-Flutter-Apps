@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/firestore.dart';
 import 'package:va_tf_todo/values/routes.dart';
@@ -14,19 +15,22 @@ class AuthController extends GetxController {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   late Rx<User?> _fireUser;
-  late Rx<UserModel> userModel;
+  late Rx<UserModel?> userModel = Rx<UserModel?>(null);
 
   var authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
   RxBool isRememberMe = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
 
-  final fbKey = GlobalKey<FormBuilderState>();
+//FormBuilder Throws an error for unregistered field.
+  final loginKey = GlobalKey<FormBuilderState>();
+  final signupKey = GlobalKey<FormBuilderState>();
 
   @override
   void onReady() {
     super.onReady();
     _fireUser = Rx<User?>(auth.currentUser);
+
     _fireUser.bindStream(auth.userChanges());
     ever(_fireUser, _initialScreen);
   }
@@ -34,7 +38,8 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    fbKey.currentState!.dispose();
+    loginKey.currentState!.dispose();
+    signupKey.currentState!.dispose();
     authState.value = AuthState.initial;
   }
 
@@ -50,11 +55,11 @@ class AuthController extends GetxController {
   void login() async {
     debugPrint('AuthController - login is Called');
 
-    if (fbKey.currentState!.saveAndValidate()) {
+    if (loginKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - login - Values Saved & Validated');
       authState(AuthState.loading);
 
-      var data = fbKey.currentState!.value;
+      var data = loginKey.currentState!.value;
       String email = data['email'];
       String password = data['password'];
 
@@ -85,10 +90,10 @@ class AuthController extends GetxController {
   void register() async {
     debugPrint('AuthController - register is Called');
 
-    if (fbKey.currentState!.saveAndValidate()) {
+    if (signupKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - register - Values Saved & Validated');
       authState(AuthState.loading);
-      var data = fbKey.currentState!.value;
+      var data = signupKey.currentState!.value;
       String name = data['full_name'];
       String email = data['email'];
       String password = data['password'];
@@ -96,11 +101,12 @@ class AuthController extends GetxController {
       debugPrint(data.toString());
       try {
         await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
-          print(result);
-          print('_______END_______');
-          _addNewUserDB({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300"});
+          // print(result);
+          // print('_______END_______');
+          _addNewUserDB({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300", "created_at": DateTime.now()});
           _initializeUserModel(result.user!.uid);
           authState(AuthState.initial);
+
           // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
         });
       } on FirebaseAuthException catch (e) {
@@ -125,11 +131,8 @@ class AuthController extends GetxController {
 
   void toggleContainers(bool isSignUp) {
     debugPrint('AuthController - toggleContainers is Called');
-
     btnAnimationValue(0);
     isSignupScreen(isSignUp);
-    fbKey.currentState!.reset();
-    // passwordCtrl.clear();
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
   }
 
@@ -139,14 +142,24 @@ class AuthController extends GetxController {
     debugPrint('AuthController - _initializeUserModel is Called');
     userModel.value = await firebaseFirestore.collection("users").doc(id).get().then(
       (doc) {
-        print(doc.data());
+        print(doc.data().toString());
         debugPrint('_________END DOC_______');
-        UserModel currentUser = UserModel.fromJson(doc.data().toString());
-        debugPrint('${currentUser.id}\n${currentUser.name}\n${currentUser.email}\n${currentUser.photoURL}\n');
-        debugPrint('_________END Current USER_______');
+        Map<String, dynamic> docInfo = doc.data() ?? {'': ''};
+
+        UserModel currentUser = UserModel(
+          id: docInfo['id'],
+          name: docInfo['name'],
+          email: docInfo['email'],
+          photoURL: docInfo['photo_url'],
+          createdAt: docInfo['created_at'],
+        );
+        // debugPrint('${currentUser.id}\n${currentUser.name}\n${currentUser.email}\n${currentUser.photoURL}\n');
+        // debugPrint('_________END Current USER_______');
 
         return currentUser;
       },
     );
+    print(userModel()!.createdAt);
+    debugPrint('_________END Current USER_______');
   }
 }

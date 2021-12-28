@@ -15,7 +15,7 @@ class SocialMediaContainer extends GetView<AuthController> {
       left: 0,
       child: Column(
         children: [
-          Obx(() => Text(controller.isSignupScreen() ? "Or Signup with" : "Or Signin with")),
+          Obx(() => Text(controller.isSignupScreen() ? 'signup_with'.tr : 'siginin_with'.tr)),
           SizedBox(height: 4.0.wp),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

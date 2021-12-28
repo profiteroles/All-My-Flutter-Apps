@@ -15,17 +15,17 @@ class SignUpContainer extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return FormBuilder(
-      key: controller.fbKey,
+      key: controller.signupKey,
       child: Column(
         children: [
           XTextField(
             icon: Icons.account_box_outlined,
             hint: 'Full Name',
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Would be nice to get to know you'),
+              v.FormBuilderValidators.required(context, errorText: 'validator_name'.tr),
               (value) {
                 if (RegExp(r'[.,!@#$<>?":_`~;[\]\\|=+)(**&^%0-9-]').hasMatch(value!)) {
-                  return 'Looks like your name is quite special';
+                  return 'validator_special'.tr;
                 }
               }
             ],
@@ -35,8 +35,8 @@ class SignUpContainer extends GetView<AuthController> {
             hint: 'Email',
             type: TextInputType.emailAddress,
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Good try! Why don\'t you put your E-mail'),
-              v.FormBuilderValidators.email(context, errorText: 'This doesn\'t look like E-mail'),
+              v.FormBuilderValidators.required(context, errorText: 'validator_required'.tr),
+              v.FormBuilderValidators.email(context, errorText: 'validator_email'.tr),
             ],
           ),
           XTextField(
@@ -44,19 +44,22 @@ class SignUpContainer extends GetView<AuthController> {
             obscure: true,
             controller: passwordCtrl,
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Good try! Let\'s get down to business'),
-              v.FormBuilderValidators.minLength(context, 8, errorText: 'Well we require min 8 charactors'),
+              v.FormBuilderValidators.required(context, errorText: 'validator_required'.tr),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
             ],
           ),
           XTextField(
             hint: 'Password Confirmation',
             obscure: true,
             validator: [
-              v.FormBuilderValidators.required(context, errorText: 'Sure it matches but ... You know how this works'),
-              v.FormBuilderValidators.minLength(context, 8, errorText: 'Actually "Eye" may guide you through this'),
+              v.FormBuilderValidators.required(
+                context,
+                errorText: 'validator_password_null'.tr,
+              ),
+              v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
               (value) {
                 if (value != passwordCtrl.text) {
-                  return 'Passwords kinda need match!';
+                  return 'validator_pass_match'.tr;
                 }
               }
             ],
@@ -66,11 +69,11 @@ class SignUpContainer extends GetView<AuthController> {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: "By submitting form you agree to our ",
+                text: 'by_submission'.tr,
                 style: Theme.of(context).textTheme.caption,
                 children: [
                   TextSpan(
-                    text: "Term & Conditions.",
+                    text: 'terms_conditions'.tr,
                     recognizer: TapGestureRecognizer()..onTap = () {},
                     style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.orange),
                   ),

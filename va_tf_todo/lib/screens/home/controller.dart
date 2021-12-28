@@ -9,6 +9,8 @@ import 'package:va_tf_todo/widgets/icons.dart';
 
 class HomeController extends GetxController {
   HomeController({required this.taskRepository});
+
+  static HomeController instance = Get.find();
   final TaskRepository taskRepository;
 
   final formKey = GlobalKey<FormState>();

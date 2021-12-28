@@ -34,7 +34,7 @@ class ProfileScreen extends GetView<ProfileController> {
           return ListView(
             padding: EdgeInsets.all(5.0.wp),
             children: [
-              const ProfileImage(name: Header('Jane Doh'), image: 'images/background.jpg'),
+              ProfileImage(name: Header('authCtrl.userModel()!.photoURL'), image: 'authCtrl.userModel()!.photoURL'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [Header('Report'), AppDropDown()],
