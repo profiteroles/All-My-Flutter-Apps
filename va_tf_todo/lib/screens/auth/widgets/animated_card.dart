@@ -4,7 +4,7 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 
 import '../controller.dart';
 
-class AnimatedCard extends GetView<SigningController> {
+class AnimatedCard extends GetView<AuthController> {
   const AnimatedCard({this.hasShadow = true, Key? key}) : super(key: key);
 
   final bool hasShadow;

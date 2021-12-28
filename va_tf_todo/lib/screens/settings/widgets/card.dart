@@ -3,8 +3,8 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 
 import 'arrow_btn.dart';
 
-class SettingCard extends StatelessWidget {
-  const SettingCard({
+class AppCard extends StatelessWidget {
+  const AppCard({
     this.subTitle = '',
     required this.title,
     required this.icon,

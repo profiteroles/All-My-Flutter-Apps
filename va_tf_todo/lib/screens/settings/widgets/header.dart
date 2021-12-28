@@ -7,7 +7,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 3.0.wp, left: 4.0.wp),
+      padding: EdgeInsets.symmetric(horizontal: 3.0.wp, vertical: 2.0.wp),
       child: Text(title, style: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold)),
     );
   }

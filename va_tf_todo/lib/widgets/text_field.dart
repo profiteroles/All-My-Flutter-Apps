@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/screens/singing/controller.dart';
+import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -32,7 +32,7 @@ class XTextField extends StatefulWidget {
 
 class _XTextFieldState extends State<XTextField> {
   bool obscure = true;
-  final signingCtrl = Get.find<SigningController>();
+  final signingCtrl = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

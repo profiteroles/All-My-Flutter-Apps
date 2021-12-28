@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import '../controller.dart';
 
-class SocialMediaContainer extends GetView<SigningController> {
+class SocialMediaContainer extends GetView<AuthController> {
   const SocialMediaContainer({Key? key}) : super(key: key);
 
   @override

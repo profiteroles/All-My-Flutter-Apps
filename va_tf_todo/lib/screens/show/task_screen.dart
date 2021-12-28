@@ -16,73 +16,76 @@ class TaskDetailScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     var task = controller.task.value!;
     var color = HexColor.fromHex(task.color);
-    return Scaffold(
-      body: Form(
-        key: controller.formKey,
-        child: ListView(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(3.0.wp),
-              child: Row(
-                children: [
-                  IconButton(icon: const Icon(Icons.arrow_back), onPressed: controller.toHomeScreen),
-                ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Form(
+          key: controller.formKey,
+          child: ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(3.0.wp),
+                child: Row(
+                  children: [
+                    IconButton(icon: const Icon(Icons.arrow_back_ios_new_outlined), onPressed: controller.toHomePage),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0.wp),
-              child: Row(
-                children: [
-                  Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
-                  SizedBox(width: 3.0.sp),
-                  Text(task.title, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold)),
-                ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0.wp),
+                child: Row(
+                  children: [
+                    Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
+                    SizedBox(width: 3.0.sp),
+                    Text(task.title, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold)),
+                  ],
+                ),
               ),
-            ),
-            Obx(
-              () {
-                var totalTodos = controller.doingTodos.length + controller.doneTodos.length;
-                return Padding(
-                  padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
-                  child: Row(
-                    children: [
-                      Text('$totalTodos Tasks', style: Theme.of(context).textTheme.subtitle2),
-                      SizedBox(width: 3.0.wp),
-                      Expanded(
-                        child: StepProgressIndicator(
-                          totalSteps: totalTodos == 0 ? 1 : totalTodos,
-                          currentStep: controller.doneTodos.length,
-                          size: 5,
-                          padding: 0,
-                          selectedGradientColor: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [color.withOpacity(.5), color],
-                          ),
-                          unselectedGradientColor: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Colors.grey[300]!, Colors.grey[300]!],
+              Obx(
+                () {
+                  var totalTodos = controller.doingTodos.length + controller.doneTodos.length;
+                  return Padding(
+                    padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
+                    child: Row(
+                      children: [
+                        Text('$totalTodos Tasks', style: Theme.of(context).textTheme.subtitle2),
+                        SizedBox(width: 3.0.wp),
+                        Expanded(
+                          child: StepProgressIndicator(
+                            totalSteps: totalTodos == 0 ? 1 : totalTodos,
+                            currentStep: controller.doneTodos.length,
+                            size: 5,
+                            padding: 0,
+                            selectedGradientColor: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [color.withOpacity(.5), color],
+                            ),
+                            unselectedGradientColor: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.grey[300]!, Colors.grey[300]!],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            TaskInputField(
-              title: 'Task',
-              controller: controller.editCtrl,
-              prefixIcon: const Icon(Icons.checklist_rounded),
-              suffixIcon: Padding(
-                padding: EdgeInsets.only(right: 2.0.wp),
-                child: ChoiceBtn(label: const Icon(Icons.done, color: green), elevation: 3, onSelected: controller.addForTaskScren),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ),
-            const DoingList(),
-            const DoneList(),
-          ],
+              TaskInputField(
+                title: 'Task',
+                controller: controller.editCtrl,
+                prefixIcon: const Icon(Icons.checklist_rounded),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(right: 2.0.wp),
+                  child: ChoiceBtn(label: const Icon(Icons.done, color: green), elevation: 3, onSelected: controller.addForTaskScren),
+                ),
+              ),
+              const DoingList(),
+              const DoneList(),
+            ],
+          ),
         ),
       ),
     );

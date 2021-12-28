@@ -5,7 +5,7 @@ import '../controller.dart';
 import 'login_container.dart';
 import 'signup_container.dart';
 
-class ToggleAnimationContainer extends GetView<SigningController> {
+class ToggleAnimationContainer extends GetView<AuthController> {
   const ToggleAnimationContainer({Key? key}) : super(key: key);
 
   @override

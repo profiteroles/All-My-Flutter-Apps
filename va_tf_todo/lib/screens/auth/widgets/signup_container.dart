@@ -7,7 +7,7 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/text_field.dart';
 import '../controller.dart';
 
-class SignUpContainer extends GetView<SigningController> {
+class SignUpContainer extends GetView<AuthController> {
   SignUpContainer({Key? key}) : super(key: key);
 
   final passwordCtrl = TextEditingController();

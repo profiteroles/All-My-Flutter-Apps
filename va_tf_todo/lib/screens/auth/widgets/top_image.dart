@@ -4,7 +4,7 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 
 import '../controller.dart';
 
-class TopImageSection extends GetView<SigningController> {
+class TopImageSection extends GetView<AuthController> {
   const TopImageSection({Key? key}) : super(key: key);
 
   @override

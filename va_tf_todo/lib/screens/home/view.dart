@@ -22,7 +22,7 @@ class HomeScreen extends GetView<HomeController> {
         child: Obx(
           () => IndexedStack(
             index: controller.pageIndex(),
-            children: const [ProfileScreen(), TodoListScreen(), SettingScreen()],
+            children: [ProfileScreen(), const TodoListScreen(), const SettingScreen()],
           ),
         ),
       ),
@@ -37,7 +37,7 @@ class TodoListScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        FlatAppBar('my_list'.tr, hasInfoIcon: true),
+        FlatAppBar('my_list'.tr, hasInfo: true),
         Obx(
           () => GridView.count(
             crossAxisCount: 2,

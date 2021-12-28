@@ -10,11 +10,14 @@ import 'package:va_tf_todo/values/main_binding.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 
+import 'screens/auth/controller.dart';
 import 'values/theme/dark_theme.dart';
 
 void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
   await Get.putAsync(() => StorageService().init());
   runApp(const VAToDo());
 }
@@ -31,7 +34,7 @@ class VAToDo extends StatelessWidget {
       locale: const Locale('en', 'US'),
       initialBinding: MainBinding(),
       builder: EasyLoading.init(),
-      initialRoute: AppRoutes.signing,
+      initialRoute: AppRoutes.initial,
       theme: lightTheme,
       darkTheme: darkTheme,
       getPages: AppPages.pages,

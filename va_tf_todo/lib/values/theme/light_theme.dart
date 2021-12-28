@@ -21,14 +21,20 @@ final lightTheme = ThemeData.light().copyWith(
   primaryColor: purple,
   splashColor: Colors.transparent,
   highlightColor: Colors.transparent,
+
   appBarTheme: AppBarTheme(
-    color: white,
-    titleTextStyle: GoogleFonts.raleway().copyWith(
-      color: purple,
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1,
-    ),
+      actionsIconTheme: const IconThemeData(color: lightGrey, size: 34),
+      color: white,
+      titleTextStyle: GoogleFonts.raleway().copyWith(
+        color: darkPrimaryVar,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.3,
+      )),
+
+  dialogTheme: const DialogTheme(
+    titleTextStyle: TextStyle(color: black, fontSize: 24),
+    contentTextStyle: TextStyle(color: grey, fontSize: 16),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: purple),
   primaryColorLight: veryLightGrey,

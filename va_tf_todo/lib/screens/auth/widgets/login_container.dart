@@ -5,7 +5,7 @@ import 'package:va_tf_todo/widgets/text_field.dart';
 import 'package:form_builder_validators/form_builder_validators.dart' as v;
 import '../controller.dart';
 
-class LoginContainer extends GetView<SigningController> {
+class LoginContainer extends GetView<AuthController> {
   const LoginContainer({Key? key}) : super(key: key);
 
   @override

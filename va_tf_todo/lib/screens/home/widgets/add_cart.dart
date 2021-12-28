@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
-import 'button.dart';
+import '../../../widgets/button.dart';
 import 'choice_btn.dart';
 import 'task_input_field.dart';
 
@@ -40,7 +40,7 @@ class AddCard extends GetView<HomeController> {
                           .toList(),
                     ),
                   ),
-                  TaskButton(onPressed: controller.addNewList),
+                  AppButton(onPressed: controller.addNewList),
                 ],
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/widgets/app_divider.dart';
 
 import 'task_box_container.dart';
 
@@ -26,11 +27,7 @@ class DoingList extends GetView<HomeController> {
               physics: const ClampingScrollPhysics(),
               children: [
                 ...controller.doingTodos.map((task) => TaskBoxContainer(task)).toList(),
-                if (controller.doingTodos.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.0.wp),
-                    child: const Divider(thickness: 2),
-                  ),
+                if (controller.doingTodos.isNotEmpty) const AppDivider(),
               ],
             ),
     );

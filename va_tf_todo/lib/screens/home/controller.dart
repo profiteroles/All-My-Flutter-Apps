@@ -26,6 +26,7 @@ class HomeController extends GetxController {
   RxDouble taskBoxHeight = 6.0.hp.obs;
 
   RxInt pageIndex = 1.obs;
+  RxString pageTitle = 'my_list'.tr.obs;
   RxDouble fabOpacity = 1.0.obs;
 
   @override
@@ -232,10 +233,37 @@ class HomeController extends GetxController {
     }
   }
 
-  void toHomeScreen() {
+  void toHomePage() {
     Get.back();
     updateTodos();
     editCtrl.clear();
     changeTask(null);
+  }
+
+  int getTotalTasks() {
+    int result = 0;
+
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i].todos != null) {
+        result += tasks[i].todos!.length;
+      }
+    }
+
+    return result;
+  }
+
+  int getTotalDoneTask() {
+    int res = 0;
+
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i].todos != null) {
+        for (int t = 0; t < tasks[i].todos!.length; t++) {
+          if (tasks[i].todos![t]['isDone'] == true) {
+            res += 1;
+          }
+        }
+      }
+    }
+    return res;
   }
 }
