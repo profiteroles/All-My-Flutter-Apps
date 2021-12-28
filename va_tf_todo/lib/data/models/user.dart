@@ -1,13 +1,17 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class UserModel {
   String id;
   String name;
   String email;
+  String photoURL;
 
-  UserModel({required this.id, required this.name, required this.email});
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.photoURL,
+  });
 
   // UserModel.fromDocumentSnapShot({required DocumentSnapshot doc}) {
   //   id = doc.id;
@@ -21,6 +25,7 @@ class UserModel {
     result.addAll({'id': id});
     result.addAll({'name': name});
     result.addAll({'email': email});
+    result.addAll({'photo_url': photoURL});
 
     return result;
   }
@@ -30,6 +35,7 @@ class UserModel {
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
+      photoURL: map['photo_url'] ?? '',
     );
   }
 

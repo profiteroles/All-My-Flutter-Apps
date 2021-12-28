@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/user.dart';
+import 'package:va_tf_todo/data/services/firestore.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
@@ -13,6 +14,7 @@ class AuthController extends GetxController {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   late Rx<User?> _fireUser;
+  late Rx<UserModel> userModel;
 
   var authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
@@ -29,6 +31,13 @@ class AuthController extends GetxController {
     ever(_fireUser, _initialScreen);
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+    fbKey.currentState!.dispose();
+    authState.value = AuthState.initial;
+  }
+
   _initialScreen(User? user) {
     if (user == null) {
       debugPrint('AuthController - initialScreen is Called');
@@ -43,14 +52,20 @@ class AuthController extends GetxController {
 
     if (fbKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - login - Values Saved & Validated');
-
-      var data = fbKey.currentState!.value;
       authState(AuthState.loading);
 
+      var data = fbKey.currentState!.value;
+      String email = data['email'];
+      String password = data['password'];
+
       try {
-        var result = await auth.signInWithEmailAndPassword(email: data['email'], password: data['password']);
-        print(result);
-        print('_______END_______');
+        await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
+          print(result);
+          print('_______END_______');
+          _initializeUserModel(result.user!.uid);
+          authState(AuthState.initial);
+          // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
+        });
       } on FirebaseAuthException catch (e) {
         authState(AuthState.initial);
         debugPrint(e.toString());
@@ -64,7 +79,6 @@ class AuthController extends GetxController {
           messageText: Text(e.message.toString()),
         );
       }
-      debugPrint(data.toString());
     }
   }
 
@@ -73,35 +87,35 @@ class AuthController extends GetxController {
 
     if (fbKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - register - Values Saved & Validated');
-
+      authState(AuthState.loading);
       var data = fbKey.currentState!.value;
-      String name = data['name'];
+      String name = data['full_name'];
       String email = data['email'];
       String password = data['password'];
 
       debugPrint(data.toString());
       try {
-        authState(AuthState.loading);
-
-        UserCredential result = await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim());
-
-        UserModel _user = UserModel(id: result.user!.uid, name: name, email: email);
-
-        print(result);
-        print('_______END_______');
-      } catch (e) {
+        await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
+          print(result);
+          print('_______END_______');
+          _addNewUserDB({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300"});
+          _initializeUserModel(result.user!.uid);
+          authState(AuthState.initial);
+          // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
+        });
+      } on FirebaseAuthException catch (e) {
         authState(AuthState.initial);
         debugPrint(e.toString());
         Get.snackbar(
           'User Information',
-          ' goes here',
+          '',
+          margin: EdgeInsets.all(5.0.wp),
+          backgroundColor: Colors.red[300],
           snackPosition: SnackPosition.BOTTOM,
           titleText: const Text('Register has failed'),
-          messageText: Text(e.toString()),
+          messageText: Text(e.message.toString()),
         );
       }
-
-      // Get.offNamed(AppRoutes.home);
     }
   }
 
@@ -117,5 +131,22 @@ class AuthController extends GetxController {
     fbKey.currentState!.reset();
     // passwordCtrl.clear();
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
+  }
+
+  _addNewUserDB(Map<String, dynamic> map) => firebaseFirestore.collection("users").doc(map['id']).set(map);
+
+  _initializeUserModel(String id) async {
+    debugPrint('AuthController - _initializeUserModel is Called');
+    userModel.value = await firebaseFirestore.collection("users").doc(id).get().then(
+      (doc) {
+        print(doc.data());
+        debugPrint('_________END DOC_______');
+        UserModel currentUser = UserModel.fromJson(doc.data().toString());
+        debugPrint('${currentUser.id}\n${currentUser.name}\n${currentUser.email}\n${currentUser.photoURL}\n');
+        debugPrint('_________END Current USER_______');
+
+        return currentUser;
+      },
+    );
   }
 }
