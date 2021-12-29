@@ -15,9 +15,9 @@ class APIRepositoryImpl extends APIRepositoryInterface {
 
     await Future.delayed(Duration(seconds: 1));
     if (token == 'AA111') {
-      return User(name: 'Steve Jobs', email: 't@t.c', image: 'assets/images/logo.png');
+      return User(name: 'Steve Jobs', email: 'a@a.com', image: 'assets/images/logo.png');
     } else if (token == 'AA222') {
-      return User(name: 'Elon Musk', email: 'e@t.c', image: 'assets/images/originallogo.png');
+      return User(name: 'Elon Musk', email: 'a@b.com', image: 'assets/images/originallogo.png');
     }
     throw AuthException();
   }
@@ -25,10 +25,10 @@ class APIRepositoryImpl extends APIRepositoryInterface {
   @override
   Future<LoginResponse> login(LoginRequest login) async {
     await Future.delayed(Duration(seconds: 1));
-    if (login.email == 't@t.c' && login.password == '123123123') {
+    if (login.email == 'a@a.com' && login.password == '123123123') {
       return LoginResponse('AA111', User(name: 'Steve Jobs', email: 't@t.c', image: 'assets/images/logo.png'));
-    } else if (login.email == 'e@t.c' && login.password == '123123123') {
-      return LoginResponse('AA222', User(name: 'Elon Musk', email: 'e@t.c', image: 'assets/images/originallogo.png'));
+    } else if (login.email == 'a@b.com' && login.password == '123123123') {
+      return LoginResponse('AA222', User(name: 'Elon Musk', email: 'a@b.com', image: 'assets/images/originallogo.png'));
     }
 
     throw AuthException();

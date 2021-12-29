@@ -20,7 +20,6 @@ class ProfileScreen extends GetView<ProfileController> {
 
   final homeCtrl = Get.find<HomeController>();
   final authCtrl = Get.find<AuthController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +29,7 @@ class ProfileScreen extends GetView<ProfileController> {
           int createdTasks = homeCtrl.getTotalTasks();
           int completedTasks = homeCtrl.getTotalDoneTask();
           int liveTasks = createdTasks - completedTasks;
-          return authCtrl.userModel()!.photoURL.isEmpty || authCtrl.userModel() == null
+          return authCtrl.userModel() == null
               ? const Center(child: CircularProgressIndicator())
               : ListView(
                   padding: EdgeInsets.all(5.0.wp),
@@ -38,7 +37,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     ProfileImage(name: Header(authCtrl.userModel()!.name), image: authCtrl.userModel()!.photoURL),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [Header('Report'), AppDropDown()],
+                      children: [Header('report'.tr), const AppDropDown()],
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4.0.wp),

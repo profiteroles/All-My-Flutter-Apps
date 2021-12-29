@@ -37,6 +37,7 @@ class LocalStrings extends Translations {
           "privacy_policy": "Privacy Policy",
           "profile": "Profile",
           "remember_me": "Remember me",
+          "report": "Report",
           "settings": "Settings",
           "signup": "SIGNUP",
           "siginin_with": "Or Signin with",

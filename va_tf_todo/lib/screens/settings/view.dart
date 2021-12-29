@@ -35,22 +35,21 @@ class SettingScreen extends GetView<SettingsController> {
   Future<dynamic> languageDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (builder) {
-        return AlertDialog(
-            title: Text('language'.tr, style: Theme.of(context).textTheme.headline6),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, i) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextButton(onPressed: () => controller.setLanguage(i), child: Text(controller.locale[i]['name'])),
-                ),
-                separatorBuilder: (context, i) => const Divider(),
-                itemCount: controller.locale.length,
-              ),
-            ));
-      },
+      builder: (builder) => AlertDialog(
+        title: Text('language'.tr, style: Theme.of(context).textTheme.headline6),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, i) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(onPressed: () => controller.setLanguage(i), child: Text(controller.locale[i]['name'])),
+            ),
+            separatorBuilder: (context, i) => const Divider(),
+            itemCount: controller.locale.length,
+          ),
+        ),
+      ),
     );
   }
 }
