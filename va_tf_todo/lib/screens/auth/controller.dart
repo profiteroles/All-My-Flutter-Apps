@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/firestore.dart';
 import 'package:va_tf_todo/values/routes.dart';
@@ -11,8 +10,6 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 enum AuthState { loading, initial }
 
 class AuthController extends GetxController {
-  static AuthController instance = Get.find();
-
   FirebaseAuth auth = FirebaseAuth.instance;
   late Rx<User?> _fireUser;
   late Rx<UserModel?> userModel = Rx<UserModel?>(null);
@@ -38,8 +35,8 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    loginKey.currentState!.dispose();
-    signupKey.currentState!.dispose();
+    // loginKey.currentState!.dispose();
+    // signupKey.currentState!.dispose();
     authState.value = AuthState.initial;
   }
 
@@ -48,6 +45,7 @@ class AuthController extends GetxController {
       debugPrint('AuthController - initialScreen is Called');
       Get.offNamed(AppRoutes.auth);
     } else {
+      _initializeUserModel(user.uid);
       Get.offNamed(AppRoutes.home);
     }
   }
@@ -65,8 +63,8 @@ class AuthController extends GetxController {
 
       try {
         await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
-          print(result);
-          print('_______END_______');
+          debugPrint(result.toString());
+          debugPrint('_______END_______');
           _initializeUserModel(result.user!.uid);
           authState(AuthState.initial);
           // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
@@ -142,7 +140,7 @@ class AuthController extends GetxController {
     debugPrint('AuthController - _initializeUserModel is Called');
     userModel.value = await firebaseFirestore.collection("users").doc(id).get().then(
       (doc) {
-        print(doc.data().toString());
+        debugPrint(doc.data().toString());
         debugPrint('_________END DOC_______');
         Map<String, dynamic> docInfo = doc.data() ?? {'': ''};
 
@@ -153,13 +151,11 @@ class AuthController extends GetxController {
           photoURL: docInfo['photo_url'],
           createdAt: docInfo['created_at'],
         );
-        // debugPrint('${currentUser.id}\n${currentUser.name}\n${currentUser.email}\n${currentUser.photoURL}\n');
-        // debugPrint('_________END Current USER_______');
 
         return currentUser;
       },
     );
-    print(userModel()!.createdAt);
+    debugPrint(userModel()!.toString());
     debugPrint('_________END Current USER_______');
   }
 }

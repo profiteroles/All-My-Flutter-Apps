@@ -8,14 +8,16 @@ class AppDropDown extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-        value: controller.selectedMonth.value,
-        onChanged: controller.setMonth,
-        items: controller.months
-            .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                ))
-            .toList());
+    return Obx(
+      () => DropdownButton(
+          value: controller.selectedMonth.value,
+          onChanged: controller.setMonth,
+          items: controller.months
+              .map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ))
+              .toList()),
+    );
   }
 }

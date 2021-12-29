@@ -30,34 +30,40 @@ class ProfileScreen extends GetView<ProfileController> {
           int createdTasks = homeCtrl.getTotalTasks();
           int completedTasks = homeCtrl.getTotalDoneTask();
           int liveTasks = createdTasks - completedTasks;
-
-          return ListView(
-            padding: EdgeInsets.all(5.0.wp),
-            children: [
-              ProfileImage(name: Header('authCtrl.userModel()!.photoURL'), image: 'authCtrl.userModel()!.photoURL'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [Header('Report'), AppDropDown()],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
-                child: Text(DateFormat.yMMMM().format(DateTime.now()), style: Theme.of(context).textTheme.subtitle1),
-              ),
-              const AppDivider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ReportStatusRow(color: green, results: liveTasks, text: 'live_tasks'.tr),
-                  ReportStatusRow(color: orange, results: completedTasks, text: 'comleted'.tr),
-                  ReportStatusRow(color: blue, results: createdTasks, text: 'created'.tr),
-                ],
-              ),
-              SizedBox(height: 8.0.wp),
-              ProgressCircle(total: createdTasks, current: completedTasks),
-              const AppDivider(),
-              UserDetailsCard(email: 'user@email.com', name: 'Jane Doe', logout: authCtrl.logout),
-            ],
-          );
+          return authCtrl.userModel()!.photoURL.isEmpty || authCtrl.userModel() == null
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(
+                  padding: EdgeInsets.all(5.0.wp),
+                  children: [
+                    ProfileImage(name: Header(authCtrl.userModel()!.name), image: authCtrl.userModel()!.photoURL),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [Header('Report'), AppDropDown()],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
+                      child: Text(DateFormat.yMMMM().format(DateTime.now()), style: Theme.of(context).textTheme.subtitle1),
+                    ),
+                    SizedBox(height: 3.0.hp),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ReportStatusRow(color: green, results: liveTasks, text: 'live_tasks'.tr),
+                        ReportStatusRow(color: orange, results: completedTasks, text: 'comleted'.tr),
+                        ReportStatusRow(color: blue, results: createdTasks, text: 'created'.tr),
+                      ],
+                    ),
+                    SizedBox(height: 8.0.wp),
+                    ProgressCircle(total: createdTasks, current: completedTasks),
+                    const AppDivider(),
+                    UserDetailsCard(
+                      email: authCtrl.userModel()!.name,
+                      name: authCtrl.userModel()!.email,
+                      logout: authCtrl.logout,
+                      amount: 4,
+                    ),
+                  ],
+                );
         },
       ),
     );

@@ -23,7 +23,7 @@ class TopImageSection extends GetView<AuthController> {
               text: 'welcome'.tr,
               style: Theme.of(context).textTheme.headline5,
               children: [
-                TextSpan(text: controller.isSignupScreen() ? 'to'.tr : ''),
+                TextSpan(text: controller.isSignupScreen() ? 'to '.tr : ''),
                 TextSpan(
                   text: controller.isSignupScreen() ? "uniQ X," : 'back'.tr,
                   style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),

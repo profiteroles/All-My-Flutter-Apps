@@ -32,7 +32,7 @@ class VAToDo extends StatelessWidget {
       locale: const Locale('en', 'US'),
       initialBinding: MainBinding(),
       builder: EasyLoading.init(),
-      initialRoute: AppRoutes.auth,
+      initialRoute: AppRoutes.initial,
       theme: lightTheme,
       darkTheme: darkTheme,
       getPages: AppPages.pages,

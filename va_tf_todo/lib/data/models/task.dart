@@ -9,6 +9,7 @@ class Task extends Equatable {
   late String color;
   late Timestamp createdAt;
   late List<dynamic>? todos;
+  late int totalTasks;
 
   Task({
     required this.title,
@@ -16,6 +17,7 @@ class Task extends Equatable {
     required this.color,
     this.isDone = false,
     this.todos,
+    this.totalTasks = 0,
   });
 
   Task.fromDocumentSnapshot({required DocumentSnapshot doc}) {

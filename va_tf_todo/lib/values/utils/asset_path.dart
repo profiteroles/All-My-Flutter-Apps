@@ -1,5 +1,6 @@
 const String imageRootPath = 'images/';
-final String background = _getPath('background.jpg');
-final String todo = _getPath('todo.png');
+final String bckgrndImage = _getPath('background.jpg');
+final String todoImage = _getPath('todo.png');
+final String profileImage = _getPath('profile.png');
 
 String _getPath(String name) => imageRootPath + name;

@@ -10,9 +10,11 @@ class UserDetailsCard extends StatelessWidget {
     required this.email,
     required this.name,
     required this.logout,
+    required this.amount,
   }) : super(key: key);
   final String email, name;
   final VoidCallback logout;
+  final int amount;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class UserDetailsCard extends StatelessWidget {
               children: [
                 appTile(context, leading: 'full_name', trailing: name),
                 appTile(context, leading: 'email', trailing: email),
-                appTile(context, leading: 'total_task', trailing: '3'),
+                appTile(context, leading: 'total_task', trailing: '$amount'),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.0.wp),
                   child: AppButton(onPressed: logout, title: 'Log Out'),
