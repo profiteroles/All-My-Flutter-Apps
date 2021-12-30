@@ -7,14 +7,14 @@ final darkTheme = ThemeData.dark().copyWith(
   primaryColor: purple,
   primaryColorLight: darkPrimaryVar,
   appBarTheme: AppBarTheme(
-    color: purple,
-    titleTextStyle: GoogleFonts.raleway().copyWith(
-      color: white,
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1,
-    ),
-  ),
+      actionsIconTheme: const IconThemeData(color: lightGrey, size: 34),
+      color: dark,
+      titleTextStyle: GoogleFonts.raleway().copyWith(
+        color: green,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.3,
+      )),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: darkSecondaryVar),
   // canvasColor: grey,
   scaffoldBackgroundColor: dark,
@@ -45,7 +45,7 @@ final darkTheme = ThemeData.dark().copyWith(
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
       borderSide: BorderSide(color: darkSecondary),
     ),
-    labelStyle: const TextStyle(color: white),
+    labelStyle: const TextStyle(color: green),
     hintStyle: GoogleFonts.raleway(color: lightGrey, fontSize: 14),
   ),
   splashColor: Colors.transparent,
@@ -61,8 +61,8 @@ final darkTheme = ThemeData.dark().copyWith(
       ),
   iconTheme: const IconThemeData(color: white),
   colorScheme: ThemeData().colorScheme.copyWith(
-        primary: purple,
-        secondary: green,
+        primary: green,
+        secondary: purple,
         onSecondary: white,
       ),
 );
