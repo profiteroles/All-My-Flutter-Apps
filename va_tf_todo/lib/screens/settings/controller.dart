@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
+import 'package:va_tf_todo/values/utils/keys.dart';
 
 class SettingsController extends GetxController {
   static SettingsController instance = Get.find();
@@ -9,6 +11,15 @@ class SettingsController extends GetxController {
   RxBool isDarkMode = false.obs;
   RxBool nofityOn = true.obs;
   RxString appLanguage = 'English'.obs;
+
+  final _storage = GetStorage();
+
+  @override
+  void onInit() async {
+    super.onInit();
+    isDarkMode.value = await _storage.read(themeKey) ?? false;
+    setThemeMode(isDarkMode());
+  }
 
   final List locale = [
     {'name': 'English', 'locale': const Locale('en', 'AUS')},
@@ -22,6 +33,7 @@ class SettingsController extends GetxController {
     debugPrint('SettingsController - setThemeMode is Called');
     isDarkMode(value);
     Get.changeTheme(value ? darkTheme : lightTheme);
+    _storage.write(themeKey, value);
   }
 
   void setNotification(bool value) {

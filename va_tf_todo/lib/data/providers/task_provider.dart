@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/storage_service.dart';
-import 'package:va_tf_todo/values/utils/key.dart';
+import 'package:va_tf_todo/values/utils/keys.dart';
 
 class TaskProvider {
   final _storage = Get.find<StorageService>();

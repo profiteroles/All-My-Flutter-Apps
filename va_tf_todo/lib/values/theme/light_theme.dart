@@ -74,7 +74,15 @@ final lightTheme = ThemeData.light().copyWith(
   ),
   iconTheme: const IconThemeData(color: purple),
   primaryIconTheme: const IconThemeData(color: purple),
-  colorScheme: ThemeData().colorScheme.copyWith(primary: purple, secondary: green, onSecondary: purple),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(unselectedItemColor: lightGrey),
-  snackBarTheme: const SnackBarThemeData(backgroundColor: purple),
+  colorScheme: ThemeData().colorScheme.copyWith(
+        primary: purple,
+        secondary: green,
+        onSecondary: orange,
+      ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    unselectedItemColor: lightGrey,
+  ),
+  snackBarTheme: const SnackBarThemeData(
+    backgroundColor: purple,
+  ),
 );

@@ -59,10 +59,11 @@ final darkTheme = ThemeData.dark().copyWith(
       //   color: Colors.red,
       // ),
       ),
-  colorScheme: ThemeData().colorScheme.copyWith(primary: green, secondary: orange, onSecondary: white),
-  // listTileTheme: ListTileThemeData(
-  //   iconColor: green,
-  //   textColor: green,
-  // ),
-  textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(textStyle: const TextStyle(color: green))),
+  iconTheme: const IconThemeData(color: white),
+
+  colorScheme: ThemeData().colorScheme.copyWith(
+        primary: green,
+        secondary: purple,
+        onSecondary: white,
+      ),
 );

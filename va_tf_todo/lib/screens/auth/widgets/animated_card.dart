@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 import '../controller.dart';
@@ -45,7 +46,7 @@ class AnimatedCard extends GetView<AuthController> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [BoxShadow(color: Colors.black.withOpacity(.3), spreadRadius: 1, blurRadius: 2, offset: const Offset(0, 1))]),
                       child: controller.authState() == AuthState.initial
-                          ? const Icon(Icons.arrow_forward, color: Colors.white)
+                          ? Icon(Icons.arrow_forward, color: Theme.of(context).canvasColor)
                           : const Center(
                               child: CircularProgressIndicator(),
                             ),
