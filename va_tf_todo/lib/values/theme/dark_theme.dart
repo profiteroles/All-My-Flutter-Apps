@@ -60,6 +60,7 @@ final darkTheme = ThemeData.dark().copyWith(
       // ),
       ),
   iconTheme: const IconThemeData(color: white),
+
   colorScheme: ThemeData().colorScheme.copyWith(
         primary: green,
         secondary: purple,

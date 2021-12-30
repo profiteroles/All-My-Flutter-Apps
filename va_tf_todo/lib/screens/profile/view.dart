@@ -30,7 +30,7 @@ class ProfileScreen extends GetView<ProfileController> {
           int createdTasks = homeCtrl.getTotalTasks();
           int completedTasks = homeCtrl.getTotalDoneTask();
           int liveTasks = createdTasks - completedTasks;
-          return authCtrl.userModel()!.photoURL.isEmpty || authCtrl.userModel() == null
+          return authCtrl.userModel() == null
               ? const Center(child: CircularProgressIndicator())
               : ListView(
                   padding: EdgeInsets.all(5.0.wp),

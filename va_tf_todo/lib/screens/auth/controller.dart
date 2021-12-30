@@ -2,32 +2,48 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/firestore.dart';
+import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/values/utils/keys.dart';
 
 enum AuthState { loading, initial }
 
 class AuthController extends GetxController {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // AuthController({required this.appServices});
+  static AuthController instance = Get.find();
+
+  // final settingsCtrl = SettingsController.instance;
+
+  // FirebaseAuth auth = FirebaseAuth.instance;
   late Rx<User?> _fireUser;
   late Rx<UserModel?> userModel = Rx<UserModel?>(null);
 
-  var authState = AuthState.initial.obs;
+  Rx<AuthState> authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
   RxBool isRememberMe = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
+  // final _storage = GetStorage();
 
 //FormBuilder Throws an error for unregistered field.
   final loginKey = GlobalKey<FormBuilderState>();
   final signupKey = GlobalKey<FormBuilderState>();
 
+  // @override
+  // void onInit() async {
+  //   super.onInit();
+  //   // settingsCtrl.isDarkMode.value = await _storage.read(themeKey);
+  //   // settingsCtrl.setThemeMode(settingsCtrl.onInit());
+  //   // settingsCtrl.onInit();
+  // }
+
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
     _fireUser = Rx<User?>(auth.currentUser);
-
     _fireUser.bindStream(auth.userChanges());
     ever(_fireUser, _initialScreen);
   }
@@ -35,19 +51,31 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    // loginKey.currentState!.dispose();
-    // signupKey.currentState!.dispose();
     authState.value = AuthState.initial;
   }
 
-  _initialScreen(User? user) {
-    if (user == null) {
-      debugPrint('AuthController - initialScreen is Called');
-      Get.offNamed(AppRoutes.auth);
-    } else {
-      _initializeUserModel(user.uid);
-      Get.offNamed(AppRoutes.home);
-    }
+  // void validateTheme(bool isDark) {
+  //   debugPrint('AuthController - validateTheme is Called');
+  //   appServices.saveThemeMode(isDarkMode);
+  //   // final isDark = appServices.getThemeMode();
+  //   debugPrint('Theme Mode is $isDark');
+  //   if (isDark) {
+  //     Get.changeTheme(isDark ? darkTheme : lightTheme);
+  //   } else {
+  //     Get.changeTheme(Get.isDarkMode ? darkTheme : lightTheme);
+  //   }
+  // }
+
+  void _initialScreen(User? user) {
+    Future.delayed(Duration(seconds: 2), () {
+      if (user == null) {
+        debugPrint('AuthController - initialScreen is Called');
+        Get.offNamed(AppRoutes.auth);
+      } else {
+        _initializeUserModel(user.uid);
+        Get.offNamed(AppRoutes.home);
+      }
+    });
   }
 
   void login() async {

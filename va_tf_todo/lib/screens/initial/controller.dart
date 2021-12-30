@@ -12,10 +12,13 @@
 //   void onReady() {
 //     print('initialController - onReady');
 //     super.onReady();
+
 //     _user = Rx<User?>(auth.currentUser);
+
 //     Future.delayed(const Duration(seconds: 1), () {
 //       print(_user()?.email);
 //       print('_______END________');
+
 //       if (_user.value == null) {
 //         Get.offNamed(AppRoutes.auth);
 //       } else {

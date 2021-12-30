@@ -2,9 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
+import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/values/utils/keys.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
 class HomeController extends GetxController {
@@ -12,6 +15,9 @@ class HomeController extends GetxController {
 
   static HomeController instance = Get.find();
   final TaskRepository taskRepository;
+
+  final settingsCtrl = SettingsController.instance;
+  final storage = GetStorage();
 
   final formKey = GlobalKey<FormState>();
   final editCtrl = TextEditingController();
@@ -32,11 +38,12 @@ class HomeController extends GetxController {
   RxDouble fabOpacity = 1.0.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     debugPrint('HomeController - initialised');
     tasks.assignAll(taskRepository.readTasks());
     ever(tasks, (_) => taskRepository.writeTasks(tasks));
+    settingsCtrl.setThemeMode(await storage.read(themeKey));
   }
 
   @override

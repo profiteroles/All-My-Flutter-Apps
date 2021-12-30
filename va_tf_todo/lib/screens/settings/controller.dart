@@ -7,16 +7,18 @@ import 'package:va_tf_todo/values/utils/keys.dart';
 
 class SettingsController extends GetxController {
   static SettingsController instance = Get.find();
-  final GetStorage _storage = GetStorage();
 
   RxBool isDarkMode = false.obs;
   RxBool nofityOn = true.obs;
   RxString appLanguage = 'English'.obs;
 
+  final _storage = GetStorage();
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    isDarkMode.value = _storage.read(themeKey) ?? false;
+    isDarkMode.value = await _storage.read(themeKey) ?? false;
+    setThemeMode(isDarkMode());
   }
 
   final List locale = [
