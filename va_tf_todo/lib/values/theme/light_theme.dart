@@ -77,7 +77,7 @@ final lightTheme = ThemeData.light().copyWith(
   colorScheme: ThemeData().colorScheme.copyWith(
         primary: purple,
         secondary: green,
-        onSecondary: purple,
+        onSecondary: orange,
       ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     unselectedItemColor: lightGrey,
