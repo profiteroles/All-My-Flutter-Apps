@@ -1,16 +1,15 @@
-# deliverone
+# DeliveryONE (MACCAS App)
 
-A new Flutter project.
+### Responsive delivery app has open available on every platform<br>
+### Clean Architecture<br>
+### Login - Calculation - Light & Dark Mode - <br>
+## Thanks for checking repo out<br>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<br>
+    <img src="shot/1.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/2.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/3.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/4.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/5.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/6.png" alt="Screenshot" width="300" height="600">
+    <img src="shot/7.png" alt="Screenshot" width="300" height="600">

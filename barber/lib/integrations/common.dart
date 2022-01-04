@@ -17,17 +17,17 @@
 //   }
 // }
 
-// Widget networkImage(String image,
+// Widget networkImage(String? image,
 //     {String aPlaceholder = "images/integrations/img/placeholder.png",
-//     double aWidth,
-//     double aHeight,
+//     double? aWidth,
+//     double? aHeight,
 //     var fit = BoxFit.fill}) {
 //   if (image != null && image.isNotEmpty) {
 //     return FadeInImage(
 //       placeholder: AssetImage(aPlaceholder),
 //       image: NetworkImage(image),
-//       width: aWidth != null ? aWidth : null,
-//       height: aHeight != null ? aHeight : null,
+//       width: aWidth ?? 0,
+//       height: aHeight ?? 0,
 //       fit: fit,
 //     );
 //   } else {

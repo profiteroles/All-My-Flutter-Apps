@@ -16,28 +16,28 @@ abstract class AppStoreBase with Store {
   late Color scaffoldBackground;
 
   @observable
-  Color backgroundColor;
+  late Color backgroundColor;
 
   @observable
-  Color backgroundSecondaryColor;
+  late Color backgroundSecondaryColor;
 
   @observable
-  Color textPrimaryColor;
+  late Color textPrimaryColor;
 
   @observable
-  Color appColorPrimaryLightColor;
+  late Color appColorPrimaryLightColor;
 
   @observable
-  Color textSecondaryColor;
+  late Color textSecondaryColor;
 
   @observable
-  Color appBarColor;
+  late Color appBarColor;
 
   @observable
-  Color iconColor;
+  late Color iconColor;
 
   @observable
-  Color iconSecondaryColor;
+  late Color iconSecondaryColor;
 
   @observable
   String selectedLanguage = 'en';
