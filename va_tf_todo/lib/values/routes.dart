@@ -3,7 +3,6 @@ import 'package:va_tf_todo/screens/auth/binding.dart';
 import 'package:va_tf_todo/screens/auth/view.dart';
 import 'package:va_tf_todo/screens/home/binding.dart';
 import 'package:va_tf_todo/screens/home/view.dart';
-import 'package:va_tf_todo/screens/initial/binding.dart';
 import 'package:va_tf_todo/screens/initial/view.dart';
 import 'package:va_tf_todo/screens/profile/binding.dart';
 import 'package:va_tf_todo/screens/profile/view.dart';

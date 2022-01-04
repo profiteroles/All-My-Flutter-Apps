@@ -1,12 +1,12 @@
 
 
-<h2>uniQ App Store - Web Site</h2>
+# uniQ App Store - Web Site
 
-Build with Amazing Flutter 2.2 
+## Build with Amazing Flutter 2.2 <br><br>
 
-Idea behind this is to show the power Flutter across many platforms. But this time I have focused on building my own unique web site with Flutter 2.2. It's dynamic, responsive and Powerful.
+### Idea behind this is to show the power Flutter across many platforms. But this time I have focused on building my own unique web site with Flutter 2.2. It's dynamic, responsive and Powerful.<br><br>
 
-If you wish to experience it yourself please visit www.uniqapp.store for full experience.
+### If you wish to experience it yourself please visit www.uniqapp.store for full experience.
 
 
 <img src="shot/1.png" alt="Screenshot">

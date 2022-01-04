@@ -1,7 +1,6 @@
 import 'package:get/instance_manager.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/home/binding.dart';
-import 'package:va_tf_todo/screens/initial/binding.dart';
 import 'package:va_tf_todo/screens/profile/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
 
