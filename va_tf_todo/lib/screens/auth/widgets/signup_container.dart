@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart' as v;
 import 'package:get/get.dart';
+import 'package:va_tf_todo/screens/auth/widgets/remember_checkbox.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/text_field.dart';
 import '../controller.dart';
@@ -64,6 +65,7 @@ class SignUpContainer extends GetView<AuthController> {
               }
             ],
           ),
+          const RememberMeBox(isLogin: false),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 3.0.wp).copyWith(top: 3.0.wp),
             child: RichText(

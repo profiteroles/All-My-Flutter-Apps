@@ -2,13 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/firestore.dart';
-import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
-import 'package:va_tf_todo/values/utils/keys.dart';
 
 enum AuthState { loading, initial }
 
@@ -67,7 +64,7 @@ class AuthController extends GetxController {
   // }
 
   void _initialScreen(User? user) {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (user == null) {
         debugPrint('AuthController - initialScreen is Called');
         Get.offNamed(AppRoutes.auth);
@@ -102,12 +99,12 @@ class AuthController extends GetxController {
         debugPrint(e.toString());
         Get.snackbar(
           'User Information',
-          ' goes here',
+          e.message.toString(),
           margin: EdgeInsets.all(5.0.wp),
           backgroundColor: Colors.red[300],
           snackPosition: SnackPosition.BOTTOM,
-          titleText: const Text('Register has failed'),
-          messageText: Text(e.message.toString()),
+          titleText: const Text('Login has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
+          messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
         );
       }
     }
@@ -124,7 +121,7 @@ class AuthController extends GetxController {
       String email = data['email'];
       String password = data['password'];
 
-      debugPrint(data.toString());
+      // debugPrint(data.toString());
       try {
         await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
           // print(result);
@@ -132,7 +129,6 @@ class AuthController extends GetxController {
           _addNewUserDB({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300", "created_at": DateTime.now()});
           _initializeUserModel(result.user!.uid);
           authState(AuthState.initial);
-
           // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
         });
       } on FirebaseAuthException catch (e) {
@@ -140,12 +136,12 @@ class AuthController extends GetxController {
         debugPrint(e.toString());
         Get.snackbar(
           'User Information',
-          '',
+          e.message.toString(),
           margin: EdgeInsets.all(5.0.wp),
           backgroundColor: Colors.red[300],
           snackPosition: SnackPosition.BOTTOM,
-          titleText: const Text('Register has failed'),
-          messageText: Text(e.message.toString()),
+          titleText: const Text('Register has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
+          messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
         );
       }
     }
@@ -159,6 +155,7 @@ class AuthController extends GetxController {
     debugPrint('AuthController - toggleContainers is Called');
     btnAnimationValue(0);
     isSignupScreen(isSignUp);
+    isRememberMe(false);
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
   }
 
@@ -168,8 +165,8 @@ class AuthController extends GetxController {
     debugPrint('AuthController - _initializeUserModel is Called');
     userModel.value = await firebaseFirestore.collection("users").doc(id).get().then(
       (doc) {
-        debugPrint(doc.data().toString());
-        debugPrint('_________END DOC_______');
+        // debugPrint(doc.data().toString());
+        // debugPrint('_________END DOC_______');
         Map<String, dynamic> docInfo = doc.data() ?? {'': ''};
 
         UserModel currentUser = UserModel(
@@ -183,7 +180,7 @@ class AuthController extends GetxController {
         return currentUser;
       },
     );
-    debugPrint(userModel()!.toString());
-    debugPrint('_________END Current USER_______');
+    // debugPrint(userModel()!.toString());
+    // debugPrint('_________END Current USER_______');
   }
 }

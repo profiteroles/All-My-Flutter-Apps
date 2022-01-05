@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/flat_appbar.dart';
@@ -19,14 +20,14 @@ class SettingScreen extends GetView<SettingsController> {
             padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
             children: [
               Header('account'.tr),
-              AppCard(title: 'User Full Name', subTitle: 'personal_info'.tr, icon: Icons.person, onPress: () {}),
+              AppCard(title: 'User Full Name', subTitle: 'personal_info'.tr, icon: Icons.person, onPress: () => HomeController.instance.setPage(0)),
               SizedBox(height: 5.0.wp),
               Header('app_settings'.tr),
               AppCard(title: 'language'.tr, subTitle: controller.appLanguage(), icon: Icons.language, onPress: () => languageDialog(context)),
               AppCard(title: 'notifications'.tr, isSwitch: true, value: controller.nofityOn(), icon: Icons.notifications_active, onChanged: controller.setNotification),
               AppCard(title: 'dark_mode'.tr, isSwitch: true, value: controller.isDarkMode(), icon: Icons.dark_mode, onChanged: controller.setThemeMode),
               AppCard(title: 'help'.tr, subTitle: '', icon: Icons.help, onPress: () {}),
-              AppCard(title: 'privacy_policy'.tr, subTitle: 'terms_conditions'.tr, icon: Icons.policy_sharp, onPress: () {})
+              AppCard(title: 'privacy_policy'.tr, subTitle: 'terms_conditions'.tr, icon: Icons.policy_sharp, onPress: controller.goToPrivacy)
             ],
           )),
     );

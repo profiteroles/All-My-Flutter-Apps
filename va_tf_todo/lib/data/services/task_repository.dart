@@ -5,7 +5,7 @@ class TaskRepository {
   TaskProvider taskProvider;
   TaskRepository({required this.taskProvider});
 
-  List<Task> readTasks() => taskProvider.readTasks();
+  List<TasksList> readTasks() => taskProvider.readTasks();
 
-  void writeTasks(List<Task> tasks) => taskProvider.writeTasks(tasks);
+  void writeTasks(List<TasksList> tasks) => taskProvider.writeTasks(tasks);
 }

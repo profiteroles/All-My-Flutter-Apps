@@ -4,6 +4,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
+import 'package:va_tf_todo/widgets/flat_appbar.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SettingsController extends GetxController {
   static SettingsController instance = Get.find();
@@ -39,6 +41,7 @@ class SettingsController extends GetxController {
   void setNotification(bool value) {
     debugPrint('SettingsController - setThemeMode is Called');
     nofityOn(value);
+    Get.snackbar('Notifications', value ? 'On' : 'Off', snackPosition: SnackPosition.BOTTOM);
   }
 
   void setLanguage(int index) {
@@ -47,4 +50,14 @@ class SettingsController extends GetxController {
     appLanguage(locale[index]['name']);
     Get.back();
   }
+
+  void goToPrivacy() => Get.to(() {
+        debugPrint('SettingsController - goToPrivacy is Called');
+        return const Scaffold(
+          appBar: FlatAppBar('Privacy Policy', leading: true),
+          body: WebView(
+            initialUrl: 'https://www.iubenda.com/privacy-policy/71269859',
+          ),
+        );
+      });
 }

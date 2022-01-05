@@ -25,7 +25,7 @@ class DoneList extends GetView<HomeController> {
                 ...controller.doneTodos
                     .map((task) => Dismissible(
                           direction: DismissDirection.endToStart,
-                          onDismissed: (_) => controller.deleteDoneTodo(task),
+                          onDismissed: (_) => controller.deleteIsDoneTask(task),
                           background: Container(
                             color: Theme.of(context).colorScheme.error,
                             alignment: Alignment.centerRight,

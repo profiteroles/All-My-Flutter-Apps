@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'remember_checkbox.dart';
 import 'package:va_tf_todo/widgets/text_field.dart';
 import 'package:form_builder_validators/form_builder_validators.dart' as v;
 import '../controller.dart';
@@ -31,26 +32,7 @@ class LoginContainer extends GetView<AuthController> {
               v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Obx(
-                    () => Checkbox(
-                      value: controller.isRememberMe(),
-                      onChanged: (value) => controller.isRememberMe(!controller.isRememberMe()),
-                    ),
-                  ),
-                  Text('remember_me'.tr, style: Theme.of(context).textTheme.bodyText1),
-                ],
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text('forgot_password'.tr, style: Theme.of(context).textTheme.bodyText1),
-              ),
-            ],
-          )
+          const RememberMeBox(),
         ],
       ),
     );

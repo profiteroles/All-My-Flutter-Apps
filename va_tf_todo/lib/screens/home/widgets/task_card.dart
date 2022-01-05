@@ -8,7 +8,7 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 
 class TaskCard extends GetView<HomeController> {
   const TaskCard({Key? key, required this.task}) : super(key: key);
-  final Task task;
+  final TasksList task;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class TaskCard extends GetView<HomeController> {
     return GestureDetector(
       onTap: () {
         controller.changeTask(task);
-        controller.changeTodos(task.todos ?? []);
+        controller.changeTodos(task.tasks ?? []);
         Get.to(() => const TaskDetailScreen());
       },
       child: Container(
@@ -39,8 +39,8 @@ class TaskCard extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepProgressIndicator(
-              totalSteps: controller.isTodoEmpty(task) ? 1 : task.todos!.length,
-              currentStep: controller.isTodoEmpty(task) ? 0 : controller.getDoneTodo(task),
+              totalSteps: controller.isTaskEmpty(task) ? 1 : task.tasks!.length,
+              currentStep: controller.isTaskEmpty(task) ? 0 : controller.getDoneTask(task),
               size: 5,
               padding: 0,
               unselectedGradientColor: const LinearGradient(
@@ -65,15 +65,11 @@ class TaskCard extends GetView<HomeController> {
                 children: [
                   Text(
                     task.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0.sp,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0.sp, overflow: TextOverflow.ellipsis),
                   ),
                   SizedBox(height: 2.0.wp),
                   Text(
-                    "${task.todos?.length ?? 0} Tasks",
+                    "${task.tasks?.length ?? 0} Tasks",
                     style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
                   ),
                 ],

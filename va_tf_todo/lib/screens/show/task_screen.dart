@@ -14,7 +14,7 @@ class TaskDetailScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    var task = controller.task.value!;
+    var task = controller.tasksList.value!;
     var color = HexColor.fromHex(task.color);
     return WillPopScope(
       onWillPop: () async => false,

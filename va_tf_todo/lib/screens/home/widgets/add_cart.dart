@@ -40,7 +40,7 @@ class AddCard extends GetView<HomeController> {
                           .toList(),
                     ),
                   ),
-                  AppButton(onPressed: controller.addNewList),
+                  AppButton(onPressed: controller.addNewTaskList),
                 ],
               ),
             ),

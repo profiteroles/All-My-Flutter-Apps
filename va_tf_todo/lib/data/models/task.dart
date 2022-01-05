@@ -1,39 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class Task extends Equatable {
+class TasksList extends Equatable {
   late String id;
   late bool isDone;
   late String title;
   late int icon;
   late String color;
   late Timestamp createdAt;
-  late List<dynamic>? todos;
+  late List<dynamic>? tasks;
   late int totalTasks;
 
-  Task({
+  TasksList({
     required this.title,
     required this.icon,
     required this.color,
     this.isDone = false,
-    this.todos,
     this.totalTasks = 0,
+    this.tasks,
   });
 
-  Task.fromDocumentSnapshot({required DocumentSnapshot doc}) {
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'is_done': isDone,
+        'icon': icon,
+        'color': color,
+        'tasks': tasks,
+        'created_at': createdAt,
+        'total_tasks': totalTasks,
+      };
+
+  TasksList.fromDocumentSnapshot({required DocumentSnapshot doc}) {
     id = doc.id;
     title = doc['title'];
     icon = doc['icon'];
     color = doc['color'];
     createdAt = doc['created_at'];
-    todos = doc['doc'];
+    tasks = doc['doc'];
   }
 
-  Task copyWith({String? title, int? icon, String? color, List<dynamic>? todos}) => Task(
+  TasksList copyWith({String? title, int? icon, String? color, List<dynamic>? tasks}) => TasksList(
         title: title ?? this.title,
         icon: icon ?? this.icon,
         color: color ?? this.color,
-        todos: todos ?? this.todos,
+        tasks: tasks ?? this.tasks,
       );
 
   Map<String, dynamic> toMap() {
@@ -42,26 +52,19 @@ class Task extends Equatable {
     result.addAll({'title': title});
     result.addAll({'icon': icon});
     result.addAll({'color': color});
-    if (todos != null) {
-      result.addAll({'todos': todos});
+    if (tasks != null) {
+      result.addAll({'todos': tasks});
     }
 
     return result;
   }
 
-  factory Task.fromJson(Map<String, dynamic> json) => Task(
+  factory TasksList.fromJson(Map<String, dynamic> json) => TasksList(
         title: json['title'],
         icon: json['icon'],
         color: json['color'],
-        todos: json['todos'],
+        tasks: json['tasks'],
       );
-
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'icon': icon,
-        'color': color,
-        'todos': todos,
-      };
 
   @override
   List<Object?> get props => [title, icon, color];

@@ -7,18 +7,18 @@ import 'package:va_tf_todo/values/utils/keys.dart';
 class TaskProvider {
   final _storage = Get.find<StorageService>();
 
-  List<Task> readTasks() {
+  List<TasksList> readTasks() {
     debugPrint('TaskProvider - readTasks is Called');
-    var tasks = <Task>[];
+    var tasks = <TasksList>[];
 
     for (var task in _storage.read(taskKey) as List) {
-      tasks.add(Task.fromJson(task));
+      tasks.add(TasksList.fromJson(task));
     }
 
     return tasks;
   }
 
-  void writeTasks(List<Task> tasks) {
+  void writeTasks(List<TasksList> tasks) {
     debugPrint('TaskProvider - writeTasks is Called');
     _storage.write(taskKey, tasks);
   }

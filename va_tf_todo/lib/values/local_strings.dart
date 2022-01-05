@@ -21,6 +21,8 @@ class LocalStrings extends Translations {
           "email": "E-mail",
           "error_task_enter": "Enter tasks for your list",
           "error_title_required": "Title is required",
+          "error_tasks_list_exist": "You already have that task!",
+          "error_choose_list": "Choose a list",
           "full_name": "Full Name",
           "forgot_password": "Forgot Password ?",
           "help": "Help",

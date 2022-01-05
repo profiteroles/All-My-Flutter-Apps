@@ -10,7 +10,7 @@ class FabDragBtn extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<Task>(
+    return DragTarget<TasksList>(
       onAccept: controller.deleteTask,
       builder: (_, __, ___) => Obx(() => AnimatedOpacity(
             opacity: controller.fabOpacity(),

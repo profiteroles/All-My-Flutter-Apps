@@ -12,18 +12,7 @@ class AppBottomNavBar extends GetView<HomeController> {
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         clipBehavior: Clip.antiAlias,
-        // child: Theme(
-        //   data: ThemeData(
-        //     splashColor: Colors.transparent,
-        //     highlightColor: Colors.transparent,
-        //     canvasColor: Theme.of(context).bottomAppBarColor,
-        //     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-
-        //     )
-        //   ),
         child: BottomNavigationBar(
-          // selectedItemColor: Theme.of(context).bottomAppBarColor,
-          // unselectedItemColor: Colors.grey,
           currentIndex: controller.pageIndex(),
           onTap: controller.setPage,
           items: const [
@@ -33,7 +22,6 @@ class AppBottomNavBar extends GetView<HomeController> {
           ],
         ),
       ),
-      // ),
     );
   }
 }

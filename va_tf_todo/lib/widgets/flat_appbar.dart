@@ -6,12 +6,13 @@ class FlatAppBar extends StatelessWidget implements PreferredSizeWidget {
   const FlatAppBar(
     this.title, {
     this.hasInfo = false,
+    this.leading = false,
     Key? key,
   })  : preferredSize = const Size.fromHeight(60.0),
         super(key: key);
 
   final String title;
-  final bool hasInfo;
+  final bool hasInfo, leading;
 
   @override
   final Size preferredSize;
@@ -22,6 +23,12 @@ class FlatAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(title),
       automaticallyImplyLeading: false,
+      leading: leading
+          ? IconButton(
+              onPressed: Get.back,
+              icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.grey),
+            )
+          : null,
       actions: [
         if (hasInfo)
           Padding(

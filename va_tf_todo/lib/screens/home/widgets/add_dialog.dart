@@ -22,7 +22,7 @@ class AddDialog extends GetView<HomeController> {
                   children: [
                     IconButton(onPressed: controller.closeDialog, icon: const Icon(Icons.close)),
                     TextButton(
-                      onPressed: controller.addMission,
+                      onPressed: controller.addTaskFromDialog,
                       child: Text('done'.tr, style: TextStyle(fontSize: 14.0.sp)),
                       style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
                     )
@@ -67,7 +67,7 @@ class AddDialog extends GetView<HomeController> {
                                         Text(task.title, style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                    if (controller.task.value == task) const Icon(Icons.check, color: Colors.blue),
+                                    if (controller.tasksList.value == task) const Icon(Icons.check, color: Colors.blue),
                                   ],
                                 ),
                               ),

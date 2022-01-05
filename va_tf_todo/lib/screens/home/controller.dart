@@ -14,23 +14,20 @@ class HomeController extends GetxController {
   HomeController({required this.taskRepository});
 
   static HomeController instance = Get.find();
-  final TaskRepository taskRepository;
 
+  final TaskRepository taskRepository;
   final settingsCtrl = SettingsController.instance;
   final storage = GetStorage();
 
+  //Task Related
   final formKey = GlobalKey<FormState>();
   final editCtrl = TextEditingController();
-
   final chipIndex = 0.obs;
-
   final deleting = false.obs;
-
-  final task = Rx<Task?>(null);
-  final tasks = <Task>[].obs;
+  final tasksList = Rx<TasksList?>(null);
+  final tasks = <TasksList>[].obs;
   final doingTodos = <dynamic>[].obs;
   final doneTodos = <dynamic>[].obs;
-
   RxDouble taskBoxHeight = 6.0.hp.obs;
 
   RxInt pageIndex = 1.obs;
@@ -91,16 +88,16 @@ class HomeController extends GetxController {
     }
   }
 
-  bool updateTask(Task task, String title) {
+  bool updateTask(TasksList task, String title) {
     debugPrint('HomeController - updateTask is called receive todo - title is: $title \n'
         '${task.title} ${task.icon} ${task.color}');
-    var todos = task.todos ?? [];
+    var todos = task.tasks ?? [];
     if (containerTodo(todos, title)) {
       return false;
     } else {
       var todo = {'title': title, 'isDone': false};
       todos.add(todo);
-      var newTask = task.copyWith(todos: todos);
+      var newTask = task.copyWith(tasks: todos);
       int oldIdx = tasks.indexOf(task);
       tasks[oldIdx] = newTask;
       tasks.refresh();
@@ -113,10 +110,10 @@ class HomeController extends GetxController {
     return todos.any((todo) => todo['title'] == title);
   }
 
-  void changeTask(Task? selected) {
+  void changeTask(TasksList? selected) {
     debugPrint('HomeController - changeTask is called receive value is:\n'
         '${selected?.title} ${selected?.icon} ${selected?.color}');
-    task.value = selected;
+    tasksList.value = selected;
   }
 
   void changeChipIndex(int i) {
@@ -129,15 +126,15 @@ class HomeController extends GetxController {
     deleting.value = value;
   }
 
-  void deleteTask(Task task) {
-    debugPrint('HomeController - addTask is called receive task is: \n'
+  void deleteTask(TasksList task) {
+    debugPrint('HomeController - deleteTask is called receive task is: \n'
         '${task.title} ${task.icon} ${task.color}');
     tasks.remove(task);
     EasyLoading.showSuccess('Task Removed');
   }
 
-  bool addTask(Task task) {
-    debugPrint('HomeController - addTask is called receive task is: \n'
+  bool addTasksList(TasksList task) {
+    debugPrint('HomeController - addTasksList is called receive task is: \n'
         '${task.title} ${task.icon} ${task.color}');
 
     if (tasks.contains(task)) {
@@ -148,8 +145,26 @@ class HomeController extends GetxController {
     }
   }
 
-  bool addTodo(String title) {
-    debugPrint('HomeController - addTodo is called receive task is: $title');
+  void addTaskFromDialog() {
+    debugPrint('HomeController - addMission is called');
+    if (formKey.currentState!.validate()) {
+      if (tasksList.value == null) {
+        EasyLoading.showError('error_choose_list'.tr);
+      } else {
+        final bool success = updateTask(tasksList.value!, editCtrl.text);
+        if (success) {
+          EasyLoading.showSuccess('Task added to your ${tasksList.value!.title}');
+          closeDialog();
+        } else {
+          EasyLoading.showError('Task is already in the list');
+        }
+        editCtrl.clear();
+      }
+    }
+  }
+
+  bool addTask(String title) {
+    debugPrint('HomeController - addTask is called receive task is: $title');
 
     var todo = {'title': title, 'isDone': false};
     if (doingTodos.any((task) => mapEquals<String, dynamic>(todo, task))) {
@@ -164,75 +179,54 @@ class HomeController extends GetxController {
     return true;
   }
 
-  void updateTodos() {
+  void updateTasks() {
     debugPrint('HomeController - updateTodos is called');
 
     var newTodos = <Map<String, dynamic>>[];
     newTodos.addAll([...doingTodos, ...doneTodos]);
-    var newTask = task.value!.copyWith(todos: newTodos);
-    int oldIdx = tasks.indexOf(task.value);
+    var newTask = tasksList.value!.copyWith(tasks: newTodos);
+    int oldIdx = tasks.indexOf(tasksList.value);
     tasks[oldIdx] = newTask;
     tasks.refresh();
   }
 
-  void deleteDoneTodo(dynamic task) {
+  void deleteIsDoneTask(dynamic task) {
     debugPrint('HomeController - deleteDoneTodo is called');
     doneTodos.remove(task);
   }
 
-  bool isTodoEmpty(Task task) {
+  bool isTaskEmpty(TasksList task) {
     debugPrint('HomeController - isTodoEmpty is called');
-    return task.todos == null || task.todos!.isEmpty;
+    return task.tasks == null || task.tasks!.isEmpty;
   }
 
-  int getDoneTodo(Task task) {
+  int getDoneTask(TasksList task) {
     debugPrint('HomeController - getDoneTodo is called');
     var res = 0;
-    for (var i = 0; i < task.todos!.length; i++) {
-      if (task.todos![i]['isDone'] == true) {
+    for (var i = 0; i < task.tasks!.length; i++) {
+      if (task.tasks![i]['isDone'] == true) {
         res += 1;
       }
     }
     return res;
   }
 
-  void addNewList() {
-    debugPrint('HomeController - addNewList is called');
+  void addNewTaskList() {
+    debugPrint('HomeController - addNewTaskList is called');
     final icons = getIcons();
     if (formKey.currentState!.validate()) {
       int icon = icons[chipIndex.value].icon!.codePoint;
       String color = icons[chipIndex.value].color!.toHex();
-      var task = Task(title: editCtrl.text, icon: icon, color: color);
+      var task = TasksList(title: editCtrl.text, icon: icon, color: color);
 
       Get.back();
-      addTask(task) ? EasyLoading.showSuccess('Create Success') : EasyLoading.showError('You already have that task!');
-    }
-  }
-
-  void addMission() {
-    debugPrint('HomeController - addMission is called');
-    if (formKey.currentState!.validate()) {
-      if (task.value == null) {
-        EasyLoading.showError('Please Choose the list');
-      } else {
-        final bool success = updateTask(
-          task.value!,
-          editCtrl.text,
-        );
-        if (success) {
-          EasyLoading.showSuccess('Task added to your ${task.value!.title}');
-          closeDialog();
-        } else {
-          EasyLoading.showError('Task is already in the list');
-        }
-        editCtrl.clear();
-      }
+      addTasksList(task) ? EasyLoading.showSuccess('${task.title} ' + 'created'.tr) : EasyLoading.showError('error_tasks_list_exist'.tr);
     }
   }
 
   void addForTaskScren(bool v) {
     if (formKey.currentState!.validate()) {
-      var success = addTodo(editCtrl.text);
+      var success = addTask(editCtrl.text);
       if (success) {
         EasyLoading.showSuccess('New Task added to your List');
       } else {
@@ -244,7 +238,7 @@ class HomeController extends GetxController {
 
   void toHomePage() {
     Get.back();
-    updateTodos();
+    updateTasks();
     editCtrl.clear();
     changeTask(null);
   }
@@ -253,8 +247,8 @@ class HomeController extends GetxController {
     int result = 0;
 
     for (int i = 0; i < tasks.length; i++) {
-      if (tasks[i].todos != null) {
-        result += tasks[i].todos!.length;
+      if (tasks[i].tasks != null) {
+        result += tasks[i].tasks!.length;
       }
     }
 
@@ -265,9 +259,9 @@ class HomeController extends GetxController {
     int res = 0;
 
     for (int i = 0; i < tasks.length; i++) {
-      if (tasks[i].todos != null) {
-        for (int t = 0; t < tasks[i].todos!.length; t++) {
-          if (tasks[i].todos![t]['isDone'] == true) {
+      if (tasks[i].tasks != null) {
+        for (int t = 0; t < tasks[i].tasks!.length; t++) {
+          if (tasks[i].tasks![t]['isDone'] == true) {
             res += 1;
           }
         }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 import '../controller.dart';
@@ -16,7 +15,7 @@ class AnimatedCard extends GetView<AuthController> {
       () => AnimatedPositioned(
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInBack,
-        top: controller.isSignupScreen() ? 68.0.hp : 60.0.hp,
+        top: controller.isSignupScreen() ? 72.0.hp : 60.0.hp,
         right: 0,
         left: 0,
         child: Center(
