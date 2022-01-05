@@ -17,7 +17,7 @@ class TaskCard extends GetView<HomeController> {
     return GestureDetector(
       onTap: () {
         controller.changeTask(task);
-        controller.changeTodos(task.tasks ?? []);
+        controller.changeTasks(task.tasks ?? []);
         Get.to(() => const TaskDetailScreen());
       },
       child: Container(

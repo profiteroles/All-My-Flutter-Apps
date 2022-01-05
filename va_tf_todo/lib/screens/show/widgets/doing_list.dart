@@ -13,7 +13,7 @@ class DoingList extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.doingTodos.isEmpty && controller.doneTodos.isEmpty
+      () => controller.doingTasks.isEmpty && controller.doneTasks.isEmpty
           ? Column(
               children: [
                 Image.asset(todoImage, fit: BoxFit.cover, width: 65.0.wp),
@@ -27,8 +27,8 @@ class DoingList extends GetView<HomeController> {
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               children: [
-                ...controller.doingTodos.map((task) => TaskBoxContainer(task)).toList(),
-                if (controller.doingTodos.isNotEmpty) const AppDivider(),
+                ...controller.doingTasks.map((task) => TaskBoxContainer(task)).toList(),
+                if (controller.doingTasks.isNotEmpty) const AppDivider(),
               ],
             ),
     );

@@ -18,7 +18,7 @@ class ToggleAnimationContainer extends GetView<AuthController> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 700),
           curve: Curves.easeInBack,
-          height: controller.isSignupScreen() ? 53.0.hp : 37.0.hp,
+          height: controller.isSignupScreen() ? 47.0.hp : 33.0.hp,
           padding: EdgeInsets.all(5.0.wp),
           width: 90.0.wp,
           margin: EdgeInsets.symmetric(horizontal: 4.0.wp),

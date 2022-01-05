@@ -10,7 +10,7 @@ class DoneList extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.doneTodos.isNotEmpty
+      () => controller.doneTasks.isNotEmpty
           ? ListView(
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
@@ -18,11 +18,11 @@ class DoneList extends GetView<HomeController> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 4.0.wp, horizontal: 6.0.wp),
                   child: Text(
-                    'Complited(${controller.doneTodos.length})',
+                    'Complited(${controller.doneTasks.length})',
                     style: TextStyle(fontSize: 14.0.sp, color: Colors.grey),
                   ),
                 ),
-                ...controller.doneTodos
+                ...controller.doneTasks
                     .map((task) => Dismissible(
                           direction: DismissDirection.endToStart,
                           onDismissed: (_) => controller.deleteIsDoneTask(task),

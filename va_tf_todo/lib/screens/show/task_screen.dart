@@ -43,7 +43,7 @@ class TaskDetailScreen extends GetView<HomeController> {
               ),
               Obx(
                 () {
-                  var totalTodos = controller.doingTodos.length + controller.doneTodos.length;
+                  var totalTodos = controller.doingTasks.length + controller.doneTasks.length;
                   return Padding(
                     padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
                     child: Row(
@@ -53,7 +53,7 @@ class TaskDetailScreen extends GetView<HomeController> {
                         Expanded(
                           child: StepProgressIndicator(
                             totalSteps: totalTodos == 0 ? 1 : totalTodos,
-                            currentStep: controller.doneTodos.length,
+                            currentStep: controller.doneTasks.length,
                             size: 5,
                             padding: 0,
                             selectedGradientColor: LinearGradient(

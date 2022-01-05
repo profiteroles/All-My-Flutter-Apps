@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/firestore.dart';
 import 'package:va_tf_todo/values/routes.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 enum AuthState { loading, initial }
@@ -21,7 +22,8 @@ class AuthController extends GetxController {
 
   Rx<AuthState> authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
-  RxBool isRememberMe = false.obs;
+  RxBool isRecover = false.obs;
+  // RxBool isRememberMe = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
   // final _storage = GetStorage();
 
@@ -51,18 +53,6 @@ class AuthController extends GetxController {
     authState.value = AuthState.initial;
   }
 
-  // void validateTheme(bool isDark) {
-  //   debugPrint('AuthController - validateTheme is Called');
-  //   appServices.saveThemeMode(isDarkMode);
-  //   // final isDark = appServices.getThemeMode();
-  //   debugPrint('Theme Mode is $isDark');
-  //   if (isDark) {
-  //     Get.changeTheme(isDark ? darkTheme : lightTheme);
-  //   } else {
-  //     Get.changeTheme(Get.isDarkMode ? darkTheme : lightTheme);
-  //   }
-  // }
-
   void _initialScreen(User? user) {
     Future.delayed(const Duration(seconds: 2), () {
       if (user == null) {
@@ -75,12 +65,31 @@ class AuthController extends GetxController {
     });
   }
 
+  void sendRecover() async {
+    debugPrint('AuthController - sendRecover - is Called');
+    await auth.sendPasswordResetEmail(email: loginKey.currentState!.value['email']);
+    authState(AuthState.initial);
+    toggleContainers(false);
+    loginKey.currentState!.reset();
+    Get.snackbar(
+      'user_info'.tr,
+      'user_recover_text'.tr,
+      snackPosition: SnackPosition.BOTTOM,
+      colorText: black,
+      backgroundColor: green,
+    );
+  }
+
   void login() async {
     debugPrint('AuthController - login is Called');
 
     if (loginKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - login - Values Saved & Validated');
       authState(AuthState.loading);
+      if (isRecover()) {
+        sendRecover();
+        return;
+      }
 
       var data = loginKey.currentState!.value;
       String email = data['email'];
@@ -147,15 +156,11 @@ class AuthController extends GetxController {
     }
   }
 
-  void logout() {
-    auth.signOut();
-  }
-
   void toggleContainers(bool isSignUp) {
     debugPrint('AuthController - toggleContainers is Called');
     btnAnimationValue(0);
     isSignupScreen(isSignUp);
-    isRememberMe(false);
+    isRecover(false);
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
   }
 
@@ -182,5 +187,15 @@ class AuthController extends GetxController {
     );
     // debugPrint(userModel()!.toString());
     // debugPrint('_________END Current USER_______');
+  }
+
+  void recover() {
+    debugPrint('AuthController - recover is Called');
+    isRecover(true);
+  }
+
+  void logout() {
+    debugPrint('AuthController - logout is Called');
+    auth.signOut();
   }
 }

@@ -26,8 +26,8 @@ class HomeController extends GetxController {
   final deleting = false.obs;
   final tasksList = Rx<TasksList?>(null);
   final tasks = <TasksList>[].obs;
-  final doingTodos = <dynamic>[].obs;
-  final doneTodos = <dynamic>[].obs;
+  final doingTasks = <dynamic>[].obs;
+  final doneTasks = <dynamic>[].obs;
   RxDouble taskBoxHeight = 6.0.hp.obs;
 
   RxInt pageIndex = 1.obs;
@@ -39,7 +39,7 @@ class HomeController extends GetxController {
     super.onInit();
     debugPrint('HomeController - initialised');
     tasks.assignAll(taskRepository.readTasks());
-    ever(tasks, (_) => taskRepository.writeTasks(tasks));
+    ever(tasks, (_) => taskRepository.writeTasks(tasks), onDone: () => debugPrint('_____task updated_______'));
     settingsCtrl.setThemeMode(await storage.read(themeKey));
   }
 
@@ -62,42 +62,42 @@ class HomeController extends GetxController {
     pageIndex(index);
   }
 
-  void doneTodo(String title) {
-    debugPrint('HomeController - doneTodo is Called title is: $title');
-    var doingTodo = {'title': title, 'isDone': false};
-    int index = doingTodos.indexWhere((e) => mapEquals<String, dynamic>(doingTodo, e));
-    doingTodos.removeAt(index);
-    var doneTodo = {'title': title, 'isDone': true};
-    doneTodos.add(doneTodo);
-    doingTodos.refresh();
-    doneTodos.refresh();
+  void doneTask(String title) {
+    debugPrint('HomeController - doneTask is Called title is: $title');
+    var doingTask = {'title': title, 'isDone': false};
+    int index = doingTasks.indexWhere((e) => mapEquals<String, dynamic>(doingTask, e));
+    doingTasks.removeAt(index);
+    var doneTask = {'title': title, 'isDone': true};
+    doneTasks.add(doneTask);
+    doingTasks.refresh();
+    doneTasks.refresh();
   }
 
-  void changeTodos(List<dynamic> select) {
-    debugPrint('HomeController - changeTodos is Called');
-    doingTodos.clear();
-    doneTodos.clear();
+  void changeTasks(List<dynamic> select) {
+    debugPrint('HomeController - changeTasks is Called');
+    doingTasks.clear();
+    doneTasks.clear();
     for (var i = 0; i < select.length; i++) {
-      var todo = select[i];
-      var status = todo['isDone'];
+      var task = select[i];
+      var status = task['isDone'];
       if (status == true) {
-        doneTodos.add(todo);
+        doneTasks.add(task);
       } else {
-        doingTodos.add(todo);
+        doingTasks.add(task);
       }
     }
   }
 
   bool updateTask(TasksList task, String title) {
-    debugPrint('HomeController - updateTask is called receive todo - title is: $title \n'
+    debugPrint('HomeController - updateTask is called receive task - title is: $title \n'
         '${task.title} ${task.icon} ${task.color}');
-    var todos = task.tasks ?? [];
-    if (containerTodo(todos, title)) {
+    var newTasks = task.tasks ?? [];
+    if (containerTask(newTasks, title)) {
       return false;
     } else {
-      var todo = {'title': title, 'isDone': false};
-      todos.add(todo);
-      var newTask = task.copyWith(tasks: todos);
+      var aTask = {'title': title, 'isDone': false};
+      newTasks.add(aTask);
+      var newTask = task.copyWith(tasks: newTasks);
       int oldIdx = tasks.indexOf(task);
       tasks[oldIdx] = newTask;
       tasks.refresh();
@@ -105,9 +105,9 @@ class HomeController extends GetxController {
     }
   }
 
-  bool containerTodo(List todos, String title) {
-    debugPrint('HomeController - containerTodo is called receive todo - title is: $title \n$todos');
-    return todos.any((todo) => todo['title'] == title);
+  bool containerTask(List listTasks, String title) {
+    debugPrint('HomeController - containerTask is called receive task - title is: $title \n$listTasks');
+    return listTasks.any((aTask) => aTask['title'] == title);
   }
 
   void changeTask(TasksList? selected) {
@@ -166,42 +166,42 @@ class HomeController extends GetxController {
   bool addTask(String title) {
     debugPrint('HomeController - addTask is called receive task is: $title');
 
-    var todo = {'title': title, 'isDone': false};
-    if (doingTodos.any((task) => mapEquals<String, dynamic>(todo, task))) {
+    var newTask = {'title': title, 'isDone': false};
+    if (doingTasks.any((task) => mapEquals<String, dynamic>(newTask, task))) {
       return false;
     }
-    var doneTodo = {'title': title, 'isDone': true};
-    if (doneTodos.any((task) => mapEquals<String, dynamic>(doneTodo, task))) {
+    var doneTask = {'title': title, 'isDone': true};
+    if (doneTasks.any((task) => mapEquals<String, dynamic>(doneTask, task))) {
       return false;
     }
 
-    doingTodos.add(todo);
+    doingTasks.add(newTask);
     return true;
   }
 
   void updateTasks() {
-    debugPrint('HomeController - updateTodos is called');
+    debugPrint('HomeController - updateTasks is called');
 
-    var newTodos = <Map<String, dynamic>>[];
-    newTodos.addAll([...doingTodos, ...doneTodos]);
-    var newTask = tasksList.value!.copyWith(tasks: newTodos);
+    var newTasks = <Map<String, dynamic>>[];
+    newTasks.addAll([...doingTasks, ...doneTasks]);
+    var newTask = tasksList.value!.copyWith(tasks: newTasks);
     int oldIdx = tasks.indexOf(tasksList.value);
     tasks[oldIdx] = newTask;
     tasks.refresh();
   }
 
   void deleteIsDoneTask(dynamic task) {
-    debugPrint('HomeController - deleteDoneTodo is called');
-    doneTodos.remove(task);
+    debugPrint('HomeController - deleteIsDoneTask is called');
+    doneTasks.remove(task);
   }
 
   bool isTaskEmpty(TasksList task) {
-    debugPrint('HomeController - isTodoEmpty is called');
+    debugPrint('HomeController - isTaskEmpty is called');
     return task.tasks == null || task.tasks!.isEmpty;
   }
 
   int getDoneTask(TasksList task) {
-    debugPrint('HomeController - getDoneTodo is called');
+    debugPrint('HomeController - getDoneTask is called');
     var res = 0;
     for (var i = 0; i < task.tasks!.length; i++) {
       if (task.tasks![i]['isDone'] == true) {

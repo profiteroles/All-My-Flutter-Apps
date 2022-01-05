@@ -38,7 +38,7 @@ class TaskBoxContainer extends GetView<HomeController> {
                 : Checkbox(
                     fillColor: MaterialStateProperty.resolveWith((states) => Colors.grey),
                     value: false,
-                    onChanged: (value) => controller.doneTodo(task['title']),
+                    onChanged: (value) => controller.doneTask(task['title']),
                   ),
           ),
           Padding(
