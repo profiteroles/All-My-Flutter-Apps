@@ -19,7 +19,7 @@ class SettingScreen extends GetView<SettingsController> {
           body: ListView(
             padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
             children: [
-              Header('account'.tr),
+              Header('account'.tr), //controller.authCtrl.userModel()!.name ??
               AppCard(title: 'User Full Name', subTitle: 'personal_info'.tr, icon: Icons.person, onPress: () => HomeController.instance.setPage(0)),
               SizedBox(height: 5.0.wp),
               Header('app_settings'.tr),

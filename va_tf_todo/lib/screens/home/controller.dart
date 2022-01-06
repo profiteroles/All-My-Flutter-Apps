@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/models/task.dart';
+import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
+import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
@@ -17,7 +20,9 @@ class HomeController extends GetxController {
 
   final TaskRepository taskRepository;
   final settingsCtrl = SettingsController.instance;
+  final authCtrl = AuthController.instance;
   final storage = GetStorage();
+  final dbFirestore = FirestoreService();
 
   //Task Related
   final formKey = GlobalKey<FormState>();
@@ -39,7 +44,7 @@ class HomeController extends GetxController {
     super.onInit();
     debugPrint('HomeController - initialised');
     tasks.assignAll(taskRepository.readTasks());
-    ever(tasks, (_) => taskRepository.writeTasks(tasks), onDone: () => debugPrint('_____task updated_______'));
+    ever(tasks, (_) => taskRepository.writeTasks(tasks));
     settingsCtrl.setThemeMode(await storage.read(themeKey));
   }
 
@@ -133,18 +138,6 @@ class HomeController extends GetxController {
     EasyLoading.showSuccess('Task Removed');
   }
 
-  bool addTasksList(TasksList task) {
-    debugPrint('HomeController - addTasksList is called receive task is: \n'
-        '${task.title} ${task.icon} ${task.color}');
-
-    if (tasks.contains(task)) {
-      return false;
-    } else {
-      tasks.add(task);
-      return true;
-    }
-  }
-
   void addTaskFromDialog() {
     debugPrint('HomeController - addMission is called');
     if (formKey.currentState!.validate()) {
@@ -211,18 +204,34 @@ class HomeController extends GetxController {
     return res;
   }
 
-  void addNewTaskList() {
+  void addNewTaskList() async {
     debugPrint('HomeController - addNewTaskList is called');
     final icons = getIcons();
     if (formKey.currentState!.validate()) {
       int icon = icons[chipIndex.value].icon!.codePoint;
       String color = icons[chipIndex.value].color!.toHex();
-      var task = TasksList(title: editCtrl.text, icon: icon, color: color);
+      var list = TasksList(title: editCtrl.text, icon: icon, color: color, createdAt: Timestamp.now());
+      print(list.toJson());
+      print('_______END OF JSON TASK LIST______');
+      await dbFirestore.setTaskList(list.toJson(), authCtrl.userModel()!.id);
 
       Get.back();
-      addTasksList(task) ? EasyLoading.showSuccess('${task.title} ' + 'created'.tr) : EasyLoading.showError('error_tasks_list_exist'.tr);
+      addTasksList(list) ? EasyLoading.showSuccess('${list.title} ' + 'created'.tr) : EasyLoading.showError('error_tasks_list_exist'.tr);
     }
   }
+
+  bool addTasksList(TasksList task) {
+    debugPrint('HomeController - addTasksList is called receive task is: \n'
+        '${task.title} ${task.icon} ${task.color}');
+
+    if (tasks.contains(task)) {
+      return false;
+    } else {
+      tasks.add(task);
+      return true;
+    }
+  }
+  // bool addTasksList(TasksList task) => tasks.contains(task) ? false : true;
 
   void addForTaskScren(bool v) {
     if (formKey.currentState!.validate()) {

@@ -7,7 +7,6 @@ import 'package:va_tf_todo/screens/settings/controller.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    // Get.lazyPut<InitialBinding>(() => InitialBinding());
     Get.put<SettingsController>(SettingsController(), permanent: true);
     Get.put<AuthController>(AuthController(), permanent: true);
     Get.put<HomeBinding>(HomeBinding(), permanent: true);

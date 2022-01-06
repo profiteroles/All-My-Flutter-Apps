@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/user.dart';
-import 'package:va_tf_todo/data/services/firestore.dart';
+import 'package:va_tf_todo/data/services/auth_service.dart';
+import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
@@ -11,40 +12,29 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 enum AuthState { loading, initial }
 
 class AuthController extends GetxController {
-  // AuthController({required this.appServices});
   static AuthController instance = Get.find();
 
-  // final settingsCtrl = SettingsController.instance;
-
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  late Rx<User?> _fireUser;
+  final dbFirestore = FirestoreService();
+  final authService = AuthService();
+  late Rx<User?> _currentUser;
   late Rx<UserModel?> userModel = Rx<UserModel?>(null);
 
   Rx<AuthState> authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
   RxBool isRecover = false.obs;
-  // RxBool isRememberMe = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
-  // final _storage = GetStorage();
 
-//FormBuilder Throws an error for unregistered field.
   final loginKey = GlobalKey<FormBuilderState>();
   final signupKey = GlobalKey<FormBuilderState>();
-
-  // @override
-  // void onInit() async {
-  //   super.onInit();
-  //   // settingsCtrl.isDarkMode.value = await _storage.read(themeKey);
-  //   // settingsCtrl.setThemeMode(settingsCtrl.onInit());
-  //   // settingsCtrl.onInit();
-  // }
 
   @override
   void onReady() async {
     super.onReady();
-    _fireUser = Rx<User?>(auth.currentUser);
-    _fireUser.bindStream(auth.userChanges());
-    ever(_fireUser, _initialScreen);
+    _currentUser = Rx<User?>(authService.user());
+    _currentUser.bindStream(authService.currentUser());
+    // _fireUser = Rx<User?>(auth.currentUser);
+    // _fireUser.bindStream(auth.userChanges());
+    ever(_currentUser, _initialScreen);
   }
 
   @override
@@ -67,7 +57,8 @@ class AuthController extends GetxController {
 
   void sendRecover() async {
     debugPrint('AuthController - sendRecover - is Called');
-    await auth.sendPasswordResetEmail(email: loginKey.currentState!.value['email']);
+    await authService.recoverPass(loginKey.currentState!.value['email'].toString().trim());
+    // await auth.sendPasswordResetEmail(email: loginKey.currentState!.value['email']);
     authState(AuthState.initial);
     toggleContainers(false);
     loginKey.currentState!.reset();
@@ -92,16 +83,17 @@ class AuthController extends GetxController {
       }
 
       var data = loginKey.currentState!.value;
-      String email = data['email'];
-      String password = data['password'];
+      String email = data['email'].toString().trim();
+      String password = data['password'].toString().trim();
 
       try {
-        await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
+        await authService.loginEmail(email, password).then((result) {
+          //} => null);
+          // await auth.signInWithEmailAndPassword(email: email, password: password).then((result) {
           debugPrint(result.toString());
           debugPrint('_______END_______');
           _initializeUserModel(result.user!.uid);
           authState(AuthState.initial);
-          // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
         });
       } on FirebaseAuthException catch (e) {
         authState(AuthState.initial);
@@ -132,13 +124,14 @@ class AuthController extends GetxController {
 
       // debugPrint(data.toString());
       try {
-        await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
-          // print(result);
-          // print('_______END_______');
-          _addNewUserDB({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300", "created_at": DateTime.now()});
+        await authService.signUpEmail(email, password).then((result) {
+          //}=> null)
+          // await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
+          print(result.user.toString());
+          print('_______END_______');
+          dbFirestore.setUser({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300", "created_at": DateTime.now()});
           _initializeUserModel(result.user!.uid);
           authState(AuthState.initial);
-          // userModel.value = UserModel(id: result.user!.uid, name: name, email: email);
         });
       } on FirebaseAuthException catch (e) {
         authState(AuthState.initial);
@@ -164,29 +157,9 @@ class AuthController extends GetxController {
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
   }
 
-  _addNewUserDB(Map<String, dynamic> map) => firebaseFirestore.collection("users").doc(map['id']).set(map);
-
   _initializeUserModel(String id) async {
     debugPrint('AuthController - _initializeUserModel is Called');
-    userModel.value = await firebaseFirestore.collection("users").doc(id).get().then(
-      (doc) {
-        // debugPrint(doc.data().toString());
-        // debugPrint('_________END DOC_______');
-        Map<String, dynamic> docInfo = doc.data() ?? {'': ''};
-
-        UserModel currentUser = UserModel(
-          id: docInfo['id'],
-          name: docInfo['name'],
-          email: docInfo['email'],
-          photoURL: docInfo['photo_url'],
-          createdAt: docInfo['created_at'],
-        );
-
-        return currentUser;
-      },
-    );
-    // debugPrint(userModel()!.toString());
-    // debugPrint('_________END Current USER_______');
+    userModel.value = await dbFirestore.getUser(id);
   }
 
   void recover() {
@@ -194,8 +167,8 @@ class AuthController extends GetxController {
     isRecover(true);
   }
 
-  void logout() {
+  void logout() async {
     debugPrint('AuthController - logout is Called');
-    auth.signOut();
+    await authService.signOut();
   }
 }

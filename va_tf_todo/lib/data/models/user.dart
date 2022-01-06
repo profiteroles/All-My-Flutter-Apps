@@ -17,12 +17,6 @@ class UserModel {
     required this.createdAt,
   });
 
-  // UserModel.fromDocumentSnapShot({required DocumentSnapshot doc}) {
-  //   id = doc.id;
-  //   name = doc['name'];
-  //   email = doc['email'];
-  // }
-
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -47,7 +41,9 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(id: json['id'], name: json['name'], email: json['email'], photoURL: json['photo_url'], createdAt: json['created_at']);
+  }
 
   @override
   String toString() {

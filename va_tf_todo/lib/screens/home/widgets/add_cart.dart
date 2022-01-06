@@ -49,10 +49,8 @@ class AddCard extends GetView<HomeController> {
           controller.changeChipIndex(0);
         },
         child: DottedBorder(
-          color: Colors.grey[400]!,
-          child: Center(
-            child: Icon(Icons.add, size: 10.0.wp, color: Colors.grey),
-          ),
+          color: Theme.of(context).toggleableActiveColor,
+          child: Center(child: Icon(Icons.add, size: 10.0.wp)),
         ),
       ),
     );

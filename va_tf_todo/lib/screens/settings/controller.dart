@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
@@ -15,6 +16,7 @@ class SettingsController extends GetxController {
   RxString appLanguage = 'English'.obs;
 
   final _storage = GetStorage();
+  final authCtrl = AuthController.instance;
 
   @override
   void onInit() async {

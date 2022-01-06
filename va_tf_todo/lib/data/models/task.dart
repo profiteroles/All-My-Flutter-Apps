@@ -15,6 +15,7 @@ class TasksList extends Equatable {
     required this.title,
     required this.icon,
     required this.color,
+    required this.createdAt,
     this.isDone = false,
     this.totalTasks = 0,
     this.tasks,
@@ -39,11 +40,12 @@ class TasksList extends Equatable {
     tasks = doc['doc'];
   }
 
-  TasksList copyWith({String? title, int? icon, String? color, List<dynamic>? tasks}) => TasksList(
+  TasksList copyWith({String? title, int? icon, String? color, List<dynamic>? tasks, Timestamp? createdAt}) => TasksList(
         title: title ?? this.title,
         icon: icon ?? this.icon,
         color: color ?? this.color,
         tasks: tasks ?? this.tasks,
+        createdAt: createdAt ?? this.createdAt,
       );
 
   Map<String, dynamic> toMap() {
@@ -64,6 +66,7 @@ class TasksList extends Equatable {
         icon: json['icon'],
         color: json['color'],
         tasks: json['tasks'],
+        createdAt: json['created_at'],
       );
 
   @override
