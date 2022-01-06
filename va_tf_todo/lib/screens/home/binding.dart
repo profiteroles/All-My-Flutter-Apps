@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:va_tf_todo/data/providers/task_provider.dart';

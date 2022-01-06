@@ -1,13 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/auth_service.dart';
 import 'package:va_tf_todo/data/services/firestore_service.dart';
+import 'package:va_tf_todo/data/services/storage_service.dart';
+import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
+import 'package:va_tf_todo/values/theme/dark_theme.dart';
+import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/values/utils/keys.dart';
 
 enum AuthState { loading, initial }
 
@@ -17,23 +25,28 @@ class AuthController extends GetxController {
   final dbFirestore = FirestoreService();
   final authService = AuthService();
   late Rx<User?> _currentUser;
-  late Rx<UserModel?> userModel = Rx<UserModel?>(null);
+  final Rx<UserModel?> userModel = Rx<UserModel?>(null);
 
   Rx<AuthState> authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
   RxBool isRecover = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
 
+  final localStorage = GetStorage();
+
   final loginKey = GlobalKey<FormBuilderState>();
   final signupKey = GlobalKey<FormBuilderState>();
+  @override
+  void onInit() {
+    _initialiseAppTheme();
+    super.onInit();
+  }
 
   @override
-  void onReady() async {
+  void onReady() {
     super.onReady();
     _currentUser = Rx<User?>(authService.user());
     _currentUser.bindStream(authService.currentUser());
-    // _fireUser = Rx<User?>(auth.currentUser);
-    // _fireUser.bindStream(auth.userChanges());
     ever(_currentUser, _initialScreen);
   }
 
@@ -41,15 +54,26 @@ class AuthController extends GetxController {
   void onClose() {
     super.onClose();
     authState.value = AuthState.initial;
+    isSignupScreen(false);
   }
 
+  _initialiseAppTheme() async {
+    debugPrint('AuthController - _initialiseAppTheme is Called');
+    final bool isThemeDark = await localStorage.read(themeKey) ?? false;
+    Get.changeTheme(isThemeDark ? darkTheme : lightTheme);
+  }
+
+  _initialiseUserModel(String id) async => userModel.value = await dbFirestore.getUser(id);
+  void recover() => isRecover(true);
+  void logout() async => await authService.signOut();
+
   void _initialScreen(User? user) {
+    debugPrint('AuthController - initialScreen is Called');
     Future.delayed(const Duration(seconds: 2), () {
       if (user == null) {
-        debugPrint('AuthController - initialScreen is Called');
         Get.offNamed(AppRoutes.auth);
       } else {
-        _initializeUserModel(user.uid);
+        _initialiseUserModel(user.uid);
         Get.offNamed(AppRoutes.home);
       }
     });
@@ -58,7 +82,6 @@ class AuthController extends GetxController {
   void sendRecover() async {
     debugPrint('AuthController - sendRecover - is Called');
     await authService.recoverPass(loginKey.currentState!.value['email'].toString().trim());
-    // await auth.sendPasswordResetEmail(email: loginKey.currentState!.value['email']);
     authState(AuthState.initial);
     toggleContainers(false);
     loginKey.currentState!.reset();
@@ -88,25 +111,11 @@ class AuthController extends GetxController {
 
       try {
         await authService.loginEmail(email, password).then((result) {
-          //} => null);
-          // await auth.signInWithEmailAndPassword(email: email, password: password).then((result) {
-          debugPrint(result.toString());
-          debugPrint('_______END_______');
-          _initializeUserModel(result.user!.uid);
-          authState(AuthState.initial);
+          _initialiseUserModel(result.user!.uid);
+          // authState(AuthState.initial);
         });
       } on FirebaseAuthException catch (e) {
-        authState(AuthState.initial);
-        debugPrint(e.toString());
-        Get.snackbar(
-          'User Information',
-          e.message.toString(),
-          margin: EdgeInsets.all(5.0.wp),
-          backgroundColor: Colors.red[300],
-          snackPosition: SnackPosition.BOTTOM,
-          titleText: const Text('Login has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
-          messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
-        );
+        authError(e);
       }
     }
   }
@@ -118,35 +127,42 @@ class AuthController extends GetxController {
       debugPrint('AuthController - register - Values Saved & Validated');
       authState(AuthState.loading);
       var data = signupKey.currentState!.value;
-      String name = data['full_name'];
-      String email = data['email'];
+      String name = data['full_name'].toString().trim();
+      String email = data['email'].toString().trim();
       String password = data['password'];
 
-      // debugPrint(data.toString());
       try {
         await authService.signUpEmail(email, password).then((result) {
-          //}=> null)
-          // await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) {
-          print(result.user.toString());
-          print('_______END_______');
-          dbFirestore.setUser({"id": result.user!.uid, "name": name, "email": email, "photo_url": "https://i.pravatar.cc/300", "created_at": DateTime.now()});
-          _initializeUserModel(result.user!.uid);
-          authState(AuthState.initial);
+          // print(result.user.toString());
+          // print('_______END_______');
+          final UserModel newUser = UserModel(id: result.user!.uid, name: name, email: email, createdAt: Timestamp.now());
+          dbFirestore.setUser(newUser.toMap());
+          _initialiseUserModel(newUser.id);
         });
       } on FirebaseAuthException catch (e) {
-        authState(AuthState.initial);
-        debugPrint(e.toString());
-        Get.snackbar(
-          'User Information',
-          e.message.toString(),
-          margin: EdgeInsets.all(5.0.wp),
-          backgroundColor: Colors.red[300],
-          snackPosition: SnackPosition.BOTTOM,
-          titleText: const Text('Register has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
-          messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
-        );
+        authError(e);
       }
+
+      // Future.delayed(const Duration(seconds: 5), () {
+      //   authState(AuthState.initial);
+      //   isSignupScreen(false);
+      // });
     }
+  }
+
+//TODO: Test this out
+  void authError(FirebaseAuthException e) {
+    authState(AuthState.initial);
+    debugPrint(e.toString());
+    Get.snackbar(
+      'User Information',
+      e.message.toString(),
+      margin: EdgeInsets.all(5.0.wp),
+      backgroundColor: Colors.red[400],
+      snackPosition: SnackPosition.BOTTOM,
+      // titleText: const Text('Login has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
+      // messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
+    );
   }
 
   void toggleContainers(bool isSignUp) {
@@ -155,20 +171,5 @@ class AuthController extends GetxController {
     isSignupScreen(isSignUp);
     isRecover(false);
     Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
-  }
-
-  _initializeUserModel(String id) async {
-    debugPrint('AuthController - _initializeUserModel is Called');
-    userModel.value = await dbFirestore.getUser(id);
-  }
-
-  void recover() {
-    debugPrint('AuthController - recover is Called');
-    isRecover(true);
-  }
-
-  void logout() async {
-    debugPrint('AuthController - logout is Called');
-    await authService.signOut();
   }
 }

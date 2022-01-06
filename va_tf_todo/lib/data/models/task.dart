@@ -1,74 +1,79 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class TasksList extends Equatable {
-  late String id;
-  late bool isDone;
-  late String title;
-  late int icon;
-  late String color;
-  late Timestamp createdAt;
-  late List<dynamic>? tasks;
-  late int totalTasks;
+  String? id;
+  String title;
+  bool done;
+  String color;
+  int icon;
+  String createdAt;
+  List<dynamic>? tasks;
 
   TasksList({
+    this.id,
     required this.title,
     required this.icon,
     required this.color,
     required this.createdAt,
-    this.isDone = false,
-    this.totalTasks = 0,
+    this.done = false,
     this.tasks,
   });
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'title': title,
-        'is_done': isDone,
+        'done': done,
         'icon': icon,
         'color': color,
         'tasks': tasks,
         'created_at': createdAt,
-        'total_tasks': totalTasks,
       };
 
-  TasksList.fromDocumentSnapshot({required DocumentSnapshot doc}) {
-    id = doc.id;
-    title = doc['title'];
-    icon = doc['icon'];
-    color = doc['color'];
-    createdAt = doc['created_at'];
-    tasks = doc['doc'];
-  }
+  // TasksList.fromDocumentSnapshot({required DocumentSnapshot doc}) {
+  //   id = doc.id;
+  //   title = doc['title'];
+  //   icon = doc['icon'];
+  //   color = doc['color'];
+  // createdAt = doc['created_at'];
+  //   tasks = doc['tasks'];
+  // }
 
-  TasksList copyWith({String? title, int? icon, String? color, List<dynamic>? tasks, Timestamp? createdAt}) => TasksList(
+  TasksList copyWith({String? id, String? title, int? icon, String? color, List<dynamic>? tasks, bool? done, String? createdAt}) => TasksList(
+        id: id ?? this.id,
         title: title ?? this.title,
         icon: icon ?? this.icon,
         color: color ?? this.color,
         tasks: tasks ?? this.tasks,
+        done: done ?? this.done,
         createdAt: createdAt ?? this.createdAt,
       );
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-
+    result.addAll({'id': id});
     result.addAll({'title': title});
     result.addAll({'icon': icon});
     result.addAll({'color': color});
-    if (tasks != null) {
-      result.addAll({'todos': tasks});
-    }
+    result.addAll({'done': done});
+    result.addAll({'created_at': createdAt});
+    result.addAll({'tasks': tasks ?? []});
+    // if (tasks != null) {
+    //   result.addAll({'tasks': tasks});
+    // }
 
     return result;
   }
 
   factory TasksList.fromJson(Map<String, dynamic> json) => TasksList(
+        id: json['id'],
         title: json['title'],
         icon: json['icon'],
         color: json['color'],
+        done: json['done'],
         tasks: json['tasks'],
         createdAt: json['created_at'],
       );
 
   @override
-  List<Object?> get props => [title, icon, color];
+  List<Object?> get props => [id, title, icon, color, done, tasks, createdAt];
 }

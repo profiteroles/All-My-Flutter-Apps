@@ -6,6 +6,7 @@ class UserModel {
   String id;
   String name;
   String email;
+  int totalTasks;
   String photoURL;
   Timestamp createdAt;
 
@@ -13,7 +14,8 @@ class UserModel {
     required this.id,
     required this.name,
     required this.email,
-    required this.photoURL,
+    this.totalTasks = 0,
+    this.photoURL = "https://i.pravatar.cc/300",
     required this.createdAt,
   });
 
@@ -25,6 +27,7 @@ class UserModel {
     result.addAll({'email': email});
     result.addAll({'photo_url': photoURL});
     result.addAll({'created_at': createdAt});
+    result.addAll({'total_tasks': totalTasks});
 
     return result;
   }
@@ -36,17 +39,25 @@ class UserModel {
       email: map['email'] ?? '',
       photoURL: map['photo_url'] ?? '',
       createdAt: map['created_at'] ?? '',
+      totalTasks: map['total_tasks'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(id: json['id'], name: json['name'], email: json['email'], photoURL: json['photo_url'], createdAt: json['created_at']);
+    return UserModel(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      photoURL: json['photo_url'],
+      createdAt: json['created_at'],
+      totalTasks: json['total_tasks'],
+    );
   }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, photoURL: $photoURL, createdAt: $createdAt)';
+    return 'UserModel(id: $id, name: $name, email: $email, $totalTasks ,photoURL: $photoURL, createdAt: $createdAt)';
   }
 }

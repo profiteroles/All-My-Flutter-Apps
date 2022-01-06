@@ -33,20 +33,20 @@ class AddCard extends GetView<HomeController> {
                       children: getIcons()
                           .map((e) => Obx(() => ChoiceBtn(
                                 label: e,
-                                elevation: controller.chipIndex.value == getIcons().indexOf(e) ? 3 : 0,
-                                selected: controller.chipIndex.value == getIcons().indexOf(e),
-                                onSelected: (selected) => controller.chipIndex.value = selected ? getIcons().indexOf(e) : 0,
+                                elevation: controller.iconIndex.value == getIcons().indexOf(e) ? 3 : 0,
+                                selected: controller.iconIndex.value == getIcons().indexOf(e),
+                                onSelected: (selected) => controller.iconIndex.value = selected ? getIcons().indexOf(e) : 0,
                               )))
                           .toList(),
                     ),
                   ),
-                  AppButton(onPressed: controller.addNewTaskList),
+                  AppButton(onPressed: controller.addTaskList),
                 ],
               ),
             ),
           );
           controller.editCtrl.clear();
-          controller.changeChipIndex(0);
+          controller.iconIndex(0);
         },
         child: DottedBorder(
           color: Theme.of(context).toggleableActiveColor,

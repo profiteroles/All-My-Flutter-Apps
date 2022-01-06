@@ -59,7 +59,7 @@ class ProfileScreen extends GetView<ProfileController> {
                       email: authCtrl.userModel()!.name,
                       name: authCtrl.userModel()!.email,
                       logout: authCtrl.logout,
-                      amount: 4,
+                      amount: authCtrl.userModel()!.totalTasks,
                     ),
                   ],
                 );

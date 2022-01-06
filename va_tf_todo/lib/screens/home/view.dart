@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/screens/home/controller.dart';
-import 'package:va_tf_todo/screens/home/widgets/add_cart.dart';
-import 'package:va_tf_todo/screens/home/widgets/task_card.dart';
-import 'package:va_tf_todo/screens/profile/view.dart';
-import 'package:va_tf_todo/screens/settings/view.dart';
-import 'package:va_tf_todo/widgets/bottom_navbar.dart';
-import 'package:va_tf_todo/widgets/fab_button.dart';
-import 'package:va_tf_todo/widgets/flat_appbar.dart';
+import 'controller.dart';
+import 'widgets/add_cart.dart';
+import 'widgets/task_card.dart';
+import 'widgets/fab_button.dart';
+import '../profile/view.dart';
+import '../settings/view.dart';
+import '../../widgets/bottom_navbar.dart';
+import '../../widgets/flat_appbar.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({Key? key}) : super(key: key);

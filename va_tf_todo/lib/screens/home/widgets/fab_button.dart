@@ -12,27 +12,30 @@ class FabDragBtn extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return DragTarget<TasksList>(
       onAccept: controller.deleteTask,
-      builder: (_, __, ___) => Obx(() => AnimatedOpacity(
-            opacity: controller.fabOpacity(),
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.bounceOut,
-            child: Visibility(
-              visible: controller.pageIndex() == 1 ? true : false,
-              child: FloatingActionButton(
+      builder: (_, __, ___) => Obx(
+        () => AnimatedOpacity(
+          opacity: controller.fabOpacity(),
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.bounceOut,
+          child: Visibility(
+            visible: controller.pageIndex() == 1 ? true : false,
+            child: FloatingActionButton(
                 backgroundColor: controller.deleting.value ? Colors.red : Theme.of(context).floatingActionButtonTheme.backgroundColor,
                 child: Icon(
                   controller.deleting.value ? Icons.delete : Icons.add,
                   color: Theme.of(context).canvasColor,
                   size: 30,
                 ),
-                onPressed: () => controller.tasks.isNotEmpty
-                    ? Get.to(() => const AddDialog(), transition: Transition.downToUp)
-                    : EasyLoading.showInfo(
-                        'First of all, Create a task',
-                      ),
-              ),
-            ),
-          )),
+                onPressed: controller.fetchDBTasks
+                // controller.tasks.isNotEmpty
+                //     ? Get.to(() => const AddDialog(), transition: Transition.downToUp)
+                //     : EasyLoading.showInfo(
+                //         'First of all, Create a task',
+                //       ),
+                ),
+          ),
+        ),
+      ),
     );
   }
 }

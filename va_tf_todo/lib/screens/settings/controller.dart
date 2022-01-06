@@ -22,7 +22,6 @@ class SettingsController extends GetxController {
   void onInit() async {
     super.onInit();
     isDarkMode.value = await _storage.read(themeKey) ?? false;
-    setThemeMode(isDarkMode());
   }
 
   final List locale = [
