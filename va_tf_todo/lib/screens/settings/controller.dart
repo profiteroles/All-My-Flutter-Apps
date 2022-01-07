@@ -1,10 +1,19 @@
+import 'dart:io';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
+import 'package:va_tf_todo/screens/settings/widgets/notification_dialog.dart';
+import 'package:va_tf_todo/values/routes.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
+import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
+import 'package:va_tf_todo/widgets/button.dart';
 import 'package:va_tf_todo/widgets/flat_appbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -13,6 +22,8 @@ class SettingsController extends GetxController {
 
   RxBool isDarkMode = false.obs;
   RxBool nofityOn = true.obs;
+  RxBool isEverNotify = false.obs;
+
   RxString appLanguage = 'English'.obs;
 
   final _storage = GetStorage();
@@ -22,6 +33,25 @@ class SettingsController extends GetxController {
   void onInit() async {
     super.onInit();
     isDarkMode.value = await _storage.read(themeKey) ?? false;
+    isEverNotify.value = await _storage.read(notifyKey) ?? false;
+
+    AwesomeNotifications().actionStream.listen((event) {
+      if (event.channelKey == scheduledKey && Platform.isIOS) {
+        AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
+            );
+      }
+      if (event.buttonKeyPressed == 'COMPLETED') {
+        print('Mission is Half Way there');
+      }
+      // Get.offNamed(AppRoutes.home);
+    });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    AwesomeNotifications().actionSink.close();
   }
 
   final List locale = [
@@ -39,10 +69,43 @@ class SettingsController extends GetxController {
     _storage.write(themeKey, value);
   }
 
-  void setNotification(bool value) {
+  void checkOnNotification() async {
+    debugPrint('SettingsController - checkOnNotification is Called');
+    if (!isEverNotify()) {
+      AwesomeNotifications().isNotificationAllowed().then((value) {
+        if (!value) {
+          Get.defaultDialog(
+            titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+            radius: 5,
+            title: 'allow'.tr + ' ' + 'notifications'.tr,
+            content: const NotificationDialog(),
+          );
+        }
+      });
+    } else {
+      nofityOn(false);
+    }
+  }
+
+  void turnOffNotify() {
+    debugPrint('HomeController - turnOffNotify is Called: ' + isEverNotify.value.toString());
+    if (isEverNotify()) {
+      _storage.write(notifyKey, isEverNotify());
+      setNotification(false);
+    }
+    Get.back();
+  }
+
+  void setNotification(bool value) async {
     debugPrint('SettingsController - setThemeMode is Called');
+    AwesomeNotifications().setGlobalBadgeCounter(0);
     nofityOn(value);
-    Get.snackbar('Notifications', value ? 'On' : 'Off', snackPosition: SnackPosition.BOTTOM);
+    if (value) {
+      isEverNotify(false);
+      _storage.write(notifyKey, false);
+      checkOnNotification();
+    }
+    value ? await defaultNotificationMessage() : Get.snackbar('notifications'.tr, 'notifications'.tr + ' ' + 'off'.tr, snackPosition: SnackPosition.BOTTOM);
   }
 
   void setLanguage(int index) {

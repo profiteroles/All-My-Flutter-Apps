@@ -11,10 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # flutter_localizations:
-  #   sdk: flutter
 
-
+  awesome_notifications: ^0.6.19
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
   equatable: ^2.0.3
@@ -44,7 +42,6 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
-  # generate: true
   uses-material-design: true
 
   assets:

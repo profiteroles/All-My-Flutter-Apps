@@ -47,6 +47,7 @@ android {
         applicationId "store.uniqapp.va_tf_todo"
         minSdkVersion 21
         targetSdkVersion 26
+        compileSdkVersion 31 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

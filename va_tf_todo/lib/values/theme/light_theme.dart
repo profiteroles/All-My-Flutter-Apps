@@ -52,8 +52,10 @@ final lightTheme = ThemeData.light().copyWith(
         // bodyText1: const TextStyle(),
         // bodyText2: const TextStyle(),
         ),
-    cardTheme: const CardTheme(color: white),
+    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: purple)),
+    // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
 
+    cardTheme: const CardTheme(color: white),
     //Dialog Theme
     // dialogTheme: const DialogTheme(
     //   contentTextStyle: TextStyle(fontSize: 17, color: black),

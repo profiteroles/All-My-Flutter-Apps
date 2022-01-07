@@ -22,6 +22,7 @@ class FlatAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0,
       title: Text(title),
+      centerTitle: false,
       automaticallyImplyLeading: false,
       leading: leading
           ? IconButton(

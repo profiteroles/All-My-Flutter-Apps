@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
+import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
@@ -18,8 +18,7 @@ class HomeController extends GetxController {
 
   final TaskRepository taskRepository;
   final authCtrl = AuthController.instance;
-  final storage = GetStorage();
-  final dbFirestore = FirestoreService();
+  final settingCtrl = SettingsController.instance;
 
   //Task Related
   final formKey = GlobalKey<FormState>();
@@ -27,14 +26,11 @@ class HomeController extends GetxController {
   final iconIndex = 0.obs;
   final deleting = false.obs;
   final tasksList = Rx<TasksList?>(null);
-  final firestoreTaskList = <TasksList>[].obs;
   final tasks = <TasksList>[].obs;
   final doingTasks = <dynamic>[].obs;
   final doneTasks = <dynamic>[].obs;
   RxDouble taskBoxHeight = 6.0.hp.obs;
-
   RxInt pageIndex = 1.obs;
-  RxString pageTitle = 'my_list'.tr.obs;
   RxDouble fabOpacity = 1.0.obs;
 
   @override
@@ -43,12 +39,6 @@ class HomeController extends GetxController {
     debugPrint('HomeController - initialised');
     tasks.assignAll(taskRepository.readTasks());
     ever(tasks, (_) => taskRepository.writeTasks(tasks));
-  }
-
-  void recoverSavedTasksList() async {
-    debugPrint('HomeController - recoverSavedTasksList is Called');
-    var result = await dbFirestore.getTaskList(authCtrl.authService.user()!.uid);
-    firestoreTaskList.assignAll(result);
   }
 
   @override
@@ -217,9 +207,8 @@ class HomeController extends GetxController {
         EasyLoading.showError('error_tasks_list_exist'.tr);
       } else {
         // await dbFirestore.setTaskList(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
-        tasks.add(item.copyWith(id: 'docID'));
-        // });
-        EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
+        tasks.add(item);
+        tasks.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
       }
     }
   }

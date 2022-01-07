@@ -6,6 +6,7 @@ import 'light_theme.dart';
 final darkTheme = ThemeData.dark().copyWith(
   primaryColor: purple,
   primaryColorLight: darkPrimaryVar,
+
   appBarTheme: AppBarTheme(
       actionsIconTheme: const IconThemeData(color: lightGrey, size: 34),
       color: dark,
@@ -20,11 +21,11 @@ final darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: dark,
   bottomAppBarColor: Colors.transparent,
   textTheme: GoogleFonts.ralewayTextTheme().apply(bodyColor: green, displayColor: green),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(purple)),
-  ),
-  cardTheme: const CardTheme(color: grey),
+  elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: darkPrimary)),
+  // ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(purple)),
+  // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
 
+  cardTheme: const CardTheme(color: grey),
   //Dialog Theme
   // dialogTheme: const DialogTheme(
   //   contentTextStyle: TextStyle(fontSize: 17, color: darkSecondaryVar),
@@ -65,5 +66,7 @@ final darkTheme = ThemeData.dark().copyWith(
         primary: green,
         secondary: purple,
         onSecondary: white,
+        primaryVariant: darkPrimaryVar,
+        secondaryVariant: darkSecondaryVar,
       ),
 );
