@@ -41,24 +41,14 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
     debugPrint('HomeController - initialised');
-    // await fetchDBTasks();
     tasks.assignAll(taskRepository.readTasks());
     ever(tasks, (_) => taskRepository.writeTasks(tasks));
   }
 
-  void fetchDBTasks() async {
-    debugPrint('HomeController - readshit is Called');
-    final userId = authCtrl.authService.user()!.uid;
-
-    List<Map<String, dynamic>> json = [];
-    tasks.forEach((element) async {
-      json.add(element.toJson());
-      await dbFirestore.setTaskList(element.toJson(), userId);
-    });
-    print(json);
-    print('______END_');
-    // var result = await dbFirestore.getTaskList(userId);
-    // firestoreTaskList.assignAll(result);
+  void recoverSavedTasksList() async {
+    debugPrint('HomeController - recoverSavedTasksList is Called');
+    var result = await dbFirestore.getTaskList(authCtrl.authService.user()!.uid);
+    firestoreTaskList.assignAll(result);
   }
 
   @override

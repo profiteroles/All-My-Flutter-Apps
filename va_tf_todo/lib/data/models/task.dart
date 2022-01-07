@@ -29,15 +29,6 @@ class TasksList extends Equatable {
         'created_at': createdAt,
       };
 
-  // TasksList.fromDocumentSnapshot({required DocumentSnapshot doc}) {
-  //   id = doc.id;
-  //   title = doc['title'];
-  //   icon = doc['icon'];
-  //   color = doc['color'];
-  // createdAt = doc['created_at'];
-  //   tasks = doc['tasks'];
-  // }
-
   TasksList copyWith({String? id, String? title, int? icon, String? color, List<dynamic>? tasks, bool? done, String? createdAt}) => TasksList(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -57,9 +48,6 @@ class TasksList extends Equatable {
     result.addAll({'done': done});
     result.addAll({'created_at': createdAt});
     result.addAll({'tasks': tasks ?? []});
-    // if (tasks != null) {
-    //   result.addAll({'tasks': tasks});
-    // }
 
     return result;
   }

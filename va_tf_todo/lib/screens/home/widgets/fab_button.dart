@@ -20,19 +20,18 @@ class FabDragBtn extends GetView<HomeController> {
           child: Visibility(
             visible: controller.pageIndex() == 1 ? true : false,
             child: FloatingActionButton(
-                backgroundColor: controller.deleting.value ? Colors.red : Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                child: Icon(
-                  controller.deleting.value ? Icons.delete : Icons.add,
-                  color: Theme.of(context).canvasColor,
-                  size: 30,
-                ),
-                onPressed: controller.fetchDBTasks
-                // controller.tasks.isNotEmpty
-                //     ? Get.to(() => const AddDialog(), transition: Transition.downToUp)
-                //     : EasyLoading.showInfo(
-                //         'First of all, Create a task',
-                //       ),
-                ),
+              backgroundColor: controller.deleting.value ? Colors.red : Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              child: Icon(
+                controller.deleting.value ? Icons.delete : Icons.add,
+                color: Theme.of(context).canvasColor,
+                size: 30,
+              ),
+              onPressed: () => controller.tasks.isNotEmpty
+                  ? Get.to(() => const AddDialog(), transition: Transition.downToUp)
+                  : EasyLoading.showInfo(
+                      'First of all, Create a task',
+                    ),
+            ),
           ),
         ),
       ),
