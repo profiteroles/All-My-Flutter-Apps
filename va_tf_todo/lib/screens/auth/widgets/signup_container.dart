@@ -8,9 +8,7 @@ import 'package:va_tf_todo/widgets/text_field.dart';
 import '../controller.dart';
 
 class SignUpContainer extends GetView<AuthController> {
-  SignUpContainer({Key? key}) : super(key: key);
-
-  final passwordCtrl = TextEditingController();
+  const SignUpContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +24,10 @@ class SignUpContainer extends GetView<AuthController> {
               (value) {
                 if (RegExp(r'[.,!@#$<>?":_`~;[\]\\|=+)(**&^%0-9-]').hasMatch(value!)) {
                   return 'validator_special'.tr;
+                } else if (RegExp(r'(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})').hasMatch(value)) {
+                  return null;
+                } else {
+                  return 'validator_fullname'.tr;
                 }
               }
             ],
@@ -42,7 +44,7 @@ class SignUpContainer extends GetView<AuthController> {
           XTextField(
             hint: 'Password',
             obscure: true,
-            controller: passwordCtrl,
+            controller: controller.passwordCtrl,
             validator: [
               v.FormBuilderValidators.required(context, errorText: 'validator_required'.tr),
               v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
@@ -58,7 +60,7 @@ class SignUpContainer extends GetView<AuthController> {
               ),
               v.FormBuilderValidators.minLength(context, 8, errorText: 'validator_8'.tr),
               (value) {
-                if (value != passwordCtrl.text) {
+                if (value != controller.passwordCtrl.text) {
                   return 'validator_pass_match'.tr;
                 }
               }

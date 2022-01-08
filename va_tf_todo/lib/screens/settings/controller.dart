@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,13 +6,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/widgets/notification_dialog.dart';
-import 'package:va_tf_todo/values/routes.dart';
-import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
-import 'package:va_tf_todo/widgets/button.dart';
+import 'package:va_tf_todo/values/utils/notification_utilities.dart';
 import 'package:va_tf_todo/widgets/flat_appbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -28,6 +25,7 @@ class SettingsController extends GetxController {
 
   final _storage = GetStorage();
   final authCtrl = AuthController.instance;
+  final nService = NotificationServices();
 
   @override
   void onInit() async {
@@ -105,7 +103,13 @@ class SettingsController extends GetxController {
       _storage.write(notifyKey, false);
       checkOnNotification();
     }
-    value ? await defaultNotificationMessage() : Get.snackbar('notifications'.tr, 'notifications'.tr + ' ' + 'off'.tr, snackPosition: SnackPosition.BOTTOM);
+    value
+        ? await nService.defaultMessage()
+        : Get.snackbar(
+            'notifications'.tr,
+            'notifications'.tr + ' ' + 'off'.tr,
+            snackPosition: SnackPosition.BOTTOM,
+          );
   }
 
   void setLanguage(int index) {
@@ -124,4 +128,25 @@ class SettingsController extends GetxController {
           ),
         );
       });
+
+  Future<dynamic> languageDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (builder) => AlertDialog(
+        title: Text('language'.tr, style: Theme.of(context).textTheme.headline6),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, i) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(onPressed: () => setLanguage(i), child: Text(locale[i]['name'])),
+            ),
+            separatorBuilder: (context, i) => const Divider(),
+            itemCount: locale.length,
+          ),
+        ),
+      ),
+    );
+  }
 }

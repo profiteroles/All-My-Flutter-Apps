@@ -1,16 +1,13 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:va_tf_todo/data/models/task.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 import 'package:va_tf_todo/data/services/auth_service.dart';
 import 'package:va_tf_todo/data/services/firestore_service.dart';
-import 'package:va_tf_todo/data/services/storage_service.dart';
-import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
@@ -31,12 +28,15 @@ class AuthController extends GetxController {
   Rx<AuthState> authState = AuthState.initial.obs;
   RxBool isSignupScreen = false.obs;
   RxBool isRecover = false.obs;
+  RxBool isThemeDark = false.obs;
   RxDouble btnAnimationValue = 23.5.wp.obs;
 
   final localStorage = GetStorage();
 
   final loginKey = GlobalKey<FormBuilderState>();
   final signupKey = GlobalKey<FormBuilderState>();
+  final passwordCtrl = TextEditingController();
+
   @override
   void onInit() {
     _initialiseAppTheme();
@@ -51,22 +51,18 @@ class AuthController extends GetxController {
     ever(_currentUser, _initialScreen);
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-    authState.value = AuthState.initial;
-    isSignupScreen(false);
-  }
-
   _initialiseAppTheme() async {
     debugPrint('AuthController - _initialiseAppTheme is Called');
-    final bool isThemeDark = await localStorage.read(themeKey) ?? false;
-    Get.changeTheme(isThemeDark ? darkTheme : lightTheme);
+    isThemeDark.value = await localStorage.read(themeKey) ?? false;
+    Get.changeTheme(isThemeDark() ? darkTheme : lightTheme);
   }
 
   _initialiseUserModel(String id) async => userModel.value = await dbFirestore.getUser(id);
   void recover() => isRecover(true);
-  void logout() async => await authService.signOut();
+  void logout() {
+    Get.offNamed(AppRoutes.auth);
+    authService.signOut();
+  }
 
   void _initialScreen(User? user) {
     debugPrint('AuthController - initialScreen is Called');
@@ -78,6 +74,16 @@ class AuthController extends GetxController {
         Get.offNamed(AppRoutes.home);
       }
     });
+  }
+
+  void toggleContainers(bool isSignUp) {
+    debugPrint('AuthController - toggleContainers is Called');
+    authState(AuthState.initial);
+    btnAnimationValue(0);
+    isSignupScreen(isSignUp);
+    isRecover(false);
+    passwordCtrl.clear();
+    Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
   }
 
   void sendRecover() async {
@@ -111,19 +117,17 @@ class AuthController extends GetxController {
       String password = data['password'].toString().trim();
 
       try {
-        await authService.loginEmail(email, password).then((result) {
-          _initialiseUserModel(result.user!.uid);
-          // authState(AuthState.initial);
-        });
+        await authService.loginEmail(email, password).then((result) => _initialiseUserModel(result.user!.uid));
       } on FirebaseAuthException catch (e) {
         authError(e);
       }
+
+      onDispose();
     }
   }
 
   void register() async {
     debugPrint('AuthController - register is Called');
-
     if (signupKey.currentState!.saveAndValidate()) {
       debugPrint('AuthController - register - Values Saved & Validated');
       authState(AuthState.loading);
@@ -134,8 +138,6 @@ class AuthController extends GetxController {
 
       try {
         await authService.signUpEmail(email, password).then((result) {
-          // print(result.user.toString());
-          // print('_______END_______');
           final UserModel newUser = UserModel(id: result.user!.uid, name: name, email: email, createdAt: Timestamp.now());
           dbFirestore.setUser(newUser.toMap());
           _initialiseUserModel(newUser.id);
@@ -143,34 +145,58 @@ class AuthController extends GetxController {
       } on FirebaseAuthException catch (e) {
         authError(e);
       }
-
-      // Future.delayed(const Duration(seconds: 5), () {
-      //   authState(AuthState.initial);
-      //   isSignupScreen(false);
-      // });
+      onDispose();
     }
   }
 
-//TODO: Test this out
+  void onDispose() {
+    Future.delayed(const Duration(seconds: 5), () {
+      authState(AuthState.initial);
+      passwordCtrl.clear();
+      isSignupScreen(false);
+    });
+  }
+
   void authError(FirebaseAuthException e) {
     authState(AuthState.initial);
     debugPrint(e.toString());
     Get.snackbar(
-      'User Information',
+      isSignupScreen() ? 'user_info'.tr : 'login_failed'.tr,
       e.message.toString(),
       margin: EdgeInsets.all(5.0.wp),
       backgroundColor: Colors.red[400],
       snackPosition: SnackPosition.BOTTOM,
-      // titleText: const Text('Login has failed', style: TextStyle(color: Colors.white, fontSize: 20)),
-      // messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
+      messageText: Text(e.message.toString(), style: const TextStyle(color: Colors.white, letterSpacing: 1.2)),
     );
   }
 
-  void toggleContainers(bool isSignUp) {
-    debugPrint('AuthController - toggleContainers is Called');
-    btnAnimationValue(0);
-    isSignupScreen(isSignUp);
-    isRecover(false);
-    Future.delayed(const Duration(milliseconds: 550), () => btnAnimationValue(23.5.wp));
+  void signWithGoogle() async {
+    debugPrint('AuthController - signWithGoogle is Called');
+    try {
+      authState(AuthState.loading);
+      final google = GoogleSignIn(scopes: ['email']);
+      final GoogleSignInAccount? googleUser = await google.signIn();
+
+      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+      authService.signWithCredential(credential).then((result) async {
+        final String? name = result.user!.displayName;
+        final String? email = result.user!.email;
+        final String? id = result.user!.uid;
+        final String? pic = result.user!.photoURL;
+
+        if (id!.isNotEmpty && name!.isNotEmpty && email!.isNotEmpty && pic!.isNotEmpty) {
+          final UserModel newUser = UserModel(id: id, name: name, email: email, createdAt: Timestamp.now(), photoURL: pic);
+          dbFirestore.setUser(newUser.toMap());
+          _initialiseUserModel(id);
+        }
+      });
+    } on FirebaseAuthException catch (e) {
+      authError(e);
+    } catch (e) {
+      debugPrint('AuthController - signWithGoogle Caught Exception User Cancelled');
+      authState(AuthState.initial);
+    }
+    onDispose();
   }
 }

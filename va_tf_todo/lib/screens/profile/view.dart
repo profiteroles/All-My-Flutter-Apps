@@ -16,12 +16,12 @@ import 'package:va_tf_todo/widgets/flat_appbar.dart';
 import 'widgets/user_details_card.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
-  final homeCtrl = Get.find<HomeController>();
-  final authCtrl = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
+    final homeCtrl = HomeController.instance;
+    final authCtrl = AuthController.instance;
     return Scaffold(
       appBar: FlatAppBar('profile'.tr),
       body: Obx(
@@ -34,7 +34,11 @@ class ProfileScreen extends GetView<ProfileController> {
               : ListView(
                   padding: EdgeInsets.all(5.0.wp),
                   children: [
-                    ProfileImage(name: Header(authCtrl.userModel()!.name), image: authCtrl.userModel()!.photoURL),
+                    ProfileImage(
+                      name: Header(authCtrl.userModel()!.name),
+                      image: authCtrl.userModel()!.photoURL,
+                      onPressed: controller.uploadImage,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [Header('report'.tr), const AppDropDown()],
@@ -56,8 +60,8 @@ class ProfileScreen extends GetView<ProfileController> {
                     ProgressCircle(total: createdTasks, current: completedTasks),
                     const AppDivider(),
                     UserDetailsCard(
-                      email: authCtrl.userModel()!.name,
-                      name: authCtrl.userModel()!.email,
+                      email: authCtrl.userModel()!.email,
+                      name: authCtrl.userModel()!.name,
                       logout: authCtrl.logout,
                       amount: authCtrl.userModel()!.totalTasks,
                     ),

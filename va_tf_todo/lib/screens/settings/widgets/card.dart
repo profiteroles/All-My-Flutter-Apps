@@ -7,7 +7,7 @@ class AppCard extends StatelessWidget {
   const AppCard({
     this.subTitle = '',
     required this.title,
-    required this.icon,
+    this.icon,
     this.onPress,
     this.onChanged,
     this.isSwitch = false,
@@ -16,7 +16,7 @@ class AppCard extends StatelessWidget {
   }) : super(key: key);
 
   final String title, subTitle;
-  final IconData icon;
+  final IconData? icon;
   final VoidCallback? onPress;
   final bool isSwitch;
   final bool? value;
@@ -33,7 +33,7 @@ class AppCard extends StatelessWidget {
           trailing: isSwitch ? Switch(value: value ?? false, onChanged: onChanged ?? (value) {}) : ArrowBtn(onPress: onPress ?? () {}),
           contentPadding: EdgeInsets.all(5.0.wp),
           iconColor: Colors.orange,
-          leading: Icon(icon),
+          leading: icon == null ? null : Icon(icon),
         ),
       ),
     );

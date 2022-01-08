@@ -22,7 +22,7 @@ class HomeScreen extends GetView<HomeController> {
         child: Obx(
           () => IndexedStack(
             index: controller.pageIndex(),
-            children: [ProfileScreen(), const TodoListScreen(), const SettingScreen()],
+            children: const [ProfileScreen(), TodoListScreen(), SettingScreen()],
           ),
         ),
       ),

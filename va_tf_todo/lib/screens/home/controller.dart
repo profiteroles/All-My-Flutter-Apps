@@ -198,7 +198,8 @@ class HomeController extends GetxController {
     if (formKey.currentState!.validate()) {
       int icon = icons[iconIndex.value].icon!.codePoint;
       String color = icons[iconIndex.value].color!.toHex();
-      var item = TasksList(title: editCtrl.text, icon: icon, color: color, tasks: const [], createdAt: Timestamp.now().toString());
+      final now = DateTime.now();
+      var item = TasksList(title: editCtrl.text, icon: icon, color: color, tasks: const [], createdAt: now.toString());
       bool titleExists = tasks.any((task) => task.title == item.title);
       bool iconExists = tasks.any((task) => task.icon == item.icon);
 
@@ -209,6 +210,10 @@ class HomeController extends GetxController {
         // await dbFirestore.setTaskList(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
         tasks.add(item);
         tasks.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
+        // item.createdAt
+        // final time = DateTime.tryParse(item.createdAt);
+
+        settingCtrl.nService.taskReminder(DateTime(now.year, now.month, now.day, now.hour, now.minute + 1));
       }
     }
   }
@@ -257,5 +262,48 @@ class HomeController extends GetxController {
       }
     }
     return res;
+  }
+
+// TODO: Make this as tutorial
+  void showOverlay(BuildContext context) async {
+    OverlayState? overlayState = Overlay.of(context);
+    OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(builder: (context) {
+      return Positioned(
+        left: Get.width * 0.1,
+        top: Get.height * 0.3,
+        child: SizedBox(
+          width: Get.width * 0.5,
+          child: Stack(
+            children: [
+              Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(60),
+                  child: Image.asset(
+                    'images/comment_dialog.png',
+                    colorBlendMode: BlendMode.multiply,
+                  )),
+              Positioned(
+                top: Get.height * 0.13,
+                left: Get.width * 0.13,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Text(
+                    'Create a task first',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+
+    overlayState!.insert(overlayEntry);
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    overlayEntry.remove();
   }
 }
