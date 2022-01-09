@@ -11,37 +11,43 @@ class UserDetailsCard extends StatelessWidget {
     required this.name,
     required this.logout,
     required this.amount,
+    this.padHor = 0,
+    this.padVer = 0,
   }) : super(key: key);
   final String email, name;
   final VoidCallback logout;
   final int amount;
+  final double padHor, padVer;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Header('personal_info'.tr),
-        Card(
-          elevation: 3,
-          color: Theme.of(context).canvasColor,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0.hp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                appTile(context, leading: 'full_name', trailing: name),
-                appTile(context, leading: 'email', trailing: email),
-                appTile(context, leading: 'total_task', trailing: '$amount'),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0.wp),
-                  child: AppButton(onPressed: logout, title: 'Log Out'),
-                )
-              ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padHor.wp, vertical: padVer.wp),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Header('personal_info'.tr),
+          Card(
+            elevation: 3,
+            color: Theme.of(context).canvasColor,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 4.0.hp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  appTile(context, leading: 'full_name', trailing: name),
+                  appTile(context, leading: 'email', trailing: email),
+                  appTile(context, leading: 'total_task', trailing: '$amount'),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0.wp),
+                    child: AppButton(onPressed: logout, title: 'Log Out'),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

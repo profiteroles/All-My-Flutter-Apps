@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:va_tf_todo/values/utils/extention.dart';
 import 'colors.dart';
 import 'light_theme.dart';
 
@@ -21,7 +22,7 @@ final darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: dark,
   bottomAppBarColor: Colors.transparent,
   textTheme: GoogleFonts.ralewayTextTheme().apply(bodyColor: green, displayColor: green),
-  elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: darkPrimary)),
+  elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: darkPrimaryVar)),
   // ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(purple)),
   // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
 
@@ -63,8 +64,9 @@ final darkTheme = ThemeData.dark().copyWith(
   iconTheme: const IconThemeData(color: white),
 
   colorScheme: ThemeData().colorScheme.copyWith(
+        onPrimary: green,
         primary: green,
-        secondary: purple,
+        secondary: lightPink,
         onSecondary: white,
         primaryVariant: darkPrimaryVar,
         secondaryVariant: darkSecondaryVar,

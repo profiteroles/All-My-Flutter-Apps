@@ -8,11 +8,13 @@ class ChoiceBtn extends StatelessWidget {
     required this.elevation,
     this.selected,
     required this.onSelected,
+    this.backgroundColor,
   }) : super(key: key);
   final Widget label;
   final double elevation;
   final bool? selected;
   final Function(bool)? onSelected;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class ChoiceBtn extends StatelessWidget {
       label: label,
       elevation: elevation,
       selectedColor: Theme.of(context).primaryColorDark,
-      backgroundColor: Theme.of(context).canvasColor,
+      backgroundColor: backgroundColor ?? Theme.of(context).canvasColor,
       selected: selected ?? false,
       onSelected: onSelected,
       pressElevation: elevation,

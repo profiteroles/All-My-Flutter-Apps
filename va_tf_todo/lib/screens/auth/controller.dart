@@ -57,8 +57,10 @@ class AuthController extends GetxController {
     Get.changeTheme(isThemeDark() ? darkTheme : lightTheme);
   }
 
-  _initialiseUserModel(String id) async => userModel.value = await dbFirestore.getUser(id);
+  initialiseUserModel(String id) async => userModel.value = await dbFirestore.getUser(id);
+
   void recover() => isRecover(true);
+
   void logout() {
     Get.offNamed(AppRoutes.auth);
     authService.signOut();
@@ -70,7 +72,7 @@ class AuthController extends GetxController {
       if (user == null) {
         Get.offNamed(AppRoutes.auth);
       } else {
-        _initialiseUserModel(user.uid);
+        initialiseUserModel(user.uid);
         Get.offNamed(AppRoutes.home);
       }
     });
@@ -117,7 +119,7 @@ class AuthController extends GetxController {
       String password = data['password'].toString().trim();
 
       try {
-        await authService.loginEmail(email, password).then((result) => _initialiseUserModel(result.user!.uid));
+        await authService.loginEmail(email, password).then((result) => initialiseUserModel(result.user!.uid));
       } on FirebaseAuthException catch (e) {
         authError(e);
       }
@@ -140,7 +142,7 @@ class AuthController extends GetxController {
         await authService.signUpEmail(email, password).then((result) {
           final UserModel newUser = UserModel(id: result.user!.uid, name: name, email: email, createdAt: Timestamp.now());
           dbFirestore.setUser(newUser.toMap());
-          _initialiseUserModel(newUser.id);
+          initialiseUserModel(newUser.id);
         });
       } on FirebaseAuthException catch (e) {
         authError(e);
@@ -188,7 +190,7 @@ class AuthController extends GetxController {
         if (id!.isNotEmpty && name!.isNotEmpty && email!.isNotEmpty && pic!.isNotEmpty) {
           final UserModel newUser = UserModel(id: id, name: name, email: email, createdAt: Timestamp.now(), photoURL: pic);
           dbFirestore.setUser(newUser.toMap());
-          _initialiseUserModel(id);
+          initialiseUserModel(id);
         }
       });
     } on FirebaseAuthException catch (e) {

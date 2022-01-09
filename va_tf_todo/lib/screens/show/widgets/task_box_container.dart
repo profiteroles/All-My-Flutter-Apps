@@ -34,9 +34,9 @@ class TaskBoxContainer extends GetView<HomeController> {
             width: 20,
             height: 20,
             child: isDone
-                ? const Icon(Icons.done)
+                ? Icon(Icons.done, color: Theme.of(context).colorScheme.primary)
                 : Checkbox(
-                    fillColor: MaterialStateProperty.resolveWith((states) => Colors.grey),
+                    // fillColor: MaterialStateProperty.resolveWith((states) => Colors.grey),
                     value: false,
                     onChanged: (value) => controller.doneTask(task['title']),
                   ),

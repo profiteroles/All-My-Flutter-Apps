@@ -10,13 +10,14 @@ class DoneList extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.doneTasks.isNotEmpty
-          ? ListView(
+      () => controller.doneTasks.isEmpty
+          ? const SizedBox.shrink()
+          : ListView(
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4.0.wp, horizontal: 6.0.wp),
+                  padding: EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 6.0.wp),
                   child: Text(
                     'Complited(${controller.doneTasks.length})',
                     style: TextStyle(fontSize: 14.0.sp, color: Colors.grey),
@@ -39,8 +40,7 @@ class DoneList extends GetView<HomeController> {
                         ))
                     .toList()
               ],
-            )
-          : const SizedBox.shrink(),
+            ),
     );
   }
 }

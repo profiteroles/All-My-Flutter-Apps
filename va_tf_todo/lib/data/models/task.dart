@@ -5,6 +5,7 @@ class TasksList extends Equatable {
   String title;
   bool done;
   String color;
+  String priority;
   int icon;
   String createdAt;
   List<dynamic>? tasks;
@@ -14,6 +15,7 @@ class TasksList extends Equatable {
     required this.title,
     required this.icon,
     required this.color,
+    required this.priority,
     required this.createdAt,
     this.done = false,
     this.tasks,
@@ -25,15 +27,17 @@ class TasksList extends Equatable {
         'done': done,
         'icon': icon,
         'color': color,
+        'prioriy': priority,
         'tasks': tasks,
         'created_at': createdAt,
       };
 
-  TasksList copyWith({String? id, String? title, int? icon, String? color, List<dynamic>? tasks, bool? done, String? createdAt}) => TasksList(
+  TasksList copyWith({String? id, String? title, int? icon, String? color, String? priority, List<dynamic>? tasks, bool? done, String? createdAt}) => TasksList(
         id: id ?? this.id,
         title: title ?? this.title,
         icon: icon ?? this.icon,
         color: color ?? this.color,
+        priority: priority ?? this.priority,
         tasks: tasks ?? this.tasks,
         done: done ?? this.done,
         createdAt: createdAt ?? this.createdAt,
@@ -45,6 +49,7 @@ class TasksList extends Equatable {
     result.addAll({'title': title});
     result.addAll({'icon': icon});
     result.addAll({'color': color});
+    result.addAll({'priority': priority});
     result.addAll({'done': done});
     result.addAll({'created_at': createdAt});
     result.addAll({'tasks': tasks ?? []});
@@ -57,11 +62,12 @@ class TasksList extends Equatable {
         title: json['title'],
         icon: json['icon'],
         color: json['color'],
+        priority: json['priority'],
         done: json['done'],
         tasks: json['tasks'],
         createdAt: json['created_at'],
       );
 
   @override
-  List<Object?> get props => [id, title, icon, color, done, tasks, createdAt];
+  List<Object?> get props => [id, title, icon, color, priority, done, tasks, createdAt];
 }

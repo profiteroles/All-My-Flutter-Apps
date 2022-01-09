@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/widgets/notification_dialog.dart';
+import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
@@ -119,15 +120,10 @@ class SettingsController extends GetxController {
     Get.back();
   }
 
-  void goToPrivacy() => Get.to(() {
-        debugPrint('SettingsController - goToPrivacy is Called');
-        return const Scaffold(
-          appBar: FlatAppBar('Privacy Policy', leading: true),
-          body: WebView(
-            initialUrl: 'https://www.iubenda.com/privacy-policy/71269859',
-          ),
-        );
-      });
+  void goToPrivacy() => Get.to(() => const Scaffold(
+        appBar: FlatAppBar('privacy_policy', leading: true),
+        body: WebView(initialUrl: AppRoutes.privacyURL),
+      ));
 
   Future<dynamic> languageDialog(BuildContext context) {
     return showDialog(

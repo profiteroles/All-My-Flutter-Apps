@@ -1,16 +1,20 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
+import 'package:va_tf_todo/screens/home/controller.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/values/utils/image_helpers.dart';
+import 'dart:io';
 
 class ProfileController extends GetxController {
+  static ProfileController instance = Get.find();
 //TODO: Backup button
   final firestoreTaskList = <TasksList>[].obs;
   final authCtrl = AuthController.instance;
@@ -18,12 +22,39 @@ class ProfileController extends GetxController {
   late String userId = authCtrl.authService.user()!.uid;
   final _picker = ImagePicker();
 
+  final homeCtrl = HomeController.instance;
+
+  int getTotalTasks() {
+    int result = 0;
+
+    for (int i = 0; i < homeCtrl.tasks.length; i++) {
+      if (homeCtrl.tasks[i].tasks != null) {
+        result += homeCtrl.tasks[i].tasks!.length;
+      }
+    }
+
+    return result;
+  }
+
+  int getTotalDoneTask() {
+    int res = 0;
+
+    for (int i = 0; i < homeCtrl.tasks.length; i++) {
+      if (homeCtrl.tasks[i].tasks != null) {
+        for (int t = 0; t < homeCtrl.tasks[i].tasks!.length; t++) {
+          if (homeCtrl.tasks[i].tasks![t]['isDone'] == true) {
+            res += 1;
+          }
+        }
+      }
+    }
+    return res;
+  }
+
   @override
   void onInit() {
     super.onInit();
   }
-
-  // final homeCtrl = HomeController.instance;
 
   void recoverSavedTasksList() async {
     debugPrint('HomeController - recoverSavedTasksList is Called');
@@ -41,52 +72,43 @@ class ProfileController extends GetxController {
 
   void uploadImage() async {
     debugPrint('ProfileController - uploadImage is Called');
+    try {
+      final File? file = await Utils.pickMedia(isGallery: await imageSourceDialog());
+      String? url;
+      if (file != null) url = await dbFirestore.uploadProfileImage(file, userId);
 
-    type().then((type) async {
-      print(type == ImageSource.camera);
-      if (type != null) {
-        try {
-          final XFile? image = await _picker.pickImage(source: type);
-          if (image == null) return;
-
-          final file = File(image.path);
-
-          print(file.path);
-
-          final String url = await dbFirestore.uploadProfileImage(file, userId);
-
-          if (url.isNotEmpty) {
-            dbFirestore.updateUser(userId, {'profile_url': url});
-          }
-        } on PlatformException catch (e) {
-          debugPrint(e.message);
-        }
+      if (url!.isNotEmpty) {
+        dbFirestore.updateUser(userId, {'photo_url': url});
+        authCtrl.initialiseUserModel(userId);
+        EasyLoading.showInfo('image_uploaded'.tr);
       }
-    });
+    } on PlatformException catch (e) {
+      debugPrint(e.message);
+    }
   }
 
-  Future<ImageSource?> type() async {
-    ImageSource? type;
+  Future<bool?> imageSourceDialog() async {
+    bool? type;
+
+    ElevatedButton appBtn(bool isGallery) => ElevatedButton(
+        child: Row(
+          children: [
+            Text((isGallery ? 'gallery' : 'camera').tr),
+            SizedBox(width: 1.0.wp),
+            Icon(isGallery ? Icons.photo_library_outlined : Icons.camera_alt_outlined),
+          ],
+        ),
+        onPressed: () {
+          type = isGallery;
+          Get.back();
+        });
 
     await Get.defaultDialog(
       titlePadding: EdgeInsets.only(top: 5.0.wp),
       title: 'Pick Picture From',
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-              child: Text('camera'.tr),
-              onPressed: () {
-                type = ImageSource.camera;
-                Get.back();
-              }),
-          ElevatedButton(
-              child: Text('gallery'.tr),
-              onPressed: () {
-                type = ImageSource.gallery;
-                Get.back();
-              }),
-        ],
+        children: [appBtn(false), appBtn(true)],
       ),
     );
     return type;

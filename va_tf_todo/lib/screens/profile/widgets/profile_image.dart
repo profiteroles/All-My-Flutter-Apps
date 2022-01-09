@@ -28,9 +28,10 @@ class ProfileImage extends StatelessWidget {
               width: 33.0.wp,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(width: 3, color: green),
+                border: Border.all(width: 4, color: green),
               ),
               child: ClipRRect(
+                // clipBehavior: ,
                 borderRadius: BorderRadius.circular(60),
                 child: FadeInImage.assetNetwork(placeholder: profileImage, image: image, fit: BoxFit.cover),
               ),

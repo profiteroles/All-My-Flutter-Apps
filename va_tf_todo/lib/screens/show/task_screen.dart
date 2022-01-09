@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/home/widgets/choice_btn.dart';
 import 'package:va_tf_todo/screens/home/widgets/task_input_field.dart';
@@ -8,6 +7,8 @@ import 'package:va_tf_todo/screens/show/widgets/doing_list.dart';
 import 'package:va_tf_todo/screens/show/widgets/done_list.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
+import 'package:va_tf_todo/widgets/flat_appbar.dart';
+import 'widgets/task_processbar.dart';
 
 class TaskDetailScreen extends GetView<HomeController> {
   const TaskDetailScreen({Key? key}) : super(key: key);
@@ -18,74 +19,44 @@ class TaskDetailScreen extends GetView<HomeController> {
     var color = HexColor.fromHex(task.color);
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        body: Form(
-          key: controller.formKey,
-          child: ListView(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(3.0.wp),
-                child: Row(
-                  children: [
-                    IconButton(icon: const Icon(Icons.arrow_back_ios_new_outlined), onPressed: controller.toHomePage),
-                  ],
-                ),
+      child: Form(
+        key: controller.formKey,
+        child: CustomScrollView(
+          slivers: [
+            AppSliverAppBar(
+              task.title,
+              leading: true,
+              titleSpacing: 0,
+              titleWidget: Row(
+                children: [
+                  Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color, size: 32),
+                  SizedBox(width: 3.0.sp),
+                  Text(task.title, style: Theme.of(context).appBarTheme.titleTextStyle),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0.wp),
-                child: Row(
-                  children: [
-                    Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
-                    SizedBox(width: 3.0.sp),
-                    Text(task.title, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              Obx(
-                () {
-                  var totalTodos = controller.doingTasks.length + controller.doneTasks.length;
-                  return Padding(
-                    padding: EdgeInsets.only(top: 3.0.wp, right: 16.0.wp, left: 16.0.wp),
-                    child: Row(
-                      children: [
-                        Text('$totalTodos Tasks', style: Theme.of(context).textTheme.subtitle2),
-                        SizedBox(width: 3.0.wp),
-                        Expanded(
-                          child: StepProgressIndicator(
-                            totalSteps: totalTodos == 0 ? 1 : totalTodos,
-                            currentStep: controller.doneTasks.length,
-                            size: 5,
-                            padding: 0,
-                            selectedGradientColor: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [color.withOpacity(.5), color],
-                            ),
-                            unselectedGradientColor: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Colors.grey[300]!, Colors.grey[300]!],
-                            ),
-                          ),
-                        ),
-                      ],
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                TaskProgressBar(color),
+                TaskInputField(
+                  title: 'Task',
+                  controller: controller.editCtrl,
+                  prefixIcon: const Icon(Icons.checklist_rounded),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.only(right: 2.0.wp),
+                    child: ChoiceBtn(
+                      backgroundColor: purple,
+                      label: Icon(Icons.done, color: Theme.of(context).colorScheme.onPrimary),
+                      elevation: 3,
+                      onSelected: controller.addForTaskScren,
                     ),
-                  );
-                },
-              ),
-              TaskInputField(
-                title: 'Task',
-                controller: controller.editCtrl,
-                prefixIcon: const Icon(Icons.checklist_rounded),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.only(right: 2.0.wp),
-                  child: ChoiceBtn(label: const Icon(Icons.done, color: green), elevation: 3, onSelected: controller.addForTaskScren),
+                  ),
                 ),
-              ),
-              const DoingList(),
-              const DoneList(),
-            ],
-          ),
+                const DoingList(),
+                const DoneList(),
+              ]),
+            ),
+          ],
         ),
       ),
     );

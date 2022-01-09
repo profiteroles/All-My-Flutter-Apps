@@ -16,6 +16,7 @@ class AppRoutes {
   static const String task = '/tasks';
   static const String profile = '/profile';
   static const String about = '/about';
+  static const String privacyURL = 'https://www.iubenda.com/privacy-policy/71269859';
 }
 
 class AppPages {

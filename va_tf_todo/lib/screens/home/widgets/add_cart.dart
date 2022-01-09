@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
@@ -19,35 +20,50 @@ class AddCard extends GetView<HomeController> {
       child: InkWell(
         onTap: () async {
           await Get.defaultDialog(
+            contentPadding: EdgeInsets.zero,
             titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
             radius: 5,
-            title: 'task_type'.tr,
+            title: 'task_list_type'.tr,
             content: Form(
               key: controller.formKey,
               child: Column(
                 children: [
                   TaskInputField(controller: controller.editCtrl),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.0.wp),
-                    child: Wrap(
-                      spacing: 2.0.wp,
-                      children: getIcons()
-                          .map((e) => Obx(() => ChoiceBtn(
-                                label: e,
-                                elevation: controller.iconIndex.value == getIcons().indexOf(e) ? 3 : 0,
-                                selected: controller.iconIndex.value == getIcons().indexOf(e),
-                                onSelected: (selected) => controller.iconIndex.value = selected ? getIcons().indexOf(e) : 0,
-                              )))
-                          .toList(),
-                    ),
+                  Text('priority'.tr),
+                  Wrap(
+                    spacing: 2.0.wp,
+                    children: getPriorities()
+                        .map((e) => Obx(() => ChoiceBtn(
+                              label: Icon(e == lightGrey ? Icons.outlined_flag : Icons.flag, color: e),
+                              elevation: controller.priorityIndex() == getPriorities().indexOf(e) ? 3 : 0,
+                              selected: controller.priorityIndex() == getPriorities().indexOf(e),
+                              onSelected: (selected) => controller.priorityIndex.value = selected ? getPriorities().indexOf(e) : 0,
+                            )))
+                        .toList(),
                   ),
-                  AppButton(onPressed: controller.addTaskList),
+                  Text('category'.tr),
+                  Wrap(
+                    spacing: 2.0.wp,
+                    children: getIcons()
+                        .map((e) => Obx(() => ChoiceBtn(
+                              label: e,
+                              elevation: controller.iconIndex.value == getIcons().indexOf(e) ? 3 : 0,
+                              selected: controller.iconIndex.value == getIcons().indexOf(e),
+                              onSelected: (selected) => controller.iconIndex.value = selected ? getIcons().indexOf(e) : 0,
+                            )))
+                        .toList(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 2.0.hp),
+                    child: AppButton(onPressed: controller.addTaskList),
+                  ),
                 ],
               ),
             ),
           );
           controller.editCtrl.clear();
           controller.iconIndex(0);
+          controller.priorityIndex(0);
         },
         child: DottedBorder(
           color: Theme.of(context).toggleableActiveColor,

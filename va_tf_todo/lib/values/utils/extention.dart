@@ -24,3 +24,7 @@ extension HexColor on Color {
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
+
+LinearGradient appLinGradient(Color color1, Color color2) {
+  return LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color1, color2]);
+}

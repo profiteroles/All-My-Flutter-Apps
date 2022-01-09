@@ -5,12 +5,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/models/user.dart';
+// import 'package:va_tf_todo/data/services/auth_service.dart';
 
 class FirestoreService {
   final _storage = FirebaseStorage.instance;
   final CollectionReference _db = FirebaseFirestore.instance.collection('users');
+  // final _uid = AuthService().user()!.uid;
 
   Future<void> setUser(Map<String, dynamic> map) => _db.doc(map['id']).set(map);
+
+  Stream<DocumentSnapshot> firestoreStream(String uid) => _db.doc(uid).snapshots();
 
   Future<UserModel> getUser(String id) {
     debugPrint('FirestoreService - getUser is Called');

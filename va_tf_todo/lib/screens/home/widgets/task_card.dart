@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/show/task_screen.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
 class TaskCard extends GetView<HomeController> {
@@ -43,20 +45,18 @@ class TaskCard extends GetView<HomeController> {
               currentStep: controller.isTaskEmpty(task) ? 0 : controller.getDoneTask(task),
               size: 5,
               padding: 0,
-              unselectedGradientColor: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.white, Colors.white],
-              ),
-              selectedGradientColor: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color.withOpacity(.5), color],
-              ),
+              unselectedGradientColor: appLinGradient(Theme.of(context).cardColor, Theme.of(context).cardColor),
+              selectedGradientColor: appLinGradient(color.withOpacity(.4), color),
             ),
             Padding(
               padding: EdgeInsets.all(6.0.wp),
-              child: Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
+                  Icon(task.priority == lightGrey.toHex() ? Icons.outlined_flag : Icons.flag),
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(6.0.wp),

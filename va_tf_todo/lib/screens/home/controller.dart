@@ -8,6 +8,7 @@ import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
+import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
@@ -23,12 +24,14 @@ class HomeController extends GetxController {
   //Task Related
   final formKey = GlobalKey<FormState>();
   final editCtrl = TextEditingController();
-  final iconIndex = 0.obs;
-  final deleting = false.obs;
+
+  RxInt iconIndex = 0.obs;
+  RxInt priorityIndex = 0.obs;
+  RxBool deleting = false.obs;
   final tasksList = Rx<TasksList?>(null);
-  final tasks = <TasksList>[].obs;
-  final doingTasks = <dynamic>[].obs;
-  final doneTasks = <dynamic>[].obs;
+  RxList<TasksList> tasks = <TasksList>[].obs;
+  RxList doingTasks = <dynamic>[].obs;
+  RxList doneTasks = <dynamic>[].obs;
   RxDouble taskBoxHeight = 6.0.hp.obs;
   RxInt pageIndex = 1.obs;
   RxDouble fabOpacity = 1.0.obs;
@@ -195,11 +198,13 @@ class HomeController extends GetxController {
   void addTaskList() async {
     debugPrint('HomeController - addNewTaskList is called');
     final icons = getIcons();
+    final priorities = getPriorities();
     if (formKey.currentState!.validate()) {
       int icon = icons[iconIndex.value].icon!.codePoint;
+      String priority = priorities[priorityIndex.value].toHex();
       String color = icons[iconIndex.value].color!.toHex();
       final now = DateTime.now();
-      var item = TasksList(title: editCtrl.text, icon: icon, color: color, tasks: const [], createdAt: now.toString());
+      var item = TasksList(title: editCtrl.text, icon: icon, color: color, priority: priority, tasks: const [], createdAt: now.toString());
       bool titleExists = tasks.any((task) => task.title == item.title);
       bool iconExists = tasks.any((task) => task.icon == item.icon);
 
@@ -210,10 +215,9 @@ class HomeController extends GetxController {
         // await dbFirestore.setTaskList(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
         tasks.add(item);
         tasks.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
-        // item.createdAt
-        // final time = DateTime.tryParse(item.createdAt);
-
-        settingCtrl.nService.taskReminder(DateTime(now.year, now.month, now.day, now.hour, now.minute + 1));
+        debugPrint(item.toString());
+        //TODO: Turn this back on before you release
+        // settingCtrl.nService.taskReminder(DateTime(now.year, now.month, now.day, now.hour, now.minute + 1));
       }
     }
   }
@@ -237,32 +241,32 @@ class HomeController extends GetxController {
     changeTask(null);
   }
 
-  int getTotalTasks() {
-    int result = 0;
+  // RxInt getTotalTasks() {
+  //   int result = 0;
 
-    for (int i = 0; i < tasks.length; i++) {
-      if (tasks[i].tasks != null) {
-        result += tasks[i].tasks!.length;
-      }
-    }
+  //   for (int i = 0; i < tasks.length; i++) {
+  //     if (tasks[i].tasks != null) {
+  //       result += tasks[i].tasks!.length;
+  //     }
+  //   }
 
-    return result;
-  }
+  //   return result.obs;
+  // }
 
-  int getTotalDoneTask() {
-    int res = 0;
+  // int getTotalDoneTask() {
+  //   int res = 0;
 
-    for (int i = 0; i < tasks.length; i++) {
-      if (tasks[i].tasks != null) {
-        for (int t = 0; t < tasks[i].tasks!.length; t++) {
-          if (tasks[i].tasks![t]['isDone'] == true) {
-            res += 1;
-          }
-        }
-      }
-    }
-    return res;
-  }
+  //   for (int i = 0; i < tasks.length; i++) {
+  //     if (tasks[i].tasks != null) {
+  //       for (int t = 0; t < tasks[i].tasks!.length; t++) {
+  //         if (tasks[i].tasks![t]['isDone'] == true) {
+  //           res += 1;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return res;
+  // }
 
 // TODO: Make this as tutorial
   void showOverlay(BuildContext context) async {

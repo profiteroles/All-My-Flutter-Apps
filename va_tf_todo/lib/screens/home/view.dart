@@ -35,35 +35,37 @@ class TodoListScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        FlatAppBar('my_list'.tr, hasInfo: true),
-        Obx(
-          () => GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            children: [
-              ...controller.tasks
-                  .map(
-                    (task) => LongPressDraggable(
-                      child: TaskCard(task: task),
-                      data: task,
-                      onDragStarted: () => controller.changeDeleting(true),
-                      onDraggableCanceled: (_, __) => controller.changeDeleting(false),
-                      onDragEnd: (_) => controller.changeDeleting(false),
-                      feedback: Opacity(
-                        opacity: .8,
+    return CustomScrollView(slivers: [
+      const AppSliverAppBar('my_list', hasInfo: true),
+      SliverList(
+        delegate: SliverChildListDelegate([
+          Obx(
+            () => GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              children: [
+                ...controller.tasks
+                    .map(
+                      (task) => LongPressDraggable(
                         child: TaskCard(task: task),
+                        data: task,
+                        onDragStarted: () => controller.changeDeleting(true),
+                        onDraggableCanceled: (_, __) => controller.changeDeleting(false),
+                        onDragEnd: (_) => controller.changeDeleting(false),
+                        feedback: Opacity(
+                          opacity: .8,
+                          child: TaskCard(task: task),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-              const AddCard(),
-            ],
+                    )
+                    .toList(),
+                const AddCard(),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ]),
+      ),
+    ]);
   }
 }
