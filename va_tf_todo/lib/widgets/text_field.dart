@@ -39,6 +39,7 @@ class _XTextFieldState extends State<XTextField> {
     return Padding(
       padding: EdgeInsets.only(top: 1.0.hp),
       child: FormBuilderTextField(
+        textCapitalization: widget.hint == 'Full Name' ? TextCapitalization.words : TextCapitalization.none,
         controller: widget.controller,
         name: widget.hint.toLowerCase().replaceAll(' ', '_'),
         obscureText: widget.obscure ? obscure : false,

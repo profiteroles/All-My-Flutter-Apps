@@ -33,11 +33,15 @@ class FabDragBtn extends GetView<HomeController> {
                 color: Theme.of(context).canvasColor,
                 size: 30,
               ),
-              onPressed: () => controller.tasks.isNotEmpty
-                  ? Get.to(() => const AddDialog(), transition: Transition.downToUp)
-                  : EasyLoading.showInfo(
-                      'First of all, Create a task',
-                    ),
+              onPressed: controller.tasks.isNotEmpty
+                  ? () => Get.to(() => const AddDialog(), transition: Transition.downToUp)
+                  : () {
+                      controller.isEmptyError(true);
+                      EasyLoading.showInfo('error_create_activity'.tr);
+                      Future.delayed(const Duration(milliseconds: 300), () => controller.isEmptyError(false));
+                      Future.delayed(const Duration(milliseconds: 600), () => controller.isEmptyError(true));
+                      Future.delayed(const Duration(milliseconds: 900), () => controller.isEmptyError(false));
+                    },
             ),
           ),
         ),

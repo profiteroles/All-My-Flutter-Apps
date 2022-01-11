@@ -1,7 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:va_tf_todo/data/models/task.dart';
@@ -75,9 +77,10 @@ class ProfileController extends GetxController {
     try {
       final File? file = await Utils.pickMedia(isGallery: await imageSourceDialog());
       String? url;
-      if (file != null) url = await dbFirestore.uploadProfileImage(file, userId);
+      if (file == null) return;
+      url = await dbFirestore.uploadProfileImage(file, userId);
 
-      if (url!.isNotEmpty) {
+      if (url.isNotEmpty) {
         dbFirestore.updateUser(userId, {'photo_url': url});
         authCtrl.initialiseUserModel(userId);
         EasyLoading.showInfo('image_uploaded'.tr);
@@ -88,29 +91,28 @@ class ProfileController extends GetxController {
   }
 
   Future<bool?> imageSourceDialog() async {
-    bool? type;
+    ElevatedButton appBtn(bool val) => ElevatedButton(
+        onPressed: () => Get.back(result: val),
+        child: Row(children: [
+          Text((val ? 'gallery' : 'camera').tr),
+          SizedBox(width: 1.0.wp),
+          Icon(val ? Icons.photo_library_outlined : Icons.camera_alt_outlined),
+        ]));
 
-    ElevatedButton appBtn(bool isGallery) => ElevatedButton(
-        child: Row(
-          children: [
-            Text((isGallery ? 'gallery' : 'camera').tr),
-            SizedBox(width: 1.0.wp),
-            Icon(isGallery ? Icons.photo_library_outlined : Icons.camera_alt_outlined),
-          ],
-        ),
-        onPressed: () {
-          type = isGallery;
-          Get.back();
-        });
-
-    await Get.defaultDialog(
-      titlePadding: EdgeInsets.only(top: 5.0.wp),
-      title: 'Pick Picture From',
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [appBtn(false), appBtn(true)],
-      ),
-    );
-    return type;
+    return await Get.defaultDialog(
+        titlePadding: EdgeInsets.only(top: 5.0.wp),
+        title: 'pick_pic_from'.tr,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [appBtn(false), appBtn(true)],
+        )).then((value) => value);
   }
+
+  void deleteAllDialog() async => await Get.defaultDialog(
+        titlePadding: EdgeInsets.symmetric(vertical: 3.0.hp, horizontal: 4.0.wp),
+        title: Emojis.symbols_warning + ' ' + 'important_warning'.tr + ' ' + Emojis.symbols_warning,
+        content: Text('delete_all_dialog_text'.tr),
+        cancel: TextButton(onPressed: () => Get.back(result: false), child: Text('nope'.tr)),
+        confirm: TextButton(onPressed: () => Get.back(result: true), child: Text('confirm'.tr)),
+      ).then((value) => value ? homeCtrl.tasks.value = [] : null);
 }

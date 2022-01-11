@@ -24,4 +24,11 @@ class TaskProvider {
     debugPrint('TaskProvider - writeTasks is Called');
     _storage.write(_auth.authService.user()!.uid, tasks);
   }
+
+  void deleteSavedActivities() {
+    debugPrint('TaskProvider - deleteSavedActivities is Called');
+    _storage.remove(_auth.authService.user()!.uid);
+  }
+
+  void deleteAll() => _storage.erase();
 }

@@ -9,6 +9,7 @@ class AppSliverAppBar extends StatelessWidget {
     this.leading = false,
     this.titleSpacing = 15,
     this.titleWidget,
+    this.onBack,
     Key? key,
   }) : super(key: key);
 
@@ -16,6 +17,7 @@ class AppSliverAppBar extends StatelessWidget {
   final bool hasInfo, leading;
   final double titleSpacing;
   final Widget? titleWidget;
+  final VoidCallback? onBack;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -28,7 +30,7 @@ class AppSliverAppBar extends StatelessWidget {
       centerTitle: false,
       leading: leading
           ? IconButton(
-              onPressed: Get.back,
+              onPressed: onBack ?? Get.back,
               icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.grey),
             )
           : null,
@@ -84,7 +86,7 @@ class FlatAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: Text(title),
+      title: Text(title.tr),
       centerTitle: false,
       automaticallyImplyLeading: false,
       leading: leading

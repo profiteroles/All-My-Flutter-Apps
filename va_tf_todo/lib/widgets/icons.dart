@@ -11,15 +11,16 @@ List<Icon> getIcons() {
   ];
 }
 
-List<Color> getPriorities() {
-  return const [
-    lightGrey, blue, yellow, red
-    // Icon(Icons.outlined_flag, color: lightGrey),
-    // Icon(Icons.flag, color: blue),
-    // Icon(Icons.flag, color: yellow),
-    // Icon(Icons.flag, color: red),
-  ];
-}
+List<Color> getPriorities() => [lightGrey, blue, yellow, red];
+
+// Map<String, Object> getPriorities() {
+//   return {
+//     "no": const Icon(Icons.outlined_flag, color: lightGrey),
+//     "low": const Icon(Icons.flag, color: blue),
+//     "med": const Icon(Icons.flag, color: yellow),
+//     "high": const Icon(Icons.flag, color: red),
+//   };
+// }
 
 class AppIcons {
   static const person = 0xe491;

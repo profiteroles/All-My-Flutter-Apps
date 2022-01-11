@@ -22,6 +22,9 @@ class TaskInputField extends StatelessWidget {
       child: TextFormField(
         validator: (value) => value!.trim().isEmpty ? 'error_title_required'.tr : null,
         controller: controller,
+        enableSuggestions: true,
+        autocorrect: true,
+        textCapitalization: TextCapitalization.words,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           prefix: prefixIcon,

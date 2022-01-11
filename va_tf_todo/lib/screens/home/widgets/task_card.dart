@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/data/models/task.dart';
@@ -15,7 +14,7 @@ class TaskCard extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final color = HexColor.fromHex(task.color);
-    // final squareWidth = Get.width - 12.0.wp;
+    // final priority = HexColor.fromHex(task.priority); // final squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
         controller.changeTask(task);
@@ -23,8 +22,6 @@ class TaskCard extends GetView<HomeController> {
         Get.to(() => const TaskDetailScreen());
       },
       child: Container(
-        // width: squareWidth / 2,
-        // height: squareWidth / 2,
         margin: EdgeInsets.all(3.0.wp),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
@@ -54,7 +51,7 @@ class TaskCard extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Icon(IconData(task.icon, fontFamily: 'MaterialIcons'), color: color),
-                  Icon(task.priority == lightGrey.toHex() ? Icons.outlined_flag : Icons.flag),
+                  Icon(HexColor.fromHex(task.priority) == lightGrey ? Icons.outlined_flag : Icons.flag, color: HexColor.fromHex(task.priority)),
                 ],
               ),
             ),
@@ -69,7 +66,8 @@ class TaskCard extends GetView<HomeController> {
                   ),
                   SizedBox(height: 2.0.wp),
                   Text(
-                    "${task.tasks?.length ?? 0} Tasks",
+                    task.tasks!.length.toString(),
+                    // "${task.tasks?.length ?? 0} Tasks",
                     style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
                   ),
                 ],

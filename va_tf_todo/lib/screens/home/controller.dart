@@ -1,14 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/task.dart';
-import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/data/services/task_repository.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
-import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
@@ -28,6 +25,7 @@ class HomeController extends GetxController {
   RxInt iconIndex = 0.obs;
   RxInt priorityIndex = 0.obs;
   RxBool deleting = false.obs;
+  RxBool isEmptyError = false.obs;
   final tasksList = Rx<TasksList?>(null);
   RxList<TasksList> tasks = <TasksList>[].obs;
   RxList doingTasks = <dynamic>[].obs;
@@ -51,11 +49,11 @@ class HomeController extends GetxController {
     editCtrl.dispose();
   }
 
-  void closeDialog() {
-    Get.back();
-    editCtrl.clear();
-    changeTask(null);
-  }
+  // void closeDialog() {
+  //   Get.back();
+  //   editCtrl.clear();
+  //   changeTask(null);
+  // }
 
   void setPage(int index) {
     debugPrint('HomeController - setPage is Called Index is: $index');
@@ -138,7 +136,7 @@ class HomeController extends GetxController {
         final bool success = updateTask(tasksList.value!, editCtrl.text);
         if (success) {
           EasyLoading.showSuccess('Task added to your ${tasksList.value!.title}');
-          closeDialog();
+          toHomePage();
         } else {
           EasyLoading.showError('Task is already in the list');
         }
@@ -158,20 +156,33 @@ class HomeController extends GetxController {
     if (doneTasks.any((task) => mapEquals<String, dynamic>(doneTask, task))) {
       return false;
     }
-
     doingTasks.add(newTask);
     return true;
   }
 
   void updateTasks() {
     debugPrint('HomeController - updateTasks is called');
-
     var newTasks = <Map<String, dynamic>>[];
     newTasks.addAll([...doingTasks, ...doneTasks]);
-    var newTask = tasksList.value!.copyWith(tasks: newTasks);
+    TasksList newTask = tasksList.value!.copyWith(
+      tasks: newTasks,
+      priority: getPriorities()[priorityIndex()].toHex(),
+      icon: getIcons()[iconIndex()].icon!.codePoint,
+      color: getIcons()[iconIndex()].color!.toHex(),
+      // title:
+    );
     int oldIdx = tasks.indexOf(tasksList.value);
     tasks[oldIdx] = newTask;
     tasks.refresh();
+  }
+
+  void toHomePage() {
+    print('HomeController - Back to Home Screen');
+    updateTasks();
+    Get.back();
+    editCtrl.clear();
+    changeTask(null);
+    priorityIndex(1);
   }
 
   void deleteIsDoneTask(dynamic task) {
@@ -222,7 +233,9 @@ class HomeController extends GetxController {
     }
   }
 
-  void addForTaskScren(bool v) {
+  void addForTaskScren(_) {
+    debugPrint('HomeController - addForTaskScren is called');
+
     if (formKey.currentState!.validate()) {
       var success = addTask(editCtrl.text);
       if (success) {
@@ -232,13 +245,6 @@ class HomeController extends GetxController {
       }
       editCtrl.clear();
     }
-  }
-
-  void toHomePage() {
-    Get.back();
-    updateTasks();
-    editCtrl.clear();
-    changeTask(null);
   }
 
   // RxInt getTotalTasks() {

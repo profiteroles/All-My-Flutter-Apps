@@ -27,7 +27,7 @@ class TasksList extends Equatable {
         'done': done,
         'icon': icon,
         'color': color,
-        'prioriy': priority,
+        'priority': priority,
         'tasks': tasks,
         'created_at': createdAt,
       };

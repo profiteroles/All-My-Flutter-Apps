@@ -20,7 +20,7 @@ class AddDialog extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(onPressed: controller.closeDialog, icon: const Icon(Icons.close)),
+                    IconButton(onPressed: controller.toHomePage, icon: const Icon(Icons.close)),
                     TextButton(
                       onPressed: controller.addTaskFromDialog,
                       child: Text('done'.tr, style: TextStyle(fontSize: 14.0.sp)),
