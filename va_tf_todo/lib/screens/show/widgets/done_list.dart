@@ -19,7 +19,7 @@ class DoneList extends GetView<HomeController> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.0.wp, horizontal: 6.0.wp),
                   child: Text(
-                    'Complited(${controller.doneTasks.length})',
+                    'comleted'.tr + ' (${controller.doneTasks.length})',
                     style: TextStyle(fontSize: 14.0.sp, color: Colors.grey),
                   ),
                 ),

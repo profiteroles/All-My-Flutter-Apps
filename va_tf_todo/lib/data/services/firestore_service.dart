@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:va_tf_todo/data/models/task.dart';
+import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/data/models/user.dart';
 // import 'package:va_tf_todo/data/services/auth_service.dart';
 
@@ -54,12 +54,12 @@ class FirestoreService {
     });
   }
 
-  Future<List<TasksList>> getTaskList(String userId) async {
+  Future<List<Activity>> getActivity(String userId) async {
     debugPrint('FirestoreService - getTaskList is Called');
-    var list = <TasksList>[];
+    var list = <Activity>[];
     try {
       var userData = await _db.doc(userId).collection('tasks_list').get().then((QuerySnapshot snapshot) {
-        snapshot.docs.forEach((e) => list.add(TasksList.fromJson(e.data() as Map<String, dynamic>)));
+        snapshot.docs.forEach((e) => list.add(Activity.fromJson(e.data() as Map<String, dynamic>)));
       });
     } catch (e) {
       debugPrint(e.toString());

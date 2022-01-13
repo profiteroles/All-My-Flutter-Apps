@@ -9,11 +9,13 @@ class TaskInputField extends StatelessWidget {
     this.title,
     this.prefixIcon,
     this.suffixIcon,
+    this.initialValue,
   }) : super(key: key);
 
   final TextEditingController controller;
   final Widget? suffixIcon, prefixIcon;
-  final String? title;
+  final String? title, initialValue;
+  // final bool? autoFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class TaskInputField extends StatelessWidget {
         enableSuggestions: true,
         autocorrect: true,
         textCapitalization: TextCapitalization.words,
+        initialValue: initialValue,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           prefix: prefixIcon,

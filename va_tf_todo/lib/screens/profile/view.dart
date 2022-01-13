@@ -61,7 +61,7 @@ class ProfileScreen extends GetView<ProfileController> {
                             padHor: 3,
                             email: controller.authCtrl.userModel()!.email,
                             name: controller.authCtrl.userModel()!.name,
-                            noActivity: controller.homeCtrl.tasks.length,
+                            noActivity: controller.homeCtrl.activities.length,
                             noTasks: controller.authCtrl.userModel()!.totalTasks,
                             logout: controller.authCtrl.logout,
                           ),

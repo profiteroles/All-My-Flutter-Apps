@@ -20,12 +20,12 @@ class AddDialog extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(onPressed: controller.toHomePage, icon: const Icon(Icons.close)),
+                    IconButton(onPressed: Get.back, icon: const Icon(Icons.close)),
                     TextButton(
                       onPressed: controller.addTaskFromDialog,
                       child: Text('done'.tr, style: TextStyle(fontSize: 14.0.sp)),
                       style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -38,20 +38,26 @@ class AddDialog extends GetView<HomeController> {
                 child: TextFormField(
                   autofocus: true,
                   controller: controller.editCtrl,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) => value!.trim().isEmpty ? 'error_task_enter'.tr : null,
                   decoration: InputDecoration(
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[400]!)),
-                  ),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[400]!)),
+                      suffixIcon: controller.editCtrl.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: controller.editCtrl.clear,
+                              icon: const Icon(Icons.close),
+                            )
+                          : null),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 7.0.wp, vertical: 2.0.wp),
+                padding: EdgeInsets.only(left: 7.0.wp, right: 7.0.wp, top: 4.0.hp, bottom: .5.hp),
                 child: Text('add_to'.tr, style: TextStyle(fontSize: 14.0.sp, color: Colors.grey)),
               ),
-              ...controller.tasks
+              ...controller.activities
                   .map((task) => Obx(
                         () => InkWell(
-                          onTap: () => controller.changeTask(task),
+                          onTap: () => controller.changeActivity(task),
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.0.wp, vertical: 1.0.wp),
                             child: Card(
@@ -67,7 +73,7 @@ class AddDialog extends GetView<HomeController> {
                                         Text(task.title, style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                    if (controller.tasksList.value == task) const Icon(Icons.check, color: Colors.blue),
+                                    if (controller.currentActivity.value == task) const Icon(Icons.check, color: Colors.blue),
                                   ],
                                 ),
                               ),

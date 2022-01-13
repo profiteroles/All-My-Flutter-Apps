@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:va_tf_todo/data/models/task.dart';
+import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/data/services/firestore_service.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
-import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/image_helpers.dart';
 import 'dart:io';
@@ -18,7 +16,7 @@ import 'dart:io';
 class ProfileController extends GetxController {
   static ProfileController instance = Get.find();
 //TODO: Backup button
-  final firestoreTaskList = <TasksList>[].obs;
+  final firestoreActivity = <Activity>[].obs;
   final authCtrl = AuthController.instance;
   final dbFirestore = FirestoreService();
   late String userId = authCtrl.authService.user()!.uid;
@@ -29,9 +27,9 @@ class ProfileController extends GetxController {
   int getTotalTasks() {
     int result = 0;
 
-    for (int i = 0; i < homeCtrl.tasks.length; i++) {
-      if (homeCtrl.tasks[i].tasks != null) {
-        result += homeCtrl.tasks[i].tasks!.length;
+    for (int i = 0; i < homeCtrl.activities.length; i++) {
+      if (homeCtrl.activities[i].tasks != null) {
+        result += homeCtrl.activities[i].tasks!.length;
       }
     }
 
@@ -41,10 +39,10 @@ class ProfileController extends GetxController {
   int getTotalDoneTask() {
     int res = 0;
 
-    for (int i = 0; i < homeCtrl.tasks.length; i++) {
-      if (homeCtrl.tasks[i].tasks != null) {
-        for (int t = 0; t < homeCtrl.tasks[i].tasks!.length; t++) {
-          if (homeCtrl.tasks[i].tasks![t]['isDone'] == true) {
+    for (int i = 0; i < homeCtrl.activities.length; i++) {
+      if (homeCtrl.activities[i].tasks != null) {
+        for (int t = 0; t < homeCtrl.activities[i].tasks!.length; t++) {
+          if (homeCtrl.activities[i].tasks![t].isdone == true) {
             res += 1;
           }
         }
@@ -58,10 +56,10 @@ class ProfileController extends GetxController {
     super.onInit();
   }
 
-  void recoverSavedTasksList() async {
+  void recoverSavedActivities() async {
     debugPrint('HomeController - recoverSavedTasksList is Called');
-    var result = await dbFirestore.getTaskList(userId);
-    firestoreTaskList.assignAll(result);
+    var result = await dbFirestore.getActivity(userId);
+    firestoreActivity.assignAll(result);
   }
 
   List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -114,5 +112,5 @@ class ProfileController extends GetxController {
         content: Text('delete_all_dialog_text'.tr),
         cancel: TextButton(onPressed: () => Get.back(result: false), child: Text('nope'.tr)),
         confirm: TextButton(onPressed: () => Get.back(result: true), child: Text('confirm'.tr)),
-      ).then((value) => value ? homeCtrl.tasks.value = [] : null);
+      ).then((value) => value ? homeCtrl.activities.value = [] : null);
 }

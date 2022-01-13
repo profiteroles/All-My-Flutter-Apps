@@ -45,14 +45,14 @@ class TodoListScreen extends GetView<HomeController> {
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               children: [
-                ...controller.tasks
+                ...controller.activities
                     .map(
                       (task) => LongPressDraggable(
                         child: TaskCard(task: task),
                         data: task,
-                        onDragStarted: () => controller.changeDeleting(true),
-                        onDraggableCanceled: (_, __) => controller.changeDeleting(false),
-                        onDragEnd: (_) => controller.changeDeleting(false),
+                        onDragStarted: () => controller.deletingActivity(true),
+                        onDraggableCanceled: (_, __) => controller.deletingActivity(false),
+                        onDragEnd: (_) => controller.deletingActivity(false),
                         feedback: Opacity(
                           opacity: .8,
                           child: TaskCard(task: task),

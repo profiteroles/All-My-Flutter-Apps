@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:va_tf_todo/data/models/task.dart';
+import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
@@ -17,8 +17,8 @@ class FabDragBtn extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<TasksList>(
-      onAccept: controller.deleteTask,
+    return DragTarget<Activity>(
+      onAccept: controller.deleteActivity,
       builder: (_, __, ___) => Obx(
         () => AnimatedOpacity(
           opacity: controller.fabOpacity(),
@@ -33,15 +33,16 @@ class FabDragBtn extends GetView<HomeController> {
                 color: Theme.of(context).canvasColor,
                 size: 30,
               ),
-              onPressed: controller.tasks.isNotEmpty
-                  ? () => Get.to(() => const AddDialog(), transition: Transition.downToUp)
-                  : () {
-                      controller.isEmptyError(true);
-                      EasyLoading.showInfo('error_create_activity'.tr);
-                      Future.delayed(const Duration(milliseconds: 300), () => controller.isEmptyError(false));
-                      Future.delayed(const Duration(milliseconds: 600), () => controller.isEmptyError(true));
-                      Future.delayed(const Duration(milliseconds: 900), () => controller.isEmptyError(false));
-                    },
+              onPressed: //controller.readAll
+                  controller.activities.isNotEmpty
+                      ? () => Get.to(() => const AddDialog(), transition: Transition.downToUp)
+                      : () {
+                          controller.isEmptyError(true);
+                          EasyLoading.showInfo('error_create_activity'.tr);
+                          Future.delayed(const Duration(milliseconds: 300), () => controller.isEmptyError(false));
+                          Future.delayed(const Duration(milliseconds: 600), () => controller.isEmptyError(true));
+                          Future.delayed(const Duration(milliseconds: 900), () => controller.isEmptyError(false));
+                        },
             ),
           ),
         ),

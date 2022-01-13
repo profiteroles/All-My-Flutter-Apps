@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:va_tf_todo/data/models/task.dart';
+import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/show/task_screen.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
@@ -9,7 +9,7 @@ import 'package:va_tf_todo/values/utils/extention.dart';
 
 class TaskCard extends GetView<HomeController> {
   const TaskCard({Key? key, required this.task}) : super(key: key);
-  final TasksList task;
+  final Activity task;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class TaskCard extends GetView<HomeController> {
     // final priority = HexColor.fromHex(task.priority); // final squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
-        controller.changeTask(task);
+        controller.changeActivity(task);
         controller.changeTasks(task.tasks ?? []);
         Get.to(() => const TaskDetailScreen());
       },

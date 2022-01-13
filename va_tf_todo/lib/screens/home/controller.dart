@@ -1,45 +1,53 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/data/models/task.dart';
-import 'package:va_tf_todo/data/services/task_repository.dart';
+import 'package:va_tf_todo/data/services/activity_repository.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
+import 'package:va_tf_todo/values/utils/asset_path.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/widgets/icons.dart';
 
 class HomeController extends GetxController {
-  HomeController({required this.taskRepository});
+  HomeController({required this.activityRepository});
 
   static HomeController instance = Get.find();
 
-  final TaskRepository taskRepository;
+  final ActivityRepository activityRepository;
   final authCtrl = AuthController.instance;
   final settingCtrl = SettingsController.instance;
 
   //Task Related
   final formKey = GlobalKey<FormState>();
   final editCtrl = TextEditingController();
+  final taskTitleCtrl = TextEditingController();
 
   RxInt iconIndex = 0.obs;
   RxInt priorityIndex = 0.obs;
   RxBool deleting = false.obs;
   RxBool isEmptyError = false.obs;
-  final tasksList = Rx<TasksList?>(null);
-  RxList<TasksList> tasks = <TasksList>[].obs;
-  RxList doingTasks = <dynamic>[].obs;
-  RxList doneTasks = <dynamic>[].obs;
-  RxDouble taskBoxHeight = 6.0.hp.obs;
+  //TODO Check and fix
+  final currentActivity = Rx<Activity?>(null);
+  RxList<Activity> activities = <Activity>[].obs;
+  RxList doingTasks = <Task>[].obs;
+  RxList doneTasks = <Task>[].obs;
+  //TODO WFT make it animate
+  RxDouble taskBoxHeight = 8.0.hp.obs;
   RxInt pageIndex = 1.obs;
   RxDouble fabOpacity = 1.0.obs;
+  // final TimeOfDay defaultTime = TimeOfDay.now().replacing(hour: 11, minute: 30);
+  //TODO CHECK & DELETE
+  Rx<TimeOfDay> taskTime = TimeOfDay.now().replacing(hour: 11, minute: 30).obs;
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint('HomeController - initialised');
-    tasks.assignAll(taskRepository.readTasks());
-    ever(tasks, (_) => taskRepository.writeTasks(tasks));
+    activities.assignAll(activityRepository.readActivities());
+    ever(activities, (_) => activityRepository.writeActivities(activities));
   }
 
   @override
@@ -61,84 +69,110 @@ class HomeController extends GetxController {
     pageIndex(index);
   }
 
-  void doneTask(String title) {
-    debugPrint('HomeController - doneTask is Called title is: $title');
-    var doingTask = {'title': title, 'isDone': false};
-    int index = doingTasks.indexWhere((e) => mapEquals<String, dynamic>(doingTask, e));
-    doingTasks.removeAt(index);
-    var doneTask = {'title': title, 'isDone': true};
-    doneTasks.add(doneTask);
+  void doneTask(Task task) {
+    debugPrint('HomeController - doneTask is Called title is: ${task.title}');
+    // var doingTask = {'title': title, 'isDone': false};
+    // int index = doingTasks.indexWhere((e) => mapEquals<String, dynamic>(doingTask, e));
+    int index = doingTasks.indexOf(task);
+    // doingTasks.removeAt(index);
+    doingTasks.remove(task);
+    // var doneTask = {'title': title, 'isDone': true};
+    // doneTasks.add(doneTask);
+    doneTasks.add(task);
     doingTasks.refresh();
     doneTasks.refresh();
   }
 
-  void changeTasks(List<dynamic> select) {
+  void changeTasks(List<Task> select) {
     debugPrint('HomeController - changeTasks is Called');
     doingTasks.clear();
     doneTasks.clear();
-    for (var i = 0; i < select.length; i++) {
-      var task = select[i];
-      var status = task['isDone'];
-      if (status == true) {
+
+    for (var task in select) {
+      if (task.isdone) {
         doneTasks.add(task);
       } else {
         doingTasks.add(task);
       }
     }
+
+    // for (var i = 0; i < select.length; i++) {
+    //   var task = select[i];
+    //   var status = task['isDone'];
+    //   if (status == true) {
+    //     doneTasks.add(task);
+    //   } else {
+    //     doingTasks.add(task);
+    //   }
+    // }
   }
 
-  bool updateTask(TasksList task, String title) {
-    debugPrint('HomeController - updateTask is called receive task - title is: $title \n'
-        '${task.title} ${task.icon} ${task.color}');
-    var newTasks = task.tasks ?? [];
-    if (containerTask(newTasks, title)) {
+  void onTimeChanged(TimeOfDay time) {
+    debugPrint('HomeController - onTimeChanged is Called $time');
+    taskTime(time);
+    taskTime;
+  }
+
+  bool updateActivity(Activity activity, String taskTitle) {
+    debugPrint('HomeController - updateActivity is called receive task - title is: $taskTitle \n$activity');
+    List<Task> newTasks = activity.tasks ?? [];
+
+    if (newTasks.any((t) => t.title == taskTitle)) {
       return false;
     } else {
-      var aTask = {'title': title, 'isDone': false};
-      newTasks.add(aTask);
-      var newTask = task.copyWith(tasks: newTasks);
-      int oldIdx = tasks.indexOf(task);
-      tasks[oldIdx] = newTask;
-      tasks.refresh();
+      Task task = Task(title: taskTitle, isdone: false, createdAt: DateTime.now().toString());
+      newTasks.add(task);
+      Activity newActivity = currentActivity()!.copyWith(tasks: newTasks);
+      int activityIndexValue = activities().indexOf(currentActivity()!);
+      print(newActivity);
+      print('END OF NEW ACTIVITY');
+
+      print(activities()[activityIndexValue]);
+      print('END OF UPDATING ACT__________');
+
+      activities.value[activityIndexValue] = newActivity;
+      print(activities()[activityIndexValue]);
+      print('END OF UPDATED ACTivity__________');
+      activities.refresh();
       return true;
     }
   }
 
-  bool containerTask(List listTasks, String title) {
-    debugPrint('HomeController - containerTask is called receive task - title is: $title \n$listTasks');
-    return listTasks.any((aTask) => aTask['title'] == title);
+  void changeActivity(Activity? activity) {
+    debugPrint('HomeController - changeActivity is called receive value is:\n$activity');
+    currentActivity.value = activity;
   }
 
-  void changeTask(TasksList? selected) {
-    debugPrint('HomeController - changeTask is called receive value is:\n'
-        '${selected?.title} ${selected?.icon} ${selected?.color}');
-    tasksList.value = selected;
-  }
-
-  void changeDeleting(bool value) {
+  void deletingActivity(bool value) {
     debugPrint('HomeController - changeDeleting is called receive value is: $value');
     deleting.value = value;
   }
 
-  void deleteTask(TasksList task) {
-    debugPrint('HomeController - deleteTask is called receive task is: \n'
-        '${task.title} ${task.icon} ${task.color}');
-    tasks.remove(task);
-    EasyLoading.showSuccess('Task Removed');
+  void deleteActivity(Activity activity) {
+    debugPrint('HomeController - deleteActivity is called receive activity is: \n$activity');
+    activities.remove(activity);
+    EasyLoading.showSuccess('removed'.tr);
   }
 
   void addTaskFromDialog() {
-    debugPrint('HomeController - addMission is called');
+    debugPrint('HomeController - addTaskFromDialog is called');
     if (formKey.currentState!.validate()) {
-      if (tasksList.value == null) {
+      if (currentActivity.value == null) {
         EasyLoading.showError('error_choose_list'.tr);
       } else {
-        final bool success = updateTask(tasksList.value!, editCtrl.text);
+        final bool success = updateActivity(currentActivity()!, editCtrl.text);
+
         if (success) {
-          EasyLoading.showSuccess('Task added to your ${tasksList.value!.title}');
-          toHomePage();
+          print('Activities - 2');
+          print(activities());
+          print('END____B4 To HOME_____________');
+          toHomePage(update: false);
+          EasyLoading.showSuccess('task'.tr + ' ' + 'added'.tr); //'Task added to your ${currentActivity.value!.title}');
+          print('Activities -3');
+          print(activities());
+          print('END________AFTER TO HOME_________');
         } else {
-          EasyLoading.showError('Task is already in the list');
+          EasyLoading.showError('error_exist'.tr);
         }
         editCtrl.clear();
       }
@@ -147,67 +181,72 @@ class HomeController extends GetxController {
 
   bool addTask(String title) {
     debugPrint('HomeController - addTask is called receive task is: $title');
-
-    var newTask = {'title': title, 'isDone': false};
-    if (doingTasks.any((task) => mapEquals<String, dynamic>(newTask, task))) {
-      return false;
-    }
-    var doneTask = {'title': title, 'isDone': true};
-    if (doneTasks.any((task) => mapEquals<String, dynamic>(doneTask, task))) {
-      return false;
-    }
+    Task newTask = Task(title: title, isdone: false, createdAt: DateTime.now().toString());
     doingTasks.add(newTask);
     return true;
   }
 
   void updateTasks() {
     debugPrint('HomeController - updateTasks is called');
-    var newTasks = <Map<String, dynamic>>[];
+    List<Task> newTasks = <Task>[];
     newTasks.addAll([...doingTasks, ...doneTasks]);
-    TasksList newTask = tasksList.value!.copyWith(
+    Activity newTask = currentActivity.value!.copyWith(
       tasks: newTasks,
       priority: getPriorities()[priorityIndex()].toHex(),
       icon: getIcons()[iconIndex()].icon!.codePoint,
       color: getIcons()[iconIndex()].color!.toHex(),
-      // title:
+      title: taskTitleCtrl.text,
     );
-    int oldIdx = tasks.indexOf(tasksList.value);
-    tasks[oldIdx] = newTask;
-    tasks.refresh();
+    int oldIdx = activities.indexOf(currentActivity.value);
+    activities[oldIdx] = newTask;
+    activities.refresh();
   }
 
-  void toHomePage() {
-    print('HomeController - Back to Home Screen');
-    updateTasks();
+  void toHomePage({bool update = true}) {
+    debugPrint('HomeController - Back to Home Screen');
+    if (update) updateTasks();
     Get.back();
     editCtrl.clear();
-    changeTask(null);
-    priorityIndex(1);
+    changeActivity(null);
+    priorityIndex(0);
   }
 
-  void deleteIsDoneTask(dynamic task) {
+  void deleteIsDoneTask(Task task) {
     debugPrint('HomeController - deleteIsDoneTask is called');
     doneTasks.remove(task);
   }
 
-  bool isTaskEmpty(TasksList task) {
+  bool isTaskEmpty(Activity activity) {
     debugPrint('HomeController - isTaskEmpty is called');
-    return task.tasks == null || task.tasks!.isEmpty;
+    return activity.tasks == null || activity.tasks!.isEmpty;
   }
 
-  int getDoneTask(TasksList task) {
+  int getDoneTask(Activity activity) {
     debugPrint('HomeController - getDoneTask is called');
     var res = 0;
-    for (var i = 0; i < task.tasks!.length; i++) {
-      if (task.tasks![i]['isDone'] == true) {
+    var tasks = activity.tasks;
+    for (Task item in tasks!) {
+      if (item.isdone) {
         res += 1;
       }
     }
+    // for (var i = 0; i < task.tasks!.length; i++) {
+    //   if (task.tasks![i].isdone == true) {
+    //     res += 1;
+    //   }
+    // }
     return res;
   }
 
-  void addTaskList() async {
-    debugPrint('HomeController - addNewTaskList is called');
+  // void readAll() {
+  //   final storage = GetStorage();
+  //   print(storage.getKeys());
+  //   print(storage.read('8kytk2rQuMhg7xtv1yrza7k3zSI2'));
+  //   // storage.erase();
+  // }
+
+  void addActivity() async {
+    debugPrint('HomeController - addNewActivity is called');
     final icons = getIcons();
     final priorities = getPriorities();
     if (formKey.currentState!.validate()) {
@@ -215,64 +254,41 @@ class HomeController extends GetxController {
       String priority = priorities[priorityIndex.value].toHex();
       String color = icons[iconIndex.value].color!.toHex();
       final now = DateTime.now();
-      var item = TasksList(title: editCtrl.text, icon: icon, color: color, priority: priority, tasks: const [], createdAt: now.toString());
-      bool titleExists = tasks.any((task) => task.title == item.title);
-      bool iconExists = tasks.any((task) => task.icon == item.icon);
+      var item = Activity(title: editCtrl.text, icon: icon, color: color, priority: priority, tasks: const [], createdAt: now.toString());
+      bool titleExists = activities.any((activity) => activity.title == item.title);
+      bool iconExists = activities.any((activity) => activity.icon == item.icon);
+
+      print(item);
+      print('END  new ACTIVITY_______');
 
       Get.back();
       if (titleExists && iconExists) {
-        EasyLoading.showError('error_tasks_list_exist'.tr);
+        EasyLoading.showError('error_activity_exist'.tr);
       } else {
-        // await dbFirestore.setTaskList(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
-        tasks.add(item);
-        tasks.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
-        debugPrint(item.toString());
+        // await dbFirestore.setActivity(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
+        activities.add(item);
+        activities.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
+        print(activities);
+        print('END ACTIVITY_______');
         //TODO: Turn this back on before you release
         // settingCtrl.nService.taskReminder(DateTime(now.year, now.month, now.day, now.hour, now.minute + 1));
       }
     }
   }
 
-  void addForTaskScren(_) {
-    debugPrint('HomeController - addForTaskScren is called');
+  void addTaskValidate(_) {
+    debugPrint('HomeController - addTaskValidate is called');
 
     if (formKey.currentState!.validate()) {
       var success = addTask(editCtrl.text);
       if (success) {
-        EasyLoading.showSuccess('New Task added to your List');
+        EasyLoading.showSuccess('added'.tr);
       } else {
-        EasyLoading.showError('Task is already on the list');
+        EasyLoading.showError('error_exist'.tr);
       }
       editCtrl.clear();
     }
   }
-
-  // RxInt getTotalTasks() {
-  //   int result = 0;
-
-  //   for (int i = 0; i < tasks.length; i++) {
-  //     if (tasks[i].tasks != null) {
-  //       result += tasks[i].tasks!.length;
-  //     }
-  //   }
-
-  //   return result.obs;
-  // }
-
-  // int getTotalDoneTask() {
-  //   int res = 0;
-
-  //   for (int i = 0; i < tasks.length; i++) {
-  //     if (tasks[i].tasks != null) {
-  //       for (int t = 0; t < tasks[i].tasks!.length; t++) {
-  //         if (tasks[i].tasks![t]['isDone'] == true) {
-  //           res += 1;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return res;
-  // }
 
 // TODO: Make this as tutorial
   void showOverlay(BuildContext context) async {
@@ -287,21 +303,16 @@ class HomeController extends GetxController {
           child: Stack(
             children: [
               Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationX(60),
-                  child: Image.asset(
-                    'images/comment_dialog.png',
-                    colorBlendMode: BlendMode.multiply,
-                  )),
+                alignment: Alignment.center,
+                transform: Matrix4.rotationX(60),
+                child: Image.asset(commentDialog, colorBlendMode: BlendMode.multiply),
+              ),
               Positioned(
                 top: Get.height * 0.13,
                 left: Get.width * 0.13,
                 child: Material(
                   color: Colors.transparent,
-                  child: Text(
-                    'Create a task first',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                  child: Text('Create a task first', style: Theme.of(context).textTheme.headline6),
                 ),
               ),
             ],
