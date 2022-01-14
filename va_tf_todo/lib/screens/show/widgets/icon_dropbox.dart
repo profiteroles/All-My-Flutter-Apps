@@ -21,7 +21,6 @@ class IconDropBox extends GetView<HomeController> {
           : getIcons()[controller.iconIndex()]),
       onPressed: () => Get.dialog(
         IconDropDown(isPriorityIcon, children: isPriorityIcon ? priorityIcons(controller) : taskIcons(controller)),
-        // barrierColor: Colors.transparent,
         transitionCurve: Curves.easeIn,
       ),
     );
@@ -49,30 +48,3 @@ class IconDropDown extends GetView<HomeController> {
     );
   }
 }
- // ? getPriorities()
-            //     .map((e) => Obx(
-            //           () => ChoiceBtn(
-            //             label: Icon(e == lightGrey ? Icons.outlined_flag : Icons.flag, color: e),
-            //             elevation: controller.priorityIndex() == getPriorities().indexOf(e) ? 3 : 0,
-            //             selected: controller.priorityIndex() == getPriorities().indexOf(e),
-            //             onSelected: (selected) {
-            //               controller.priorityIndex.value = selected ? getPriorities().indexOf(e) : 0;
-            //               Get.back(result: getPriorities()[getPriorities().indexOf(e)].toHex());
-            //             },
-            //           ),
-            //         ))
-            //     .toList()
-            //TaskList Icons
-            // : getIcons()
-            //     .map((e) => Obx(
-            //           () => ChoiceBtn(
-            //             label: e,
-            //             elevation: controller.iconIndex.value == getIcons().indexOf(e) ? 3 : 0,
-            //             selected: controller.iconIndex.value == getIcons().indexOf(e),
-            //             onSelected: (selected) {
-            //               controller.iconIndex.value = selected ? getIcons().indexOf(e) : 0;
-            //               Get.back(result: getIcons()[getIcons().indexOf(e)]);
-            //             },
-            //           ),
-            //         ))
-            //     .toList(),

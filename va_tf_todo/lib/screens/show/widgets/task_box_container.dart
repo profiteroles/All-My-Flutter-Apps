@@ -1,5 +1,3 @@
-import 'package:day_night_time_picker/day_night_time_picker.dart';
-import 'package:day_night_time_picker/lib/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -48,29 +46,11 @@ class TaskBoxContainer extends GetView<HomeController> {
               style: TextStyle(decoration: isDone ? TextDecoration.lineThrough : null),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           IconButton(
             icon: Icon(isDone ? FontAwesomeIcons.solidCalendarCheck : FontAwesomeIcons.solidCalendarPlus),
-            onPressed: isDone
-                ? () {}
-                : () {
-                    Navigator.of(context).push(
-                      showPicker(
-                        context: context,
-                        value: TimeOfDay.fromDateTime(DateTime(2002, 3, 1, 5, 48)), //
-                        onChange: controller.onTimeChanged,
-                        minuteInterval: MinuteInterval.FIVE,
-                        is24HrFormat: true,
-                        onChangeDateTime: (date) {
-                          print(date);
-                        },
-                      ),
-                    );
-                  },
-            // showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(DateTime.now().year + 1)).then(
-            //   (value) => print(value),
-            // );
-          )
+            onPressed: () => controller.setTaskReminder(task, isDone),
+          ),
         ],
       ),
     );

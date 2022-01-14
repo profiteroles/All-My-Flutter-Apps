@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
-import 'package:va_tf_todo/screens/show/task_screen.dart';
+import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 
@@ -14,12 +14,11 @@ class TaskCard extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final color = HexColor.fromHex(task.color);
-    // final priority = HexColor.fromHex(task.priority); // final squareWidth = Get.width - 12.0.wp;
     return GestureDetector(
       onTap: () {
         controller.changeActivity(task);
         controller.changeTasks(task.tasks ?? []);
-        Get.to(() => const TaskDetailScreen());
+        Get.toNamed(AppRoutes.task);
       },
       child: Container(
         margin: EdgeInsets.all(3.0.wp),

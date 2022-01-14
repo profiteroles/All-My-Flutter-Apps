@@ -25,7 +25,7 @@ final darkTheme = ThemeData.dark().copyWith(
   elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: darkPrimaryVar)),
   // ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(purple)),
   // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-
+  textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: green)),
   cardTheme: const CardTheme(color: grey),
   //Dialog Theme
   // dialogTheme: const DialogTheme(
@@ -70,5 +70,6 @@ final darkTheme = ThemeData.dark().copyWith(
         onSecondary: white,
         primaryVariant: darkPrimaryVar,
         secondaryVariant: darkSecondaryVar,
+        onSurface: green,
       ),
 );

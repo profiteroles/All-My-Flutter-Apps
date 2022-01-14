@@ -82,6 +82,7 @@ final lightTheme = ThemeData.light().copyWith(
         secondary: green,
         onSecondary: orange,
         onPrimary: white,
+        onSurface: black,
       ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(unselectedItemColor: lightGrey),
   snackBarTheme: const SnackBarThemeData(backgroundColor: grey, contentTextStyle: TextStyle(color: black)),

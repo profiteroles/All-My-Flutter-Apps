@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/screens/home/controller.dart';
 import 'package:va_tf_todo/screens/home/widgets/choice_btn.dart';
@@ -13,7 +12,7 @@ class TaskTitleUpdateBtn extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Text(controller.currentActivity()!.title, style: Get.theme.appBarTheme.titleTextStyle),
+      child: Obx(() => Text(controller.activityTitle(), style: Get.theme.appBarTheme.titleTextStyle)),
       onPressed: () => Get.dialog(
         Align(
           alignment: Alignment.topCenter,
@@ -34,7 +33,10 @@ class TaskTitleUpdateBtn extends GetView<HomeController> {
                     backgroundColor: purple,
                     label: Icon(Icons.done, color: Get.theme.colorScheme.onPrimary),
                     elevation: 3,
-                    onSelected: (_) => EasyLoading.showSuccess('change_appear'.tr).then((_) => Get.back()),
+                    onSelected: (_) {
+                      controller.activityTitle(controller.taskTitleCtrl.text);
+                      Get.back();
+                    },
                   ),
                 ),
               ),

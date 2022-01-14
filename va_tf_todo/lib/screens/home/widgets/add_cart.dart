@@ -16,6 +16,7 @@ class AddCard extends GetView<HomeController> {
       margin: EdgeInsets.all(3.0.wp),
       child: InkWell(
         onTap: () async {
+          controller.editCtrl.clear();
           await Get.defaultDialog(
             contentPadding: EdgeInsets.zero,
             titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),

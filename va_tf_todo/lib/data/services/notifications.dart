@@ -17,27 +17,26 @@ class NotificationServices {
     );
   }
 
-  Future<void> taskReminder(DateTime time, {bool? repeat}) async {
+  Future<void> taskReminder(DateTime date, String title, {bool? repeat}) async {
     debugPrint('Notifications - defaultNotificationMessage is Called');
-    print(time.weekday);
-    print(time.hour);
-    print(time.minute);
-    print('_______END OF TIME______');
 
     await AwesomeNotifications().createNotification(
       actionButtons: [NotificationActionButton(key: 'COMPLETED', label: 'Completed')],
       content: NotificationContent(
         id: createUniqId(),
         channelKey: scheduledKey,
-        title: 'notification_schedule'.tr,
-        body: 'notification_schedule_text'.tr,
+        title: 'notification_title'.tr,
+        body: '$title ' + 'notification_body'.tr,
         notificationLayout: NotificationLayout.Default,
+        autoDismissible: true,
       ),
       schedule: NotificationCalendar(
         repeats: repeat ?? false,
-        weekday: time.weekday,
-        hour: time.hour,
-        minute: time.minute,
+        year: date.year,
+        month: date.month,
+        day: date.day,
+        hour: date.hour,
+        minute: date.minute,
         second: 0,
         millisecond: 0,
       ),
