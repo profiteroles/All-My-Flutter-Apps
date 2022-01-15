@@ -101,7 +101,7 @@ class HomeController extends GetxController {
         doingTasks.refresh();
         if (date != null) {
           EasyLoading.showSuccess('Reminder is Set $date');
-          settingCtrl.nService.taskReminder(DateTime.parse(date), task.title);
+          // settingCtrl.nService.taskReminder(DateTime.parse(date), task.title);
         }
       });
     }
@@ -249,7 +249,7 @@ class HomeController extends GetxController {
       } else {
         // await dbFirestore.setActivity(item.toJson(), authCtrl.authService.user()!.uid).then((docID) {
         activities.add(item);
-        activities.length == 1 ? settingCtrl.checkOnNotification() : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
+        activities.length == 1 ? null : EasyLoading.showSuccess('${item.title} ' + 'created'.tr);
         // print(activities);
         // print('END ACTIVITY_______');
         //TODO: Turn this back on before you release

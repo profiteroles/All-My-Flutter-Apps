@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,7 +11,6 @@ import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
-import 'package:va_tf_todo/values/utils/notification_utilities.dart';
 import 'package:va_tf_todo/widgets/flat_appbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -26,7 +25,7 @@ class SettingsController extends GetxController {
 
   final _storage = GetStorage();
   final authCtrl = AuthController.instance;
-  final nService = NotificationServices();
+  final nService = NotificationsService();
 
   @override
   void onInit() async {
@@ -34,23 +33,53 @@ class SettingsController extends GetxController {
     isDarkMode.value = await _storage.read(themeKey) ?? false;
     isEverNotify.value = await _storage.read(notifyKey) ?? false;
 
-    AwesomeNotifications().actionStream.listen((event) {
-      if (event.channelKey == scheduledKey && Platform.isIOS) {
-        AwesomeNotifications().getGlobalBadgeCounter().then(
-              (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
-            );
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message!.data != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print('____________END______getInitialMessage_________');
       }
-      if (event.buttonKeyPressed == 'COMPLETED') {
-        print('Mission is Half Way there');
-      }
-      // Get.offNamed(AppRoutes.home);
     });
+
+//foreground listener
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message.notification != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print(message.data.keys);
+        print('____________END_____onMessage____________');
+      }
+
+      NotificationsService.display(message);
+    });
+    //
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      // print(message.data);
+      print(message.data['route']);
+      print(message.from);
+      // print(message.category);
+      print('____________END_____ onMessageOpenedApp ____________');
+
+      Get.offNamed(AppRoutes.home);
+    });
+
+    // AwesomeNotifications().actionStream.listen((event) {
+    //   if (event.channelKey == scheduledKey && Platform.isIOS) {
+    //     AwesomeNotifications().getGlobalBadgeCounter().then(
+    //           (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
+    //         );
+    //   }
+    //   if (event.buttonKeyPressed == 'COMPLETED') {
+    //     print('Mission is Half Way there');
+    //   }
+    //   // Get.offNamed(AppRoutes.home);
+    // });
   }
 
   @override
   void onClose() {
     super.onClose();
-    AwesomeNotifications().actionSink.close();
+    // AwesomeNotifications().actionSink.close();
   }
 
   final List locale = [
@@ -68,23 +97,23 @@ class SettingsController extends GetxController {
     _storage.write(themeKey, value);
   }
 
-  void checkOnNotification() async {
-    debugPrint('SettingsController - checkOnNotification is Called');
-    if (!isEverNotify()) {
-      AwesomeNotifications().isNotificationAllowed().then((value) {
-        if (!value) {
-          Get.defaultDialog(
-            titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
-            radius: 5,
-            title: 'allow'.tr + ' ' + 'notifications'.tr,
-            content: const NotificationDialog(),
-          );
-        }
-      });
-    } else {
-      nofityOn(false);
-    }
-  }
+  // void checkOnNotification() async {
+  //   debugPrint('SettingsController - checkOnNotification is Called');
+  //   if (!isEverNotify()) {
+  //     AwesomeNotifications().isNotificationAllowed().then((value) {
+  //       if (!value) {
+  //         Get.defaultDialog(
+  //           titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+  //           radius: 5,
+  //           title: 'allow'.tr + ' ' + 'notifications'.tr,
+  //           content: const NotificationDialog(),
+  //         );
+  //       }
+  //     });
+  //   } else {
+  //     nofityOn(false);
+  //   }
+  // }
 
   void turnOffNotify() {
     debugPrint('HomeController - turnOffNotify is Called: ' + isEverNotify.value.toString());
@@ -97,15 +126,16 @@ class SettingsController extends GetxController {
 
   void setNotification(bool value) async {
     debugPrint('SettingsController - setThemeMode is Called');
-    AwesomeNotifications().setGlobalBadgeCounter(0);
+    // AwesomeNotifications().setGlobalBadgeCounter(0);
+
     nofityOn(value);
     if (value) {
       isEverNotify(false);
       _storage.write(notifyKey, false);
-      checkOnNotification();
+      // checkOnNotification();
     }
     value
-        ? await nService.defaultMessage()
+        ? NotificationsService.showNotification('') // await nService.defaultMessage()
         : Get.snackbar(
             'notifications'.tr,
             'notifications'.tr + ' ' + 'off'.tr,
