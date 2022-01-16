@@ -9,7 +9,7 @@ class ActivityProvider {
 
   List<Activity> readActivities() {
     debugPrint('ActivityProvider - readActivities is Called');
-    final key = _auth.authService.user()!.uid;
+    final key = _auth.authService.user()?.uid ?? '';
     var activities = <Activity>[];
     if (_storage.read(key) != null) {
       for (var activity in _storage.read(key) as List) {

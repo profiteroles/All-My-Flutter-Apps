@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
@@ -34,10 +35,12 @@ class SettingsController extends GetxController {
     isEverNotify.value = await _storage.read(notifyKey) ?? false;
 
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      if (message!.data != null) {
-        print(message.notification!.title);
+      try {
+        print(message!.notification!.title);
         print(message.notification!.body);
         print('____________END______getInitialMessage_________');
+      } catch (e) {
+        debugPrint(e.toString());
       }
     });
 
@@ -97,23 +100,23 @@ class SettingsController extends GetxController {
     _storage.write(themeKey, value);
   }
 
-  // void checkOnNotification() async {
-  //   debugPrint('SettingsController - checkOnNotification is Called');
-  //   if (!isEverNotify()) {
-  //     AwesomeNotifications().isNotificationAllowed().then((value) {
-  //       if (!value) {
-  //         Get.defaultDialog(
-  //           titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
-  //           radius: 5,
-  //           title: 'allow'.tr + ' ' + 'notifications'.tr,
-  //           content: const NotificationDialog(),
-  //         );
-  //       }
-  //     });
-  //   } else {
-  //     nofityOn(false);
-  //   }
-  // }
+  void checkOnNotification() async {
+    debugPrint('SettingsController - checkOnNotification is Called');
+    // if (!isEverNotify()) {
+    //   AwesomeNotifications().isNotificationAllowed().then((value) {
+    //     if (!value) {
+    //       Get.defaultDialog(
+    //         titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+    //         radius: 5,
+    //         title: 'allow'.tr + ' ' + 'notifications'.tr,
+    //         content: const NotificationDialog(),
+    //       );
+    //     }
+    //   });
+    // } else {
+    //   nofityOn(false);
+    // }
+  }
 
   void turnOffNotify() {
     debugPrint('HomeController - turnOffNotify is Called: ' + isEverNotify.value.toString());
@@ -132,7 +135,7 @@ class SettingsController extends GetxController {
     if (value) {
       isEverNotify(false);
       _storage.write(notifyKey, false);
-      // checkOnNotification();
+      checkOnNotification();
     }
     value
         ? NotificationsService.showNotification('') // await nService.defaultMessage()
