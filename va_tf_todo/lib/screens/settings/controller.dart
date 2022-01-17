@@ -1,19 +1,21 @@
 import 'dart:io';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
-import 'package:va_tf_todo/screens/settings/widgets/notification_dialog.dart';
 import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/theme/dark_theme.dart';
 import 'package:va_tf_todo/values/theme/light_theme.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';
 import 'package:va_tf_todo/values/utils/keys.dart';
+import 'package:va_tf_todo/values/utils/notification_utilities.dart';
 import 'package:va_tf_todo/widgets/flat_appbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'widgets/notification_dialog.dart';
 
 class SettingsController extends GetxController {
   static SettingsController instance = Get.find();
@@ -26,14 +28,14 @@ class SettingsController extends GetxController {
 
   final _storage = GetStorage();
   final authCtrl = AuthController.instance;
-  final nService = NotificationsService();
+  final nService = NotificationServices();
 
   @override
   void onInit() async {
     super.onInit();
     isDarkMode.value = await _storage.read(themeKey) ?? false;
     isEverNotify.value = await _storage.read(notifyKey) ?? false;
-
+    nofityOn.value = await AwesomeNotifications().isNotificationAllowed().asStream().first;
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       try {
         print(message!.notification!.title);
@@ -44,45 +46,45 @@ class SettingsController extends GetxController {
       }
     });
 
-//foreground listener
-    FirebaseMessaging.onMessage.listen((message) {
-      if (message.notification != null) {
-        print(message.notification!.title);
-        print(message.notification!.body);
-        print(message.data.keys);
-        print('____________END_____onMessage____________');
+// //foreground listener
+//     FirebaseMessaging.onMessage.listen((message) {
+//       if (message.notification != null) {
+//         print(message.notification!.title);
+//         print(message.notification!.body);
+//         print(message.data.keys);
+//         print('____________END_____onMessage____________');
+//       }
+
+//       NotificationsService.display(message);
+//     });
+//     //
+//     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+//       // print(message.data);
+//       print(message.data['route']);
+//       print(message.from);
+//       // print(message.category);
+//       print('____________END_____ onMessageOpenedApp ____________');
+
+//       Get.offNamed(AppRoutes.home);
+//     });
+
+    AwesomeNotifications().actionStream.listen((event) {
+      if (event.channelKey == scheduledChannelKey && Platform.isIOS) {
+        AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
+            );
       }
-
-      NotificationsService.display(message);
-    });
-    //
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      // print(message.data);
-      print(message.data['route']);
-      print(message.from);
-      // print(message.category);
-      print('____________END_____ onMessageOpenedApp ____________');
-
+      if (event.buttonKeyPressed == 'COMPLETED') {
+        print('Mission is Half Way there');
+      }
       Get.offNamed(AppRoutes.home);
     });
-
-    // AwesomeNotifications().actionStream.listen((event) {
-    //   if (event.channelKey == scheduledKey && Platform.isIOS) {
-    //     AwesomeNotifications().getGlobalBadgeCounter().then(
-    //           (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
-    //         );
-    //   }
-    //   if (event.buttonKeyPressed == 'COMPLETED') {
-    //     print('Mission is Half Way there');
-    //   }
-    //   // Get.offNamed(AppRoutes.home);
-    // });
   }
 
   @override
   void onClose() {
     super.onClose();
-    // AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().actionSink.close();
   }
 
   final List locale = [
@@ -100,50 +102,70 @@ class SettingsController extends GetxController {
     _storage.write(themeKey, value);
   }
 
-  void checkOnNotification() async {
+  Future<bool> checkOnNotification() async {
     debugPrint('SettingsController - checkOnNotification is Called');
     // if (!isEverNotify()) {
-    //   AwesomeNotifications().isNotificationAllowed().then((value) {
-    //     if (!value) {
-    //       Get.defaultDialog(
-    //         titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
-    //         radius: 5,
-    //         title: 'allow'.tr + ' ' + 'notifications'.tr,
-    //         content: const NotificationDialog(),
-    //       );
-    //     }
-    //   });
+    final systemCheck = await AwesomeNotifications().isNotificationAllowed().then((systemNotification) {
+      if (!systemNotification) {
+        Get.defaultDialog(
+          titlePadding: EdgeInsets.symmetric(vertical: 5.0.wp),
+          radius: 5,
+          title: 'allow'.tr + ' ' + 'notifications'.tr,
+          content: const NotificationDialog(),
+        ).then((value) {
+          return value;
+        });
+      } else {
+        return true;
+      }
+    });
+
+    return systemCheck ?? false;
     // } else {
-    //   nofityOn(false);
+    // nofityOn(false);
     // }
   }
 
-  void turnOffNotify() {
+  void notificationOff() {
     debugPrint('HomeController - turnOffNotify is Called: ' + isEverNotify.value.toString());
-    if (isEverNotify()) {
-      _storage.write(notifyKey, isEverNotify());
-      setNotification(false);
-    }
+    //When Don't bother check box is checked saves in the storage
+    // if (isEverNotify.value) {
+    //   // isEverNotify(true);
+    //   _storage.write(notifyKey, true);
+    // }
+
+    isEverNotify() ? _storage.write(notifyKey, true) : null;
+
     Get.back();
+    setNotification(false);
+    print('AFTER GET BACK');
   }
 
   void setNotification(bool value) async {
-    debugPrint('SettingsController - setThemeMode is Called');
-    // AwesomeNotifications().setGlobalBadgeCounter(0);
-
+    debugPrint('SettingsController - setThemeMode is Called: $value');
+    AwesomeNotifications().setGlobalBadgeCounter(0);
     nofityOn(value);
     if (value) {
-      isEverNotify(false);
-      _storage.write(notifyKey, false);
-      checkOnNotification();
+      await checkOnNotification().then((isAllowed) {
+        print(isAllowed);
+        print('___isAllowed____END______');
+      });
+
+      // if (isAllowed) {
+      //   await nService.defaultMessage();
+      // } // NotificationsService.showNotification('')
+      // print(isAllowed);
+      print('_______END______');
+      nofityOn(false);
     }
-    value
-        ? NotificationsService.showNotification('') // await nService.defaultMessage()
-        : Get.snackbar(
-            'notifications'.tr,
-            'notifications'.tr + ' ' + 'off'.tr,
-            snackPosition: SnackPosition.BOTTOM,
-          );
+    // if (value) {
+    //   isEverNotify(false);
+    //   _storage.write(notifyKey, false);
+    //   await checkOnNotification();
+    // }
+    if (!value) {
+      Get.snackbar('notifications'.tr, 'notifications'.tr + ' ' + 'off'.tr, snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
   void setLanguage(int index) {

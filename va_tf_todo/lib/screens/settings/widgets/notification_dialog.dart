@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/services/notifications.dart';
@@ -28,7 +29,7 @@ class NotificationDialog extends GetView<SettingsController> {
             mainAxisAlignment: controller.isEverNotify() ? MainAxisAlignment.center : MainAxisAlignment.spaceAround,
             children: [
               AppButton(
-                onPressed: controller.turnOffNotify,
+                onPressed: controller.notificationOff,
                 title: 'nope'.tr,
                 hasMinSize: false,
                 color: darkPrimaryVar,
@@ -36,11 +37,7 @@ class NotificationDialog extends GetView<SettingsController> {
               controller.isEverNotify()
                   ? const SizedBox.shrink()
                   : AppButton(
-                      onPressed: () {
-                        // NotificationsServices().showNotification(title: title, body: body),;
-                        // AwesomeNotifications().requestPermissionToSendNotifications();
-                        Get.back();
-                      },
+                      onPressed: () => AwesomeNotifications().requestPermissionToSendNotifications().then((value) => Get.back(result: value)),
                       title: 'allow'.tr,
                       color: lightPurple,
                       hasMinSize: false,

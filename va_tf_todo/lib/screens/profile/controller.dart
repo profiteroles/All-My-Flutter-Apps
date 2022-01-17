@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -107,7 +108,8 @@ class ProfileController extends GetxController {
 
   void deleteAllDialog() async => await Get.defaultDialog(
         titlePadding: EdgeInsets.symmetric(vertical: 3.0.hp, horizontal: 4.0.wp),
-        // title: Emojis.symbols_warning + ' ' + 'important_warning'.tr + ' ' + Emojis.symbols_warning,
+        title: Emojis.symbols_warning + ' ' + 'important_warning'.tr + ' ' + Emojis.symbols_warning,
+        contentPadding: EdgeInsets.symmetric(horizontal: 4.0.wp),
         content: Text('delete_all_dialog_text'.tr),
         cancel: TextButton(onPressed: () => Get.back(result: false), child: Text('nope'.tr)),
         confirm: TextButton(onPressed: () => Get.back(result: true), child: Text('confirm'.tr)),

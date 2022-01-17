@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # awesome_notifications: ^0.6.19
+  awesome_notifications: ^0.6.20
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
   cloud_firestore: ^3.1.5
@@ -25,7 +25,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_easyloading: ^3.0.3
   flutter_form_builder: ^7.0.0
-  flutter_local_notifications: ^9.2.0
+  # flutter_local_notifications: ^9.2.0
   flutter_signin_button: ^2.0.0
   # flutter_picker: ^2.0.2
   font_awesome_flutter: ^9.2.0
@@ -37,7 +37,7 @@ dependencies:
   image_cropper: ^1.4.1
   image_picker: ^0.8.4+4
   intl: ^0.17.0
-  rxdart: ^0.27.3
+  # rxdart: ^0.27.3
   step_progress_indicator: ^1.0.1
   webview_flutter: ^3.0.0
   
