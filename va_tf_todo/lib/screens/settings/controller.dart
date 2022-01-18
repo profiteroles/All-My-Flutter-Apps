@@ -36,37 +36,39 @@ class SettingsController extends GetxController {
     isDarkMode.value = await _storage.read(themeKey) ?? false;
     isEverNotify.value = await _storage.read(notifyKey) ?? false;
     nofityOn.value = await AwesomeNotifications().isNotificationAllowed().asStream().first;
+
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       try {
         print(message!.notification!.title);
         print(message.notification!.body);
-        print('____________END______getInitialMessage_________');
+        Get.toNamed(AppRoutes.home);
+        print('Went home');
       } catch (e) {
         debugPrint(e.toString());
       }
     });
 
 // //foreground listener
-//     FirebaseMessaging.onMessage.listen((message) {
-//       if (message.notification != null) {
-//         print(message.notification!.title);
-//         print(message.notification!.body);
-//         print(message.data.keys);
-//         print('____________END_____onMessage____________');
-//       }
+    // FirebaseMessaging.onMessage.listen((message) {
+    //   if (message.notification != null) {
+    //     print(message.notification!.title);
+    //     print(message.notification!.body);
+    //     print(message.data.keys);
+    //     print('____________END_____onMessage____________');
+    //   }
 
-//       NotificationsService.display(message);
-//     });
-//     //
-//     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-//       // print(message.data);
-//       print(message.data['route']);
-//       print(message.from);
-//       // print(message.category);
-//       print('____________END_____ onMessageOpenedApp ____________');
+    //   //   NotificationsService.display(message);
+    // });
+    // // //
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   // print(message.data);
+    //   print(message.data['route']);
+    //   print(message.from);
+    //   // print(message.category);
+    //   print('____________END_____ onMessageOpenedApp ____________');
 
-//       Get.offNamed(AppRoutes.home);
-//     });
+    //   Get.offNamed(AppRoutes.home);
+    // });
 
     AwesomeNotifications().actionStream.listen((event) {
       if (event.channelKey == scheduledChannelKey && Platform.isIOS) {
@@ -104,7 +106,6 @@ class SettingsController extends GetxController {
 
   Future<bool> checkOnNotification() async {
     debugPrint('SettingsController - checkOnNotification is Called');
-    // if (!isEverNotify()) {
     final systemCheck = await AwesomeNotifications().isNotificationAllowed().then((systemNotification) {
       if (!systemNotification) {
         Get.defaultDialog(
@@ -113,6 +114,9 @@ class SettingsController extends GetxController {
           title: 'allow'.tr + ' ' + 'notifications'.tr,
           content: const NotificationDialog(),
         ).then((value) {
+          print('SettingsController -checkOnNotification : $value __END');
+          nofityOn(value);
+          _storage.write(notifyKey, false);
           return value;
         });
       } else {
@@ -121,49 +125,27 @@ class SettingsController extends GetxController {
     });
 
     return systemCheck ?? false;
-    // } else {
-    // nofityOn(false);
-    // }
   }
 
   void notificationOff() {
     debugPrint('HomeController - turnOffNotify is Called: ' + isEverNotify.value.toString());
     //When Don't bother check box is checked saves in the storage
-    // if (isEverNotify.value) {
-    //   // isEverNotify(true);
-    //   _storage.write(notifyKey, true);
-    // }
 
     isEverNotify() ? _storage.write(notifyKey, true) : null;
 
     Get.back();
     setNotification(false);
-    print('AFTER GET BACK');
   }
 
   void setNotification(bool value) async {
-    debugPrint('SettingsController - setThemeMode is Called: $value');
-    AwesomeNotifications().setGlobalBadgeCounter(0);
+    debugPrint('SettingsController - setNotification is Called: $value');
+    NotificationServices().setBadge(0);
     nofityOn(value);
     if (value) {
-      await checkOnNotification().then((isAllowed) {
-        print(isAllowed);
-        print('___isAllowed____END______');
-      });
-
-      // if (isAllowed) {
-      //   await nService.defaultMessage();
-      // } // NotificationsService.showNotification('')
-      // print(isAllowed);
-      print('_______END______');
-      nofityOn(false);
-    }
-    // if (value) {
-    //   isEverNotify(false);
-    //   _storage.write(notifyKey, false);
-    //   await checkOnNotification();
-    // }
-    if (!value) {
+      await checkOnNotification();
+      nofityOn(value);
+      NotificationServices().defaultMessage();
+    } else {
       Get.snackbar('notifications'.tr, 'notifications'.tr + ' ' + 'off'.tr, snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -180,24 +162,20 @@ class SettingsController extends GetxController {
         body: WebView(initialUrl: AppRoutes.privacyURL),
       ));
 
-  Future<dynamic> languageDialog(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (builder) => AlertDialog(
-        title: Text('language'.tr, style: Theme.of(context).textTheme.headline6),
+  Future<dynamic> languageDialog() {
+    debugPrint('SettingsController - languageDialog is Opened');
+    return Get.dialog(AlertDialog(
+        title: Text('language'.tr, style: Get.textTheme.headline6),
         content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, i) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(onPressed: () => setLanguage(i), child: Text(locale[i]['name'])),
-            ),
-            separatorBuilder: (context, i) => const Divider(),
-            itemCount: locale.length,
-          ),
-        ),
-      ),
-    );
+            width: double.maxFinite,
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, i) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(onPressed: () => setLanguage(i), child: Text(locale[i]['name'])),
+              ),
+              separatorBuilder: (context, i) => const Divider(),
+              itemCount: locale.length,
+            ))));
   }
 }

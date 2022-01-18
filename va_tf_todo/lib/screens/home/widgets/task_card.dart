@@ -24,10 +24,10 @@ class TaskCard extends GetView<HomeController> {
         margin: EdgeInsets.all(3.0.wp),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Theme.of(context).cardColor,
+          color: Get.theme.cardColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor.withOpacity(.3),
+              color: Get.theme.shadowColor.withOpacity(.3),
               blurRadius: 5,
               offset: const Offset(0, 5),
             ),
@@ -41,7 +41,7 @@ class TaskCard extends GetView<HomeController> {
               currentStep: controller.isTaskEmpty(task) ? 0 : controller.getDoneTask(task),
               size: 5,
               padding: 0,
-              unselectedGradientColor: appLinGradient(Theme.of(context).cardColor, Theme.of(context).cardColor),
+              unselectedGradientColor: appLinGradient(Get.theme.cardColor, Get.theme.cardColor),
               selectedGradientColor: appLinGradient(color.withOpacity(.4), color),
             ),
             Padding(

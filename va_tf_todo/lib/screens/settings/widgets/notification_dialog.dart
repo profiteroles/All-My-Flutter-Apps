@@ -1,7 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/values/theme/colors.dart';
 import 'package:va_tf_todo/values/utils/extention.dart';

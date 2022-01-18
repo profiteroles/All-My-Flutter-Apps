@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/values/translations/local_strings.dart';
 import 'package:va_tf_todo/values/main_binding.dart';
@@ -19,14 +20,9 @@ void main() async {
   await GetStorage.init();
   AwesomeNotifications().initialize(null, notificationChannels);
   await Firebase.initializeApp().then((value) => Get.put(AuthController()));
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(NotificationServices().backgroundHandler);
   // NotificationsService.initiliase();
   runApp(const VAToDo());
-}
-
-Future<void> backgroundHandler(RemoteMessage message) async {
-  print(message.data.toString());
-  print(message.notification.toString());
 }
 
 class VAToDo extends StatelessWidget {

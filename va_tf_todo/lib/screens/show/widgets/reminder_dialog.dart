@@ -54,7 +54,7 @@ class ReminderDialog extends GetView<HomeController> {
                   lastDate: DateTime(DateTime.now().year + 1),
                   builder: (context, child) => Theme(
                     child: child!,
-                    data: Theme.of(context).copyWith(colorScheme: Get.theme.colorScheme.copyWith(primary: Get.theme.primaryColor)),
+                    data: Get.theme.copyWith(colorScheme: Get.theme.colorScheme.copyWith(primary: Get.theme.primaryColor)),
                   ),
                 );
 
@@ -66,7 +66,7 @@ class ReminderDialog extends GetView<HomeController> {
                       context: context,
                       value: const TimeOfDay(hour: 12, minute: 30),
                       onChange: (val) {},
-                      minuteInterval: MinuteInterval.FIVE,
+                      minuteInterval: MinuteInterval.ONE,
                       is24HrFormat: true,
                     ));
                     result = DateTime(date.year, date.month, date.day, time.hour, time.minute).toString();

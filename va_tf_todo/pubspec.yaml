@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  awesome_notifications: ^0.6.20
+  awesome_notifications: ^0.6.21
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
   cloud_firestore: ^3.1.5

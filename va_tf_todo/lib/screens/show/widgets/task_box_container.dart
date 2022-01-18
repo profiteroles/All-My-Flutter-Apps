@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/task.dart';
@@ -23,27 +24,31 @@ class TaskBoxContainer extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(5),
         color: Get.theme.cardColor,
         boxShadow: [
-          BoxShadow(color: Theme.of(context).shadowColor.withOpacity(.3), blurRadius: 5, offset: const Offset(0, 5)),
+          BoxShadow(color: Get.theme.shadowColor.withOpacity(.3), blurRadius: 5, offset: const Offset(0, 5)),
         ],
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(
             width: 20,
             height: 20,
-            child: isDone
-                ? Icon(Icons.done, color: Theme.of(context).colorScheme.primary)
-                : Checkbox(
-                    value: false,
-                    onChanged: (value) => controller.doneTask(task),
-                  ),
+            child: isDone ? Icon(Icons.done, color: Get.theme.colorScheme.primary) : Checkbox(value: false, onChanged: (_) => controller.doneTask(task)),
           ),
-          Padding(
-            padding: EdgeInsets.all(3.0.wp),
-            child: Text(
-              task.title,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(decoration: isDone ? TextDecoration.lineThrough : null),
+          GestureDetector(
+            onLongPress: () => showMenu(
+                context: context,
+                items: [PopupMenuItem(child: Text(task.title))],
+                // TODO: make auto pop back
+                position: RelativeRect.fromRect(Rect.largest, Rect.fromCenter(center: const Offset(4, 8), width: double.infinity, height: 100.0.hp))),
+            child: Container(
+              padding: EdgeInsets.only(left: 3.0.wp),
+              width: Get.width / 1.9,
+              child: Text(
+                task.title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(decoration: isDone ? TextDecoration.lineThrough : null),
+              ),
             ),
           ),
           const Spacer(),

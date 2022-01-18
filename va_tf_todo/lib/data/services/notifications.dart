@@ -1,11 +1,14 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/route_manager.dart';
+import 'package:va_tf_todo/values/routes.dart';
 import 'package:va_tf_todo/values/utils/notification_utilities.dart';
 
 class NotificationServices {
   Future<void> defaultMessage() async {
-    debugPrint('Notifications - defaultMessage is Called');
+    debugPrint('NotificationsService - defaultMessage is Called');
     try {
       await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -17,14 +20,17 @@ class NotificationServices {
         ),
       );
     } catch (e) {
-      debugPrint('NotificationsService - defaultMessage Caught an Exception');
-      debugPrint(e.toString());
+      debugPrint('NotificationsService - defaultMessage Caught an Exception: $e');
     }
   }
 
-  Future<void> taskReminder(DateTime date, String title, {bool? repeat}) async {
-    debugPrint('Notifications - defaultMessage is Called');
+  void setBadge(int no) {
+    debugPrint('NotificationsService - setBadge is Called');
+    AwesomeNotifications().setGlobalBadgeCounter(no);
+  }
 
+  Future<void> taskReminder(DateTime date, String title, {bool? repeat}) async {
+    debugPrint('NotificationsService - taskReminder is Called');
     await AwesomeNotifications().createNotification(
       actionButtons: [NotificationActionButton(key: 'COMPLETED', label: 'Completed')],
       content: NotificationContent(
@@ -46,6 +52,15 @@ class NotificationServices {
         millisecond: 0,
       ),
     );
+  }
+
+  Future<void> backgroundHandler(RemoteMessage message) async {
+    debugPrint('NotificationsService - backgroundHandler is Called');
+    try {
+      Get.toNamed(AppRoutes.home);
+    } catch (e) {
+      debugPrint('NotificationsService - backgroundHandler Exception: $e');
+    }
   }
 }
 

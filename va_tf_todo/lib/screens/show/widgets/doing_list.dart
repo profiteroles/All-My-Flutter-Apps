@@ -17,7 +17,7 @@ class DoingList extends GetView<HomeController> {
                 Image.asset(todoImage, fit: BoxFit.cover, width: 65.0.wp),
                 Text(
                   'add_task'.tr,
-                  style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1),
+                  style: Get.theme.textTheme.headline5!.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1),
                 ),
               ],
             )

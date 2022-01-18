@@ -69,7 +69,7 @@ class HomeController extends GetxController {
   void doneTask(Task task) {
     debugPrint('HomeController - doneTask is Called title is: ${task.title}');
     doingTasks.remove(task);
-    doneTasks.add(task);
+    doneTasks.add(task.copyWith(isdone: true));
     doingTasks.refresh();
     doneTasks.refresh();
   }
@@ -101,7 +101,7 @@ class HomeController extends GetxController {
         doingTasks.refresh();
         if (date != null) {
           EasyLoading.showSuccess('Reminder is Set $date');
-          // settingCtrl.nService.taskReminder(DateTime.parse(date), task.title);
+          settingCtrl.nService.taskReminder(DateTime.parse(date), task.title);
         }
       });
     }
@@ -125,7 +125,7 @@ class HomeController extends GetxController {
   }
 
   void changeActivity(Activity? activity) {
-    debugPrint('HomeController - changeActivity is called receive value is:\n$activity');
+    debugPrint('HomeController - changeActivity is called receive value is: $activity');
     activityTitle.value = activity?.title ?? '';
     currentActivity.value = activity;
   }
@@ -136,7 +136,7 @@ class HomeController extends GetxController {
   }
 
   void deleteActivity(Activity? activity) {
-    debugPrint('HomeController - deleteActivity is called receive activity is: \n$activity');
+    debugPrint('HomeController - deleteActivity is called receive activity is: $activity');
 
     activities.remove(activity);
     EasyLoading.showSuccess('removed'.tr);
