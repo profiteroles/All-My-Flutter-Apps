@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:va_tf_todo/data/models/activity.dart';
 import 'package:va_tf_todo/data/models/task.dart';
 import 'package:va_tf_todo/data/services/activity_repository.dart';
+import 'package:va_tf_todo/data/services/notifications.dart';
 import 'package:va_tf_todo/screens/auth/controller.dart';
 import 'package:va_tf_todo/screens/settings/controller.dart';
 import 'package:va_tf_todo/screens/show/widgets/reminder_dialog.dart';
@@ -88,6 +89,11 @@ class HomeController extends GetxController {
     }
   }
 
+  void readAll() {
+    print('object');
+    settingCtrl.nService.cancelSchedule(1642588088316142);
+  }
+
   void setTaskReminder(Task task, bool isDone) async {
     debugPrint('HomeController - onTimeChanged is Called');
     if (isDone) {
@@ -101,7 +107,7 @@ class HomeController extends GetxController {
         doingTasks.refresh();
         if (date != null) {
           EasyLoading.showSuccess('Reminder is Set $date');
-          settingCtrl.nService.taskReminder(DateTime.parse(date), task.title);
+          settingCtrl.nService.taskReminder(DateTime.parse(date), task.title, task.id);
         }
       });
     }
@@ -114,7 +120,7 @@ class HomeController extends GetxController {
     if (isExist) {
       return false;
     } else {
-      Task task = Task(title: taskTitle, isdone: false, createdAt: DateTime.now().toString());
+      Task task = Task(id: DateTime.now().microsecondsSinceEpoch, title: taskTitle, isdone: false, createdAt: DateTime.now().toString());
       Activity newActivity = currentActivity()!.copyWith(tasks: [...?activity.tasks, task]);
       int activityIndexValue = activities().indexOf(currentActivity()!);
       activities.value[activityIndexValue] = newActivity;
@@ -167,7 +173,7 @@ class HomeController extends GetxController {
     if (isExist) {
       return false;
     } else {
-      Task task = Task(title: title, isdone: false, createdAt: DateTime.now().toString());
+      Task task = Task(id: DateTime.now().microsecondsSinceEpoch, title: title, isdone: false, createdAt: DateTime.now().toString());
       doingTasks.add(task);
       return true;
     }

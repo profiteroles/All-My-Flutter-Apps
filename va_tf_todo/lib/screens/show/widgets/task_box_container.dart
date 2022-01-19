@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:va_tf_todo/data/models/task.dart';
@@ -23,9 +24,7 @@ class TaskBoxContainer extends GetView<HomeController> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Get.theme.cardColor,
-        boxShadow: [
-          BoxShadow(color: Get.theme.shadowColor.withOpacity(.3), blurRadius: 5, offset: const Offset(0, 5)),
-        ],
+        boxShadow: [BoxShadow(color: Get.theme.shadowColor.withOpacity(.3), blurRadius: 5, offset: const Offset(0, 5))],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -36,11 +35,13 @@ class TaskBoxContainer extends GetView<HomeController> {
             child: isDone ? Icon(Icons.done, color: Get.theme.colorScheme.primary) : Checkbox(value: false, onChanged: (_) => controller.doneTask(task)),
           ),
           GestureDetector(
-            onLongPress: () => showMenu(
+            onLongPressStart: (details) => Clipboard.setData(ClipboardData(text: task.title)).then(
+              (value) => showMenu(
                 context: context,
                 items: [PopupMenuItem(child: Text(task.title))],
-                // TODO: make auto pop back
-                position: RelativeRect.fromRect(Rect.largest, Rect.fromCenter(center: const Offset(4, 8), width: double.infinity, height: 100.0.hp))),
+                position: RelativeRect.fromLTRB(5, details.globalPosition.dy, 0, 0),
+              ),
+            ),
             child: Container(
               padding: EdgeInsets.only(left: 3.0.wp),
               width: Get.width / 1.9,
@@ -53,7 +54,11 @@ class TaskBoxContainer extends GetView<HomeController> {
           ),
           const Spacer(),
           IconButton(
-            icon: Icon(isDone ? FontAwesomeIcons.solidCalendarCheck : FontAwesomeIcons.solidCalendarPlus),
+            icon: Icon(isDone
+                ? FontAwesomeIcons.solidCalendarCheck
+                : task.alarmAt == null
+                    ? FontAwesomeIcons.solidCalendarPlus
+                    : Icons.alarm),
             onPressed: () => controller.setTaskReminder(task, isDone),
           ),
         ],

@@ -29,12 +29,12 @@ class NotificationServices {
     AwesomeNotifications().setGlobalBadgeCounter(no);
   }
 
-  Future<void> taskReminder(DateTime date, String title, {bool? repeat}) async {
+  Future<void> taskReminder(DateTime date, String title, int taskID, {bool? repeat}) async {
     debugPrint('NotificationsService - taskReminder is Called');
     await AwesomeNotifications().createNotification(
       actionButtons: [NotificationActionButton(key: 'COMPLETED', label: 'Completed')],
       content: NotificationContent(
-        id: createUniqId(),
+        id: taskID,
         channelKey: scheduledChannelKey,
         title: 'notification_title'.tr,
         body: '$title ' + 'notification_body'.tr,
@@ -52,6 +52,10 @@ class NotificationServices {
         millisecond: 0,
       ),
     );
+  }
+
+  Future<void> cancelSchedule(int id) async {
+    await AwesomeNotifications().cancelSchedule(id);
   }
 
   Future<void> backgroundHandler(RemoteMessage message) async {

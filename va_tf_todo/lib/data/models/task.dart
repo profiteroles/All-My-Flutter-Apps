@@ -3,20 +3,23 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Task extends Equatable {
+  int id;
   String title;
   bool isdone;
   String createdAt;
   String? alarmAt;
 
   Task({
+    required this.id,
     required this.title,
     required this.isdone,
     required this.createdAt,
     this.alarmAt,
   });
 
-  Task copyWith({String? title, bool? isdone, String? createdAt, String? alarmAt}) {
+  Task copyWith({int? id, String? title, bool? isdone, String? createdAt, String? alarmAt}) {
     return Task(
+      id: id ?? this.id,
       title: title ?? this.title,
       isdone: isdone ?? this.isdone,
       createdAt: createdAt ?? this.createdAt,
@@ -26,7 +29,7 @@ class Task extends Equatable {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-
+    result.addAll({'id': id});
     result.addAll({'title': title});
     result.addAll({'isdone': isdone});
     result.addAll({'created_at': createdAt});
@@ -37,6 +40,7 @@ class Task extends Equatable {
 
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
+      id: map['id'] ?? '',
       title: map['title'] ?? '',
       isdone: map['isdone'] ?? false,
       createdAt: map['created_at'] ?? '',
@@ -50,9 +54,15 @@ class Task extends Equatable {
 
   @override
   String toString() {
-    return 'Task(title: $title, isdone: $isdone, created_at: $createdAt, alarm_at: $alarmAt)';
+    return 'Task(id:$id, title: $title, isdone: $isdone, created_at: $createdAt, alarm_at: $alarmAt)';
   }
 
   @override
-  List<Object?> get props => [title, isdone, createdAt, alarmAt];
+  List<Object?> get props => [
+        id,
+        title,
+        isdone,
+        createdAt,
+        alarmAt,
+      ];
 }

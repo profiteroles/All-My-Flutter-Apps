@@ -2,15 +2,22 @@
 
 A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Implementations
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- GetX State Management
+- Single Container Sign In & Up
+- Google Sign In
+- Local & Cloud Storage
+- Dark & Light Theme(Priotising System Theme)
+- Languages (ENG, DEU, SPA, FRA, RUS)
+- Local & Push Notifications (FireMessages)
+- Form Validations
+- Image Picker & Cropper
+- Web View within the App
+- Dismissable App Bar
+- Custom Bottom Nav Bar with Dissmisable Floating Button
+- Date & Time Picker
+ 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
